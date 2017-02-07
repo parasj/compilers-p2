@@ -1,0 +1,6 @@
+let
+        var a, b : int := 0;
+in
+      a := b + 2 * 3 + 4 - 5;
+      51as
+end
