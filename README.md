@@ -1,2 +1,2 @@
 # 4240_Project
-Paras Jain and Rishav Bose's Project
+Paras Jain, Rishav Bose and Evan Bailey's Project
