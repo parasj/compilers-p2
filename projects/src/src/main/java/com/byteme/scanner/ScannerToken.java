@@ -5,5 +5,4 @@ package com.byteme.scanner;
  */
 public interface ScannerToken {
     public DFA getDFA();
-
 }

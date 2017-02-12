@@ -7,18 +7,22 @@ import java.util.stream.IntStream;
  * src
  */
 public class DFA {
-    private Map<DFAState, Map<Character, DFAState>> transitions;
-    private Set<DFAState> accepting;
-    private DFAState initial;
+    private Map<Integer, Map<Character, Integer>> transitions;
+    private Set<Integer> accepting;
+    private final int initial = 0;
+
+    public DFA(Map<Integer, Map<Character, Integer>> transitions, Set<Integer> accepting) {
+        this.transitions = transitions;
+        this.accepting = accepting;
+    }
 
     public boolean accepts(String s) {
-        DFAState curr = initial;
         return accepts(initial, s);
     }
 
-    private boolean accepts(DFAState state, String str) {
+    private boolean accepts(int state, String str) {
         // dead state -> FALSE
-        if (state == null)
+        if (state < 0)
             return false;
 
         // empty string -> state in accepting
@@ -26,8 +30,8 @@ public class DFA {
             return accepting.contains(state);
 
         // recurse on remainder of input
-        Map<Character, DFAState> delta = transitions.getOrDefault(str.charAt(0), Collections.emptyMap());
-        DFAState statePrime = delta.get(str.charAt(0));
+        Map<Character, Integer> delta = transitions.getOrDefault(str.charAt(0), Collections.emptyMap());
+        Integer statePrime = delta.get(str.charAt(0));
         String remaining = (str.length() > 0) ? str.substring(1) : "";
         return accepts(statePrime, remaining);
     }
