@@ -1,6 +1,7 @@
 package com.byteme.scanner;
 
 import java.io.File;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -62,9 +63,12 @@ public class Scanner {
 
     public Scanner(File f) {
         this.f = f;
+        for (ScannerToken t : tokens) {
+            System.out.println(t + "\n\n");
+        }
     }
 
     public List<ScannerToken> tokenize() {
-        return null;
+        return Collections.emptyList();
     }
 }

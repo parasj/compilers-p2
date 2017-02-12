@@ -9,19 +9,24 @@ import java.util.stream.Collectors;
 
 public class Main {
     public static void main(String[] args) {
-        if (args.length != 3)
+        if (args.length != 2) {
             printUsage();
+            System.exit(1);
+        }
 
-        String fnameIn = args[1];
-        String phase = args[2];
+        String fnameIn = args[0];
+        String phase = args[1];
 
-        if (phase.equals("--token")) {
+        if (phase.equals("--tokens")) {
             List<String> tokens =
                     scanTokens(new File(fnameIn)).stream()
                             .map(ScannerToken::toString)
                             .collect(Collectors.toList());
 
             System.out.println(String.join(" ", tokens));
+        } else {
+            printUsage();
+            System.exit(1);
         }
     }
 

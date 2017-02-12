@@ -35,4 +35,34 @@ public class DFA {
             return evaluate(statePrime, remaining);
         }
     }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("digraph dfa {\n\tnode [shape=\"circle\"];\n");
+
+        // accepting
+        sb.append("\tnode [shape = doublecircle];");
+        for (int accept : accepting) {
+            sb.append(String.format(" q_%d", accept));
+        }
+        sb.append(";\n");
+
+        // edges
+        for (int fromState : transitions.keySet()) {
+            Map<Character, Integer> t = transitions.get(fromState);
+            for (char transition : t.keySet()) {
+                int toState = t.get(transition);
+                String line = String.format("q_%d -> q_%d [ label = \"%c\" ];", fromState, toState, transition);
+
+                sb.append("\t");
+                sb.append(line);
+                sb.append("\n");
+            }
+        }
+
+        sb.append("}\n");
+
+        return sb.toString();
+    }
 }
