@@ -42,11 +42,11 @@ public class DFA {
         sb.append("digraph dfa {\n\tnode [shape=\"circle\"];\n");
 
         // accepting
-        sb.append("\tnode [shape = doublecircle];");
+        sb.append("\t{node [shape = doublecircle];");
         for (int accept : accepting) {
             sb.append(String.format(" q_%d", accept));
         }
-        sb.append(";\n");
+        sb.append(";}\n");
 
         // edges
         for (int fromState : transitions.keySet()) {
