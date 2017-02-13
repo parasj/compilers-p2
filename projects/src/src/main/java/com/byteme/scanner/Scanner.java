@@ -58,7 +58,11 @@ public class Scanner {
             new KeywordScannerToken(">="),
             new KeywordScannerToken("&"),
             new KeywordScannerToken("|"),
-            new KeywordScannerToken(":=")
+            new KeywordScannerToken(":="),
+            new comment(),
+            new floatlit(),
+            new id(),
+            new intlit()
     };
 
     public Scanner(File f) {

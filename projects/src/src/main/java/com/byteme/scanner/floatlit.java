@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * src
  */
-public class intlit implements ScannerToken {
+public class floatlit implements ScannerToken {
     private final DFA dfa;
 
-    public intlit() {
+    public floatlit() {
         this.dfa = constructDFA();
     }
 
@@ -26,6 +26,8 @@ public class intlit implements ScannerToken {
                 transitions.put((char)(i), 1);
             } else if (i == '0') {
                 transitions.put((char)(i), 2);
+            } else if (i == '.') {
+                transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -39,6 +41,8 @@ public class intlit implements ScannerToken {
                 transitions.put((char)(i), 1);
             } else if (i == '0') {
                 transitions.put((char)(i), 1);
+            } else if (i == '.') {
+                transitions.put((char)(i), 3);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -52,16 +56,32 @@ public class intlit implements ScannerToken {
                 transitions.put((char)(i), -1);
             } else if (i == '0') {
                 transitions.put((char)(i), -1);
+            } else if (i == '.') {
+                transitions.put((char)(i), 3);
             } else {
                 transitions.put((char)(i), -1);
             }
         }
         table.put(2, transitions);
 
+        //For state 3
+        transitions = new HashMap<Character, Integer>();
+        for (int i = 0; i < 128; i++) {
+            if (i <= '9' && i >= '1') {
+                transitions.put((char)(i), 3);
+            } else if (i == '0') {
+                transitions.put((char)(i), 3);
+            } else if (i == '.') {
+                transitions.put((char)(i), -1);
+            } else {
+                transitions.put((char)(i), -1);
+            }
+        }
+        table.put(3, transitions);
 
 
-        accept.add(1);
-        accept.add(2);
+
+        accept.add(3);
 
         return new DFA(table, accept);
     }
@@ -74,7 +94,7 @@ public class intlit implements ScannerToken {
 
     @Override
     public String toString() {
-        return "intlit " +
+        return "floatlit " +
                 "dfa=\n" + dfa;
     }
 }

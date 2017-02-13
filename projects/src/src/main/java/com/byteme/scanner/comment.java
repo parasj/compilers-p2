@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * src
  */
-public class intlit implements ScannerToken {
+public class comment implements ScannerToken {
     private final DFA dfa;
 
-    public intlit() {
+    public comment() {
         this.dfa = constructDFA();
     }
 
@@ -22,10 +22,10 @@ public class intlit implements ScannerToken {
         //For State 0
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
+            if (i == '/') {
                 transitions.put((char)(i), 1);
-            } else if (i == '0') {
-                transitions.put((char)(i), 2);
+            } else if (i == '*') {
+                transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -35,10 +35,10 @@ public class intlit implements ScannerToken {
         //For state 1
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), 1);
-            } else if (i == '0') {
-                transitions.put((char)(i), 1);
+            if (i == '/') {
+                transitions.put((char)(i), -1);
+            } else if (i == '*') {
+                transitions.put((char)(i), 2);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -48,20 +48,45 @@ public class intlit implements ScannerToken {
         //For state 2
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
+            if (i == '/') {
+                transitions.put((char)(i), 2);
+            } else if (i == '*') {
+                transitions.put((char)(i), 3);
+            } else {
+                transitions.put((char)(i), 2);
+            }
+        }
+        table.put(2, transitions);
+
+        //For state 3
+        transitions = new HashMap<Character, Integer>();
+        for (int i = 0; i < 128; i++) {
+            if (i == '/') {
+                transitions.put((char)(i), 4);
+            } else if (i == '*') {
+                transitions.put((char)(i), 3);
+            } else {
+                transitions.put((char)(i), 2);
+            }
+        }
+        table.put(3, transitions);
+
+        //For state 4
+        transitions = new HashMap<Character, Integer>();
+        for (int i = 0; i < 128; i++) {
+            if (i == '/') {
                 transitions.put((char)(i), -1);
-            } else if (i == '0') {
+            } else if (i == '*') {
                 transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
         }
-        table.put(2, transitions);
+        table.put(4, transitions);
 
 
 
-        accept.add(1);
-        accept.add(2);
+        accept.add(4);
 
         return new DFA(table, accept);
     }
@@ -74,7 +99,7 @@ public class intlit implements ScannerToken {
 
     @Override
     public String toString() {
-        return "intlit " +
+        return "comment " +
                 "dfa=\n" + dfa;
     }
 }

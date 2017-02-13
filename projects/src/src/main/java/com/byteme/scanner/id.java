@@ -8,10 +8,10 @@ import java.util.Set;
 /**
  * src
  */
-public class intlit implements ScannerToken {
+public class id implements ScannerToken {
     private final DFA dfa;
 
-    public intlit() {
+    public id() {
         this.dfa = constructDFA();
     }
 
@@ -22,10 +22,12 @@ public class intlit implements ScannerToken {
         //For State 0
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
+            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
                 transitions.put((char)(i), 1);
-            } else if (i == '0') {
+            } else if (i == '_') {
                 transitions.put((char)(i), 2);
+            } else if (i <= '9' && i >= '0') {
+                transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -35,10 +37,12 @@ public class intlit implements ScannerToken {
         //For state 1
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
+            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
                 transitions.put((char)(i), 1);
-            } else if (i == '0') {
-                transitions.put((char)(i), 1);
+            } else if (i == '_') {
+                transitions.put((char)(i), 2);
+            } else if (i <= '9' && i >= '0') {
+                transitions.put((char)(i), 2);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -48,10 +52,12 @@ public class intlit implements ScannerToken {
         //For state 2
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), -1);
-            } else if (i == '0') {
-                transitions.put((char)(i), -1);
+            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
+                transitions.put((char)(i), 2);
+            } else if (i == '_') {
+                transitions.put((char)(i), 2);
+            } else if (i <= '9' && i >= '0') {
+                transitions.put((char)(i), 2);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -60,7 +66,6 @@ public class intlit implements ScannerToken {
 
 
 
-        accept.add(1);
         accept.add(2);
 
         return new DFA(table, accept);
@@ -74,7 +79,7 @@ public class intlit implements ScannerToken {
 
     @Override
     public String toString() {
-        return "intlit " +
+        return "id " +
                 "dfa=\n" + dfa;
     }
 }
