@@ -43,9 +43,9 @@ public class id implements ScannerToken {
             if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
                 transitions.put((char)(i), 1);
             } else if (i == '_') {
-                transitions.put((char)(i), 2);
+                transitions.put((char)(i), 1);
             } else if (i <= '9' && i >= '0') {
-                transitions.put((char)(i), 2);
+                transitions.put((char)(i), 1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -56,11 +56,11 @@ public class id implements ScannerToken {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
-                transitions.put((char)(i), 2);
+                transitions.put((char)(i), 1);
             } else if (i == '_') {
                 transitions.put((char)(i), 2);
             } else if (i <= '9' && i >= '0') {
-                transitions.put((char)(i), 2);
+                transitions.put((char)(i), 1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -68,8 +68,7 @@ public class id implements ScannerToken {
         table.put(2, transitions);
 
 
-
-        accept.add(2);
+        accept.add(1);
 
         return new DFA(table, accept);
     }
