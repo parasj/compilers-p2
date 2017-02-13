@@ -1,4 +1,7 @@
-package com.byteme.scanner;
+package com.byteme.scanner.Tokens;
+
+import com.byteme.scanner.DFA;
+import com.byteme.scanner.ScannerToken;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,10 +11,10 @@ import java.util.Set;
 /**
  * src
  */
-public class id implements ScannerToken {
+public class intlit implements ScannerToken {
     private final DFA dfa;
 
-    public id() {
+    public intlit() {
         this.dfa = constructDFA();
     }
 
@@ -22,12 +25,10 @@ public class id implements ScannerToken {
         //For State 0
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
+            if (i <= '9' && i >= '1') {
                 transitions.put((char)(i), 1);
-            } else if (i == '_') {
+            } else if (i == '0') {
                 transitions.put((char)(i), 2);
-            } else if (i <= '9' && i >= '0') {
-                transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -37,12 +38,10 @@ public class id implements ScannerToken {
         //For state 1
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
+            if (i <= '9' && i >= '1') {
                 transitions.put((char)(i), 1);
-            } else if (i == '_') {
-                transitions.put((char)(i), 2);
-            } else if (i <= '9' && i >= '0') {
-                transitions.put((char)(i), 2);
+            } else if (i == '0') {
+                transitions.put((char)(i), 1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -52,12 +51,10 @@ public class id implements ScannerToken {
         //For state 2
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
-                transitions.put((char)(i), 2);
-            } else if (i == '_') {
-                transitions.put((char)(i), 2);
-            } else if (i <= '9' && i >= '0') {
-                transitions.put((char)(i), 2);
+            if (i <= '9' && i >= '1') {
+                transitions.put((char)(i), -1);
+            } else if (i == '0') {
+                transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -66,6 +63,7 @@ public class id implements ScannerToken {
 
 
 
+        accept.add(1);
         accept.add(2);
 
         return new DFA(table, accept);
@@ -79,7 +77,7 @@ public class id implements ScannerToken {
 
     @Override
     public String toString() {
-        return "id " +
+        return "intlit " +
                 "dfa=\n" + dfa;
     }
 }

@@ -1,5 +1,7 @@
 package com.byteme.scanner;
 
+import com.byteme.scanner.Tokens.*;
+
 import java.io.File;
 import java.util.Collections;
 import java.util.List;

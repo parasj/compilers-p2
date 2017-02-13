@@ -1,4 +1,7 @@
-package com.byteme.scanner;
+package com.byteme.scanner.Tokens;
+
+import com.byteme.scanner.DFA;
+import com.byteme.scanner.ScannerToken;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,10 +11,10 @@ import java.util.Set;
 /**
  * src
  */
-public class floatlit implements ScannerToken {
+public class comment implements ScannerToken {
     private final DFA dfa;
 
-    public floatlit() {
+    public comment() {
         this.dfa = constructDFA();
     }
 
@@ -22,11 +25,9 @@ public class floatlit implements ScannerToken {
         //For State 0
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
+            if (i == '/') {
                 transitions.put((char)(i), 1);
-            } else if (i == '0') {
-                transitions.put((char)(i), 2);
-            } else if (i == '.') {
+            } else if (i == '*') {
                 transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
@@ -37,12 +38,10 @@ public class floatlit implements ScannerToken {
         //For state 1
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), 1);
-            } else if (i == '0') {
-                transitions.put((char)(i), 1);
-            } else if (i == '.') {
-                transitions.put((char)(i), 3);
+            if (i == '/') {
+                transitions.put((char)(i), -1);
+            } else if (i == '*') {
+                transitions.put((char)(i), 2);
             } else {
                 transitions.put((char)(i), -1);
             }
@@ -52,14 +51,12 @@ public class floatlit implements ScannerToken {
         //For state 2
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), -1);
-            } else if (i == '0') {
-                transitions.put((char)(i), -1);
-            } else if (i == '.') {
+            if (i == '/') {
+                transitions.put((char)(i), 2);
+            } else if (i == '*') {
                 transitions.put((char)(i), 3);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char)(i), 2);
             }
         }
         table.put(2, transitions);
@@ -67,21 +64,32 @@ public class floatlit implements ScannerToken {
         //For state 3
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i <= '9' && i >= '1') {
+            if (i == '/') {
+                transitions.put((char)(i), 4);
+            } else if (i == '*') {
                 transitions.put((char)(i), 3);
-            } else if (i == '0') {
-                transitions.put((char)(i), 3);
-            } else if (i == '.') {
+            } else {
+                transitions.put((char)(i), 2);
+            }
+        }
+        table.put(3, transitions);
+
+        //For state 4
+        transitions = new HashMap<Character, Integer>();
+        for (int i = 0; i < 128; i++) {
+            if (i == '/') {
+                transitions.put((char)(i), -1);
+            } else if (i == '*') {
                 transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
             }
         }
-        table.put(3, transitions);
+        table.put(4, transitions);
 
 
 
-        accept.add(3);
+        accept.add(4);
 
         return new DFA(table, accept);
     }
@@ -94,7 +102,7 @@ public class floatlit implements ScannerToken {
 
     @Override
     public String toString() {
-        return "floatlit " +
+        return "comment " +
                 "dfa=\n" + dfa;
     }
 }

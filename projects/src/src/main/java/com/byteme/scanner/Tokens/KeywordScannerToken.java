@@ -1,4 +1,7 @@
-package com.byteme.scanner;
+package com.byteme.scanner.Tokens;
+
+import com.byteme.scanner.DFA;
+import com.byteme.scanner.ScannerToken;
 
 import java.util.HashMap;
 import java.util.HashSet;

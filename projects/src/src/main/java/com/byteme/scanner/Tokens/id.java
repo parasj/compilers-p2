@@ -1,4 +1,7 @@
-package com.byteme.scanner;
+package com.byteme.scanner.Tokens;
+
+import com.byteme.scanner.DFA;
+import com.byteme.scanner.ScannerToken;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -8,10 +11,10 @@ import java.util.Set;
 /**
  * src
  */
-public class comment implements ScannerToken {
+public class id implements ScannerToken {
     private final DFA dfa;
 
-    public comment() {
+    public id() {
         this.dfa = constructDFA();
     }
 
@@ -22,9 +25,11 @@ public class comment implements ScannerToken {
         //For State 0
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i == '/') {
+            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
                 transitions.put((char)(i), 1);
-            } else if (i == '*') {
+            } else if (i == '_') {
+                transitions.put((char)(i), 2);
+            } else if (i <= '9' && i >= '0') {
                 transitions.put((char)(i), -1);
             } else {
                 transitions.put((char)(i), -1);
@@ -35,9 +40,11 @@ public class comment implements ScannerToken {
         //For state 1
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i == '/') {
-                transitions.put((char)(i), -1);
-            } else if (i == '*') {
+            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
+                transitions.put((char)(i), 1);
+            } else if (i == '_') {
+                transitions.put((char)(i), 2);
+            } else if (i <= '9' && i >= '0') {
                 transitions.put((char)(i), 2);
             } else {
                 transitions.put((char)(i), -1);
@@ -48,45 +55,21 @@ public class comment implements ScannerToken {
         //For state 2
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
-            if (i == '/') {
+            if ((i <= 'Z' && i >= 'A') | (i <= 'z' && i >= 'a')) {
                 transitions.put((char)(i), 2);
-            } else if (i == '*') {
-                transitions.put((char)(i), 3);
+            } else if (i == '_') {
+                transitions.put((char)(i), 2);
+            } else if (i <= '9' && i >= '0') {
+                transitions.put((char)(i), 2);
             } else {
-                transitions.put((char)(i), 2);
+                transitions.put((char)(i), -1);
             }
         }
         table.put(2, transitions);
 
-        //For state 3
-        transitions = new HashMap<Character, Integer>();
-        for (int i = 0; i < 128; i++) {
-            if (i == '/') {
-                transitions.put((char)(i), 4);
-            } else if (i == '*') {
-                transitions.put((char)(i), 3);
-            } else {
-                transitions.put((char)(i), 2);
-            }
-        }
-        table.put(3, transitions);
-
-        //For state 4
-        transitions = new HashMap<Character, Integer>();
-        for (int i = 0; i < 128; i++) {
-            if (i == '/') {
-                transitions.put((char)(i), -1);
-            } else if (i == '*') {
-                transitions.put((char)(i), -1);
-            } else {
-                transitions.put((char)(i), -1);
-            }
-        }
-        table.put(4, transitions);
 
 
-
-        accept.add(4);
+        accept.add(2);
 
         return new DFA(table, accept);
     }
@@ -99,7 +82,7 @@ public class comment implements ScannerToken {
 
     @Override
     public String toString() {
-        return "comment " +
+        return "id " +
                 "dfa=\n" + dfa;
     }
 }
