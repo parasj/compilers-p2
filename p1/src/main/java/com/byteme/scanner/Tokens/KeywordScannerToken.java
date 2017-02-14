@@ -30,6 +30,11 @@ public class KeywordScannerToken implements ScannerToken {
         for (char c : literal.toCharArray()) {
             Map<Character, Integer> transitions = table.getOrDefault(lastState, new HashMap<>());
             transitions.put(c, nextState);
+            for (int i = 0; i < 128; i++) {
+                if (i != c) {
+                    transitions.put((char)(i), -1);
+                }
+            }
             table.put(lastState, transitions);
             lastState = nextState++;
         }

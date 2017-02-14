@@ -10,9 +10,9 @@ public class DFA {
     private Set<Integer> accepting;
     private final int initial = 0;
 
-    private static final int DFA_DEAD = -2;
-    private static final int DFA_ACCEPT = 1;
-    private static final int DFA_REJECT = -1;
+    public static final int DFA_DEAD = -2;
+    public static final int DFA_ACCEPT = 1;
+    public static final int DFA_REJECT = -1;
 
     public DFA(Map<Integer, Map<Character, Integer>> transitions, Set<Integer> accepting) {
         this.transitions = transitions;
