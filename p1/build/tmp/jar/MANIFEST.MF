@@ -1,5 +1,0 @@
-Manifest-Version: 1.0
-Implementation-Title: BTC - the byteme tiger compiler
-Implementation-Version: 1.0
-Main-Class: com.byteme.Main
-
