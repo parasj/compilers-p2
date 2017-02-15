@@ -1,20 +1,23 @@
 package com.byteme.scanner.Tokens;
 
 import com.byteme.scanner.DFA;
-import com.byteme.scanner.Lexeme;
+import com.byteme.scanner.ClassLexeme;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * src
- */
-public class IdClassLexeme implements Lexeme {
-    private final DFA dfa;
+public class IdClassLexeme extends ClassLexeme {
+    private static final String LITERAL = "id";
 
-    public IdClassLexeme() {
+    private final DFA dfa;
+    private final String idName;
+
+    public IdClassLexeme(String idName) {
+        super(LITERAL, idName);
+
+        this.idName = idName;
         this.dfa = constructDFA();
     }
 
@@ -73,15 +76,13 @@ public class IdClassLexeme implements Lexeme {
         return new DFA(table, accept);
     }
 
+    @Override
+    public ClassLexeme newClassLexemeWithS(String s) {
+        return new IdClassLexeme(s);
+    }
 
     @Override
     public DFA getDFA() {
         return dfa;
-    }
-
-    @Override
-    public String toString() {
-        return "IdClassLexeme " +
-                "dfa=\n" + dfa;
     }
 }

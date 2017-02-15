@@ -1,8 +1,0 @@
-let
-    var u : unit;
-    var a, b : int := 0;
-in
-    if a <= b then
-        a := b + 1;
-    endif;
-end

@@ -13,6 +13,7 @@ import java.util.*;
  * src
  */
 public class Scanner {
+    private List<Lexeme> lexemeList = new ArrayList();
     private File f;
     private Lexeme[] lexemes = {
             new KeywordLexeme("array"),
@@ -64,20 +65,20 @@ public class Scanner {
             new KeywordLexeme("&"),
             new KeywordLexeme("|"),
             new KeywordLexeme(":="),
-            new CommentClassLexeme(),
-            new FloatlitClassLexeme(),
-            new IdClassLexeme(),
-            new IntlitClassLexeme()
+            new CommentClassLexeme(null),
+            new FloatlitClassLexeme(null),
+            new IdClassLexeme(null),
+            new IntlitClassLexeme(null)
     };
 
     public Scanner(File f) {
         this.f = f;
     }
 
-    private Lexeme getFirstScannerTokenAccepting(String token) {
+    private Lexeme getFirstLexemeAccepting(String token) {
         Lexeme acceptingLexeme = null;
 
-        // Iterate over all known scanner tokens, return first one that accepts this token
+        // Iterate over all known lexemes, return first one that accepts this token
         for (Lexeme st : lexemes) {
             DFA dfa = st.getDFA();
 
@@ -91,8 +92,6 @@ public class Scanner {
     }
 
     public List<Lexeme> tokenize() {
-        List<Lexeme> lexemeList = new ArrayList();
-
         try {
             // Assume UTF-8 encoding
             byte fileBytes[] = Files.readAllBytes(Paths.get(f.getPath()));
@@ -118,9 +117,6 @@ public class Scanner {
 
                 token = token.concat(Character.toString(newestChar));
 
-                // TODO: This is temporary, for debugging
-                //System.out.println("Candidate Token: " + token);
-
                 // Evaluate each DFA
                 for (Lexeme st : lexemes) {
                     DFA stDFA = st.getDFA();
@@ -131,16 +127,14 @@ public class Scanner {
                     dfaStateCounter.put(state, newCount);
                 }
 
-                // If all DFAs are dead, throw out current input if it is whitespace
-
                 /*
                  * Once all DFAs are dead, we must backtrack until we encounter an accepting DFA
                  *
                  * A backtracking function is called which will remove the last character from our candidate token,
                  * evaluate all DFAs with this new candidate token, and track the states resultant.
                  *
-                 * If two DFAs are matching, this is (we can assume) that the token matches a keyword and an IdClassLexeme, so just
-                 * return the Lexeme matching this as a keyword.
+                 * If two DFAs are matching, this is (we can assume) that the token matches a keyword and an
+                 * IdClassLexeme, so just return the Lexeme matching this as a keyword.
                  *
                  * If there are still more DFAs matching, we screwed up.
                  */
@@ -153,19 +147,7 @@ public class Scanner {
                     }
                     // Otherwise, backtrack until we find a token that is accepted by some Lexeme
                     else {
-                        // TODO - what if we match more than 2? An error should be thrown.
-
-                        // Find a Lexeme that accepts the previous token
-                        Lexeme acceptingLexeme = getFirstScannerTokenAccepting(previousToken);
-
-                        if (null != acceptingLexeme) {
-                            lexemeList.add(acceptingLexeme);
-                        }
-                        else {
-                            // TODO Do we potentially have to go back more than one iteration?
-                            System.out.println("==ERROR==");
-                            break;
-                        }
+                        consumeToken(previousToken);
 
                         token = new String();
                         i -= 1; // So we can re-evaluate the discarded input
@@ -173,11 +155,34 @@ public class Scanner {
                 }
             }
 
+            // Consume any leftover tokens
+            if (!token.isEmpty()) {
+                consumeToken(token);
+            }
+
             return lexemeList;
         }
         // TODO: How do we want to handle encountering an IOException here?
         catch (IOException ioex) {
             return null;
+        }
+    }
+
+    private void consumeToken(String token) {
+        // Find a Lexeme that accepts the previous token
+        Lexeme acceptingLexeme = getFirstLexemeAccepting(token);
+
+        if (null != acceptingLexeme) {
+            if (acceptingLexeme instanceof KeywordLexeme) {
+                lexemeList.add(acceptingLexeme);
+            }
+            else {
+                lexemeList.add(((ClassLexeme)acceptingLexeme).newClassLexemeWithS(token));
+            }
+        }
+        else {
+            // TODO Do we potentially have to go back more than one iteration?
+            System.out.println("==ERROR on token \"" + token + "\"==");
         }
     }
 }

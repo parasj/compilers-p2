@@ -1,9 +1,0 @@
-let
-  var u : unit;
-	var m : int := 5;
-	func print ( n : int ) : unit begin
-		u := printi(n);
-	end;
-in
-	u := print(m);
-end

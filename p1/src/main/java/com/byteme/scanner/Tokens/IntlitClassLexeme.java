@@ -1,20 +1,23 @@
 package com.byteme.scanner.Tokens;
 
 import com.byteme.scanner.DFA;
-import com.byteme.scanner.Lexeme;
+import com.byteme.scanner.ClassLexeme;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * src
- */
-public class IntlitClassLexeme implements Lexeme {
-    private final DFA dfa;
+public class IntlitClassLexeme extends ClassLexeme {
+    private static final String LITERAL = "intlit";
 
-    public IntlitClassLexeme() {
+    private final DFA dfa;
+    private final String intlitName;
+
+    public IntlitClassLexeme(String intlitName) {
+        super(LITERAL, intlitName);
+
+        this.intlitName = intlitName;
         this.dfa = constructDFA();
     }
 
@@ -69,15 +72,13 @@ public class IntlitClassLexeme implements Lexeme {
         return new DFA(table, accept);
     }
 
+    @Override
+    public ClassLexeme newClassLexemeWithS(String s) {
+        return new IntlitClassLexeme(s);
+    }
 
     @Override
     public DFA getDFA() {
         return dfa;
-    }
-
-    @Override
-    public String toString() {
-        return "IntlitClassLexeme " +
-                "dfa=\n" + dfa;
     }
 }

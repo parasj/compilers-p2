@@ -23,7 +23,15 @@ public class Main {
                             .map(Lexeme::toString)
                             .collect(Collectors.toList());
 
-            System.out.println(String.join(" ", tokens));
+            // Remove empty string from comments
+            for (int i = 0; i < tokens.size(); i++) {
+                if (tokens.get(i).equals("")) {
+                    tokens.remove(i);
+                    i--;
+                }
+            }
+
+            System.out.print(String.join(" ", tokens));
         } else {
             printUsage();
             System.exit(1);

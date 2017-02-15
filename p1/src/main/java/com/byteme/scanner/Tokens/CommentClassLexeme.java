@@ -1,20 +1,23 @@
 package com.byteme.scanner.Tokens;
 
 import com.byteme.scanner.DFA;
-import com.byteme.scanner.Lexeme;
+import com.byteme.scanner.ClassLexeme;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-/**
- * src
- */
-public class CommentClassLexeme implements Lexeme {
+public class CommentClassLexeme extends ClassLexeme {
+    private static final String LITERAL = "comment";
+
+    private final String comment;
     private final DFA dfa;
 
-    public CommentClassLexeme() {
+    public CommentClassLexeme(String comment) {
+        super(LITERAL, comment);
+
+        this.comment = comment;
         this.dfa = constructDFA();
     }
 
@@ -94,15 +97,21 @@ public class CommentClassLexeme implements Lexeme {
         return new DFA(table, accept);
     }
 
+    @Override
+    public ClassLexeme newClassLexemeWithS(String s) {
+        return new CommentClassLexeme(s);
+    }
 
     @Override
     public DFA getDFA() {
         return dfa;
     }
 
+    /*
+     * Comment lexemes do not stringify.
+     */
     @Override
     public String toString() {
-        return "CommentClassLexeme " +
-                "dfa=\n" + dfa;
+        return "";
     }
 }

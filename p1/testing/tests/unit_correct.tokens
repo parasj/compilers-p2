@@ -1,1 +1,0 @@
-let var u:id : unit ; var A:id : unit := _ ; var B:id : int := 0:intlit ; func nothing:id ( ) : unit begin B:id := B:id + 1:intlit ; end ; in A:id := B:id ( ) ; end

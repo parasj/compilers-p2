@@ -11,4 +11,5 @@ jar {
            	   'Implementation-Version': '1.0',
            	   'Main-Class': 'com.byteme.Main'
   }
+  baseName 'compiler'
 }

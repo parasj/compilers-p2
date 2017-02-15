@@ -11,16 +11,18 @@ import java.util.Set;
 /**
  * src
  */
-public class KeywordLexeme implements Lexeme {
+public class KeywordLexeme extends Lexeme {
     private final String literal;
     private final DFA dfa;
 
     public KeywordLexeme(String literal) {
+        super(literal);
+
         this.literal = literal;
         this.dfa = constructDFA(literal);
     }
 
-    private DFA constructDFA(String literal) {
+    private static DFA constructDFA(String literal) {
         Map<Integer, Map<Character, Integer>> table = new HashMap<>();
         Set<Integer> accept = new HashSet<>();
 
@@ -55,13 +57,5 @@ public class KeywordLexeme implements Lexeme {
     @Override
     public DFA getDFA() {
         return dfa;
-    }
-
-    /*
-     * For keyword lexemes, the string representation is simply the lexeme's literal.
-     */
-    @Override
-    public String toString() {
-        return literal;
     }
 }
