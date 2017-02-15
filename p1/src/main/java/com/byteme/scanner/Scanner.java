@@ -168,7 +168,7 @@ public class Scanner {
         }
     }
 
-    private void consumeToken(String token) {
+    private boolean consumeToken(String token) {
         // Find a Lexeme that accepts the previous token
         Lexeme acceptingLexeme = getFirstLexemeAccepting(token);
 
@@ -179,10 +179,12 @@ public class Scanner {
             else {
                 lexemeList.add(((ClassLexeme)acceptingLexeme).newClassLexemeWithS(token));
             }
+            return true;
         }
         else {
             // TODO Do we potentially have to go back more than one iteration?
-            System.out.println("==ERROR on token \"" + token + "\"==");
+            //System.out.println("==ERROR on token \"" + token + "\"==");
+            return false;
         }
     }
 }
