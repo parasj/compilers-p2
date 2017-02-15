@@ -65,6 +65,7 @@ public class Scanner {
             new KeywordLexeme("&"),
             new KeywordLexeme("|"),
             new KeywordLexeme(":="),
+            new KeywordLexeme("_"),
             new CommentClassLexeme(null),
             new FloatlitClassLexeme(null),
             new IdClassLexeme(null),
