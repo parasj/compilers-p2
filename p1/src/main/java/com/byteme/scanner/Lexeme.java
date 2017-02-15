@@ -20,5 +20,4 @@ public abstract class Lexeme {
     }
 
     public abstract DFA getDFA();
-    //public abstract Token tokenize();
 }

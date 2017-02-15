@@ -163,7 +163,6 @@ public class Scanner {
 
             return lexemeList;
         }
-        // TODO: How do we want to handle encountering an IOException here?
         catch (IOException ioex) {
             return null;
         }
@@ -183,8 +182,7 @@ public class Scanner {
             return true;
         }
         else {
-            // TODO Do we potentially have to go back more than one iteration?
-            //System.out.println("==ERROR on token \"" + token + "\"==");
+            // TODO: This should be a scanner error, right?
             return false;
         }
     }
