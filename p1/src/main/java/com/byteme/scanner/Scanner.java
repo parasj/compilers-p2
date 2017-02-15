@@ -146,6 +146,14 @@ public class Scanner {
 
                     // If there was no previous token, there is no need to backtrack
                     if (previousToken.length() == 0) {
+                        if (token.trim().length() > 0) { // todo bad way of handling this
+                            String fileSoFar = new String(fileChars).substring(0, i + 1);
+                            int lineCount = fileSoFar.length() - fileSoFar.replace("\n", "").length() + 1;
+                            int charCount = fileSoFar.length() - fileSoFar.lastIndexOf('\n') - 1;
+
+                            System.out.println("line " + lineCount + ":" + charCount + " scanner error");
+                            System.exit(1);
+                        }
                         token = "";
                     }
                     // Otherwise, backtrack until we find a token that is accepted by some Lexeme
