@@ -1,12 +1,21 @@
-Project Directory for CS 4240 - Compilers and Interpreters
+# CS 4240 - Compilers and Interpreters
 
-How to run:
-run setup.sh in p1 (you may have to run chmod +x setup.sh first) to install gradle and build the jar.
-The jar is located in p1/build/libs/compiler.jar
-You can now run test files on it
+## Team
+Rishav Bose (rbose7)  
+Evan Bailey (ebailey34 and occasionally nolasaint)  
+Paras Jain (pjain67)  
 
-Team Members (and their github names):
+## Project 1
+Project 1's goal was to build a scanner
 
-Evan Bailey (ebailey34 and occasionally nolasaint)
+### Build instructions
+1. `cd p1`
+2. `make`
 
-Rishav Bose(rbose7)
+#### Troubleshooting builds
+Note you may need to run `chmod +x ./gradlew` to enable execution permissions. If that does not work, please do:
+
+1. `cd p1`
+2. `make install`
+3. `gradle clean build`
+4. `make copy`

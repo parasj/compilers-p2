@@ -1,7 +1,7 @@
 package com.byteme;
 
-import com.byteme.scanner.Scanner;
 import com.byteme.scanner.Lexeme;
+import com.byteme.scanner.Scanner;
 
 import java.io.File;
 import java.util.List;

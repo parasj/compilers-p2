@@ -1,7 +1,7 @@
 package com.byteme.scanner.Tokens;
 
-import com.byteme.scanner.DFA;
 import com.byteme.scanner.ClassLexeme;
+import com.byteme.scanner.DFA;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,11 +29,11 @@ public class CommentClassLexeme extends ClassLexeme {
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i == '/') {
-                transitions.put((char)(i), 1);
+                transitions.put((char) (i), 1);
             } else if (i == '*') {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             }
         }
         table.put(0, transitions);
@@ -42,11 +42,11 @@ public class CommentClassLexeme extends ClassLexeme {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i == '/') {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             } else if (i == '*') {
-                transitions.put((char)(i), 2);
+                transitions.put((char) (i), 2);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             }
         }
         table.put(1, transitions);
@@ -55,11 +55,11 @@ public class CommentClassLexeme extends ClassLexeme {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i == '/') {
-                transitions.put((char)(i), 2);
+                transitions.put((char) (i), 2);
             } else if (i == '*') {
-                transitions.put((char)(i), 3);
+                transitions.put((char) (i), 3);
             } else {
-                transitions.put((char)(i), 2);
+                transitions.put((char) (i), 2);
             }
         }
         table.put(2, transitions);
@@ -68,11 +68,11 @@ public class CommentClassLexeme extends ClassLexeme {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i == '/') {
-                transitions.put((char)(i), 4);
+                transitions.put((char) (i), 4);
             } else if (i == '*') {
-                transitions.put((char)(i), 3);
+                transitions.put((char) (i), 3);
             } else {
-                transitions.put((char)(i), 2);
+                transitions.put((char) (i), 2);
             }
         }
         table.put(3, transitions);
@@ -81,15 +81,14 @@ public class CommentClassLexeme extends ClassLexeme {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i == '/') {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             } else if (i == '*') {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             }
         }
         table.put(4, transitions);
-
 
 
         accept.add(4);

@@ -1,7 +1,7 @@
 package com.byteme.scanner.Tokens;
 
-import com.byteme.scanner.DFA;
 import com.byteme.scanner.ClassLexeme;
+import com.byteme.scanner.DFA;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -29,11 +29,11 @@ public class IntlitClassLexeme extends ClassLexeme {
         Map<Character, Integer> transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), 1);
+                transitions.put((char) (i), 1);
             } else if (i == '0') {
-                transitions.put((char)(i), 2);
+                transitions.put((char) (i), 2);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             }
         }
         table.put(0, transitions);
@@ -42,11 +42,11 @@ public class IntlitClassLexeme extends ClassLexeme {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), 1);
+                transitions.put((char) (i), 1);
             } else if (i == '0') {
-                transitions.put((char)(i), 1);
+                transitions.put((char) (i), 1);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             }
         }
         table.put(1, transitions);
@@ -55,15 +55,14 @@ public class IntlitClassLexeme extends ClassLexeme {
         transitions = new HashMap<Character, Integer>();
         for (int i = 0; i < 128; i++) {
             if (i <= '9' && i >= '1') {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             } else if (i == '0') {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             } else {
-                transitions.put((char)(i), -1);
+                transitions.put((char) (i), -1);
             }
         }
         table.put(2, transitions);
-
 
 
         accept.add(1);

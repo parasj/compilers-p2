@@ -5,6 +5,10 @@ repositories {
     mavenCentral()
 }
 
+dependencies {
+  testCompile 'junit:junit:4.12'
+}
+
 jar {
   manifest {
     attributes 'Implementation-Title': 'BTC - the byteme tiger compiler',
@@ -13,6 +17,7 @@ jar {
   }
   baseName 'compiler'
 }
+
 task wrapper(type: Wrapper) {
     gradleVersion = '2.2'
 }

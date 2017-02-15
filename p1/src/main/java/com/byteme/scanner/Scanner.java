@@ -7,13 +7,15 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 /**
  * src
  */
 public class Scanner {
-    private List<Lexeme> lexemeList = new ArrayList();
+    private List<Lexeme> lexemeList = new ArrayList<>();
     private File f;
     private Lexeme[] lexemes = {
             new KeywordLexeme("array"),
@@ -98,14 +100,14 @@ public class Scanner {
             byte fileBytes[] = Files.readAllBytes(Paths.get(f.getPath()));
             char fileChars[] = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
 
-            String token = new String();
+            String token = "";
 
             // Iteratively build our candidate token
             for (int i = 0; i < fileChars.length; i++) {
                 char newestChar = fileChars[i];
 
                 // The number of DFAs in each state post-candidate token evaluation
-                HashMap<Integer, Integer> dfaStateCounter = new HashMap();
+                HashMap<Integer, Integer> dfaStateCounter = new HashMap<>();
 
                 dfaStateCounter.put(DFA.DFA_ACCEPT, 0);
                 dfaStateCounter.put(DFA.DFA_DEAD, 0);
@@ -144,13 +146,13 @@ public class Scanner {
 
                     // If there was no previous token, there is no need to backtrack
                     if (previousToken.length() == 0) {
-                        token = new String();
+                        token = "";
                     }
                     // Otherwise, backtrack until we find a token that is accepted by some Lexeme
                     else {
                         consumeToken(previousToken);
 
-                        token = new String();
+                        token = "";
                         i -= 1; // So we can re-evaluate the discarded input
                     }
                 }
@@ -162,8 +164,7 @@ public class Scanner {
             }
 
             return lexemeList;
-        }
-        catch (IOException ioex) {
+        } catch (IOException ioex) {
             return null;
         }
     }
@@ -175,13 +176,11 @@ public class Scanner {
         if (null != acceptingLexeme) {
             if (acceptingLexeme instanceof KeywordLexeme) {
                 lexemeList.add(acceptingLexeme);
-            }
-            else {
-                lexemeList.add(((ClassLexeme)acceptingLexeme).newClassLexemeWithS(token));
+            } else {
+                lexemeList.add(((ClassLexeme) acceptingLexeme).newClassLexemeWithS(token));
             }
             return true;
-        }
-        else {
+        } else {
             // TODO: This should be a scanner error, right?
             return false;
         }

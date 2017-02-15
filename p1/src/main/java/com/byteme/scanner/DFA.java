@@ -1,18 +1,19 @@
 package com.byteme.scanner;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * src
  */
 public class DFA {
-    private Map<Integer, Map<Character, Integer>> transitions;
-    private Set<Integer> accepting;
-    private final int initial = 0;
-
     public static final int DFA_DEAD = -2;
     public static final int DFA_ACCEPT = 1;
     public static final int DFA_REJECT = -1;
+    private final int initial = 0;
+    private Map<Integer, Map<Character, Integer>> transitions;
+    private Set<Integer> accepting;
 
     public DFA(Map<Integer, Map<Character, Integer>> transitions, Set<Integer> accepting) {
         this.transitions = transitions;

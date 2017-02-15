@@ -34,7 +34,7 @@ public class KeywordLexeme extends Lexeme {
             transitions.put(c, nextState);
             for (int i = 0; i < 128; i++) {
                 if (i != c) {
-                    transitions.put((char)(i), -1);
+                    transitions.put((char) (i), -1);
                 }
             }
             table.put(lastState, transitions);
@@ -44,7 +44,7 @@ public class KeywordLexeme extends Lexeme {
         // From accepting state, map any input to dead state
         Map<Character, Integer> transitions = table.getOrDefault(lastState, new HashMap<>());
         for (int i = 0; i < 128; i++) {
-            transitions.put((char)(i), -1);
+            transitions.put((char) (i), -1);
         }
         table.put(lastState, transitions);
 

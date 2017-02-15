@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.byteme.scanner.Tokens.CommentClassLexemeTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2017-02-15T21:18:49" hostname="lawn-128-61-37-177.lawn.gatech.edu" time="0.003">
+  <properties/>
+  <testcase name="getDFA" classname="com.byteme.scanner.Tokens.CommentClassLexemeTest" time="0.003"/>
+  <system-out><![CDATA[]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
