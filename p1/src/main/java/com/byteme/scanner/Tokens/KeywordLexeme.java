@@ -62,9 +62,6 @@ public class KeywordLexeme implements Lexeme {
      */
     @Override
     public String toString() {
-        /*return "KeywordLexeme: " +
-                "literal='" + literal + '\'' +
-                ", dfa=\n" + dfa;*/
         return literal;
     }
 }

@@ -147,9 +147,6 @@ public class Scanner {
                 if (lexemes.length == dfaStateCounter.get(DFA.DFA_DEAD)) {
                     String previousToken = token.substring(0, token.length() - 1);
 
-                    // TODO - Remove this debug statement
-                    //System.out.println("All " + lexemes.length + " DFAs are in the dead state.");
-
                     // If there was no previous token, there is no need to backtrack
                     if (previousToken.length() == 0) {
                         token = new String();
@@ -163,7 +160,6 @@ public class Scanner {
 
                         if (null != acceptingLexeme) {
                             lexemeList.add(acceptingLexeme);
-                            //System.out.println("Matched " + acceptingLexeme.toString().split("\n")[0]);
                         }
                         else {
                             // TODO Do we potentially have to go back more than one iteration?
@@ -171,11 +167,8 @@ public class Scanner {
                             break;
                         }
 
-                        // TODO - Remove this debug statement
-                        //System.out.println("This should match a keyword: " + previousToken);
-
                         token = new String();
-                        i -= 1; // We want to re-acquire
+                        i -= 1; // So we can re-evaluate the discarded input
                     }
                 }
             }
