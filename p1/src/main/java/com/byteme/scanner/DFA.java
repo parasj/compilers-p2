@@ -29,7 +29,7 @@ public class DFA {
         } else if (str == null || str.length() == 0) { // empty string -> state in accepting
             return (accepting.contains(state)) ? DFA_ACCEPT : DFA_REJECT;
         } else { // recurse on remainder of input
-            Map<Character, Integer> delta = transitions.getOrDefault(str.charAt(0), Collections.emptyMap());
+            Map<Character, Integer> delta = transitions.getOrDefault(state, Collections.emptyMap());
             Integer statePrime = delta.get(str.charAt(0));
             String remaining = (str.length() > 0) ? str.substring(1) : "";
             return evaluate(statePrime, remaining);

@@ -1,7 +1,7 @@
 package com.byteme;
 
 import com.byteme.scanner.Scanner;
-import com.byteme.scanner.ScannerToken;
+import com.byteme.scanner.Lexeme;
 
 import java.io.File;
 import java.util.List;
@@ -20,7 +20,7 @@ public class Main {
         if (phase.equals("--tokens")) {
             List<String> tokens =
                     scanTokens(new File(fnameIn)).stream()
-                            .map(ScannerToken::toString)
+                            .map(Lexeme::toString)
                             .collect(Collectors.toList());
 
             System.out.println(String.join(" ", tokens));
@@ -30,7 +30,7 @@ public class Main {
         }
     }
 
-    private static List<ScannerToken> scanTokens(File f) {
+    private static List<Lexeme> scanTokens(File f) {
         Scanner scanner = new Scanner(f);
         return scanner.tokenize();
     }

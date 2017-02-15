@@ -1,7 +1,7 @@
 package com.byteme.scanner.Tokens;
 
 import com.byteme.scanner.DFA;
-import com.byteme.scanner.ScannerToken;
+import com.byteme.scanner.Lexeme;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,11 +11,11 @@ import java.util.Set;
 /**
  * src
  */
-public class KeywordScannerToken implements ScannerToken {
+public class KeywordLexeme implements Lexeme {
     private final String literal;
     private final DFA dfa;
 
-    public KeywordScannerToken(String literal) {
+    public KeywordLexeme(String literal) {
         this.literal = literal;
         this.dfa = constructDFA(literal);
     }
@@ -39,6 +39,13 @@ public class KeywordScannerToken implements ScannerToken {
             lastState = nextState++;
         }
 
+        // From accepting state, map any input to dead state
+        Map<Character, Integer> transitions = table.getOrDefault(lastState, new HashMap<>());
+        for (int i = 0; i < 128; i++) {
+            transitions.put((char)(i), -1);
+        }
+        table.put(lastState, transitions);
+
         accept.add(lastState);
 
         return new DFA(table, accept);
@@ -50,10 +57,14 @@ public class KeywordScannerToken implements ScannerToken {
         return dfa;
     }
 
+    /*
+     * For keyword lexemes, the string representation is simply the lexeme's literal.
+     */
     @Override
     public String toString() {
-        return "KeywordScannerToken: " +
+        /*return "KeywordLexeme: " +
                 "literal='" + literal + '\'' +
-                ", dfa=\n" + dfa;
+                ", dfa=\n" + dfa;*/
+        return literal;
     }
 }

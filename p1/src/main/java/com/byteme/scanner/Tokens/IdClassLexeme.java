@@ -1,7 +1,7 @@
 package com.byteme.scanner.Tokens;
 
 import com.byteme.scanner.DFA;
-import com.byteme.scanner.ScannerToken;
+import com.byteme.scanner.Lexeme;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -11,10 +11,10 @@ import java.util.Set;
 /**
  * src
  */
-public class id implements ScannerToken {
+public class IdClassLexeme implements Lexeme {
     private final DFA dfa;
 
-    public id() {
+    public IdClassLexeme() {
         this.dfa = constructDFA();
     }
 
@@ -81,7 +81,7 @@ public class id implements ScannerToken {
 
     @Override
     public String toString() {
-        return "id " +
+        return "IdClassLexeme " +
                 "dfa=\n" + dfa;
     }
 }

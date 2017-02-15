@@ -3,6 +3,6 @@ package com.byteme.scanner;
 /**
  * src
  */
-public interface ScannerToken {
+public interface Lexeme {
     public DFA getDFA();
 }
