@@ -1,0 +1,38 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE grammar [
+  <!ELEMENT grammar ANY>
+  <!ATTLIST grammar name CDATA #REQUIRED>
+  <!ELEMENT productionRule ANY>
+  <!ATTLIST productionRule name CDATA #REQUIRED>
+  <!ELEMENT terminal ANY>
+  <!ATTLIST terminal value CDATA #REQUIRED>
+  <!ELEMENT productionRuleReference ANY>
+  <!ATTLIST productionRuleReference name CDATA #REQUIRED>
+]>
+
+<grammar name="tiger">
+
+  <productionRule name="program">
+    <terminal value="let"/>
+    <productionRuleReference name="program" />
+    <terminal value="in" />
+    <productionRuleReference name="stmts" />
+    <terminal value="end" />
+  </productionRule>
+
+<productionRule name="declseg">
+  <productionRuleReference name="typedecls" />
+  <productionRuleReference name="vardecls" />
+  <productionRuleReference name="funcdecls" />
+</productionRule>
+
+<productionRule name="typedecls">
+  <!-- a terminal with value = empty string is the empty string terminal -->  
+  <terminal value="" />
+</productionRule>
+
+<productionRule name="typedecls">
+  
+</productionRule>
+
+</grammar>

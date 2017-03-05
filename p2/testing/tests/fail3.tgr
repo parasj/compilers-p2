@@ -1,0 +1,6 @@
+let
+  /* unclosed comment
+        var a, b : int := 0;
+in
+      a := b + 2 * 3 + 4 - 5;
+end
