@@ -1,0 +1,23 @@
+apply plugin: 'java'
+apply plugin: 'idea'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+  testCompile 'junit:junit:4.12'
+}
+
+jar {
+  manifest {
+    attributes 'Implementation-Title': 'BTC - the byteme tiger compiler',
+           	   'Implementation-Version': '1.0',
+           	   'Main-Class': 'com.byteme.Main'
+  }
+  baseName 'compiler'
+}
+
+task wrapper(type: Wrapper) {
+    gradleVersion = '2.2'
+}
