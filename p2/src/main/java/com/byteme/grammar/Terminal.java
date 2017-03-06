@@ -26,4 +26,8 @@ public final class Terminal extends Symbol {
 //        return lexeme;
 //    }
 
+    @Override
+    public String toString() {
+        return this.name.toUpperCase();
+    }
 }

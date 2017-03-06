@@ -5,34 +5,136 @@
   <!ELEMENT productionRule ANY>
   <!ATTLIST productionRule name CDATA #REQUIRED>
   <!ELEMENT terminal ANY>
-  <!ATTLIST terminal value CDATA #REQUIRED>
-  <!ELEMENT productionRuleReference ANY>
-  <!ATTLIST productionRuleReference name CDATA #REQUIRED>
+  <!ATTLIST terminal lexeme CDATA #REQUIRED>
+  <!ELEMENT nonterminal ANY>
+  <!ATTLIST nonterminal rule CDATA #REQUIRED>
 ]>
 
 <grammar name="tiger">
 
+  <!-- rule: program -->
   <productionRule name="program">
-    <terminal value="let"/>
-    <productionRuleReference name="program" />
-    <terminal value="in" />
-    <productionRuleReference name="stmts" />
-    <terminal value="end" />
+    <terminal lexeme="let"/>
+    <nonterminal rule="program" />
+    <terminal lexeme="in" />
+    <nonterminal rule="stmts" />
+    <terminal lexeme="end" />
   </productionRule>
 
-<productionRule name="declseg">
-  <productionRuleReference name="typedecls" />
-  <productionRuleReference name="vardecls" />
-  <productionRuleReference name="funcdecls" />
-</productionRule>
+  <!-- rule: declseg -->
+  <productionRule name="declseg">
+    <nonterminal rule="typedecls" />
+    <nonterminal rule="vardecls" />
+    <nonterminal rule="funcdecls" />
+  </productionRule>
 
-<productionRule name="typedecls">
-  <!-- a terminal with value = empty string is the empty string terminal -->  
-  <terminal value="" />
-</productionRule>
+  <!-- rule: typedecls -->
+  <productionRule name="typedecls">
+    <!-- a terminal with lexeme = empty string is the empty string terminal -->  
+    <terminal lexeme="" />
+  </productionRule>
 
-<productionRule name="typedecls">
+  <productionRule name="typedecls">
+    <nonterminal rule="typedecl" />
+    <nonterminal rule="typedecls" />
+  </productionRule>
+
+  <!-- rule: typedecl -->
+  <productionRule name="typedecl">
+    <terminal lexeme="type" />
+    <terminal lexeme="id" />
+    <terminal lexeme=":=" />
+    <nonterminal rule="type" />
+    <terminal lexeme=";" />
+  </productionRule>
+
+  <!-- rule: type -->
+  <productionRule name="type">
+    <terminal lexeme="boolean" />
+  </productionRule>
+
+  <productionRule name="type">
+    <terminal lexeme="int" />
+  </productionRule>
+
+  <productionRule name="type">
+    <terminal lexeme="float" />
+  </productionRule>
+
+  <productionRule name="type">
+    <terminal lexeme="unit" />
+  </productionRule>
+
+  <productionRule name="type">
+    <terminal lexeme="id" />
+  </productionRule>
+
+  <productionRule name="type">
+    <terminal lexeme="array" />
+    <terminal lexeme="[" />
+    <terminal lexeme="intlit" />
+    <terminal lexeme="]" />
+    <terminal lexeme="of" />
+    <nonterminal rule="type" />
+  </productionRule>
   
-</productionRule>
+  <!-- rule: vardecls -->
+  <productionRule name="vardecls">
+    <terminal lexeme="" />
+  </productionRule>
 
+  <productionRule name="vardecls">
+    <nonterminal rule="vardecl" />
+    <nonterminal rule="vardecls" />
+  </productionRule>
+
+  <!-- rule: vardecl -->
+  <productionRule name="vardecl">
+    <terminal lexeme="var" />
+    <nonterminal rule="ids" />
+    <terminal lexeme=":" />
+    <nonterminal rule="type" />
+    <nonterminal rule="optinit" />
+    <terminal lexeme=";" />
+  </productionRule>
+
+  <!-- rule: ids -->
+  <productionRule name="ids">
+    <terminal lexeme="id" />
+  </productionRule>
+
+  <productionRule name="ids">
+    <terminal lexeme="id" />
+    <terminal lexeme="," />
+    <nonterminal rule="ids" />
+  </productionRule>
+
+  <!-- rule: optinit -->
+  <productionRule name="optinit">
+    <terminal lexeme="" />
+  </productionRule>
+
+  <productionRule name="optinit">
+    <terminal lexeme=":=" />
+    <nonterminal rule="const" />
+  </productionRule>
+
+  <!-- rule: funcdecls -->
+  <productionRule name="funcdecls">
+    <terminal lexeme="" />
+  </productionRule>
+
+  <productionRule name="funcdecls">
+    <terminal lexeme="func" />
+    <terminal lexeme="id" />
+    <terminal lexeme="(" />
+    <nonterminal rule="params" />
+    <terminal lexeme=")" />
+    <terminal lexeme=":" />
+    <nonterminal rule="type" />
+    <terminal lexeme="begin" />
+    <nonterminal rule="stmts" />
+    <terminal lexeme="end" />
+    <terminal lexeme=";" />
+  </productionRule>
 </grammar>

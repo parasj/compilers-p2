@@ -11,6 +11,10 @@ import java.util.LinkedList;
  */
 public final class Grammar {
 
+    /**
+     * Note: the first rule in this list is considered the rule with our
+     * grammar's head non-terminal.
+     */
     private final LinkedList<ProductionRule> productionRules;
 
     /**

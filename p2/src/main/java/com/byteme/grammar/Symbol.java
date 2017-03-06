@@ -7,7 +7,7 @@ package com.byteme.grammar;
  */
 public abstract class Symbol {
 
-    // Note: declared protected for ease-of-access in subclasses
+    // declared protected for ease-of-access in subclasses
     protected final String name;
 
     /**
@@ -25,6 +25,11 @@ public abstract class Symbol {
      * @return the Symbol's name as a String.
      */
     public final String getName() {
+        return name;
+    }
+
+    @Override
+    public String toString() {
         return name;
     }
 
