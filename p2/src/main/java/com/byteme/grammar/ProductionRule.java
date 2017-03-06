@@ -17,7 +17,7 @@ import java.util.LinkedList;
  *
  *      assignment -> variable assignOp variable arithmeticOp variable ;
  */
-public class ProductionRule extends NonTerminal {
+public final class ProductionRule extends NonTerminal {
 
     /**
      * An ordered list of Symbols that this ProductionRule derives as.
