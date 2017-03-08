@@ -22,7 +22,7 @@ public abstract class Symbol {
     /**
      * Returns this Symbol's name.
      *
-     * @return the Symbol's name as a String.
+     * @return  the Symbol's name as a String.
      */
     public final String getName() {
         return name;

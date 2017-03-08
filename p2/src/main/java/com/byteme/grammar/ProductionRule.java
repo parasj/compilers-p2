@@ -4,7 +4,7 @@ import java.util.LinkedList;
 
 /**
  * In the scope of context-free grammars, a production rule is some collection
- * of symbols that can be derived from a conceptual class, or "rule." TODO reword, including headNonTerminal -> symbols
+ * of symbols which a given non-terminal symbol may derive as.
  *
  * A production rule takes the form A -> s, where A is the head non-terminal
  * symbol, and s is the collection of symbols which A can derive as.
@@ -19,6 +19,10 @@ import java.util.LinkedList;
  */
 public final class ProductionRule {
 
+    /**
+     * The NonTerminal Symbol whose derivation is defined by this
+     * ProductionRule.
+     */
     private final NonTerminal headNonTerminal;
 
     /**
@@ -31,17 +35,38 @@ public final class ProductionRule {
     /**
      * Constructs a ProductionRule (of the form A -> s).
      *
-     * @param   headNonTerminal -   TODO
-     * @param   symbols         -   the Symbols that this production rule derives as
+     * @param   headNonTerminal -   the NonTerminal at the head of this
+     *                              ProductionRule
+     * @param   derivation      -   the Symbols that the head NonTerminal
+     *                              derives as
      */
-    public ProductionRule(NonTerminal headNonTerminal, Symbol ... symbols) {
+    public ProductionRule(NonTerminal headNonTerminal, Symbol ... derivation) {
         this.headNonTerminal = headNonTerminal;
         this.derivation = new LinkedList<>();
 
         // construct list of Symbols in the derivation for this rule
-        for (Symbol s : symbols) {
+        for (Symbol s : derivation) {
             this.derivation.addLast(s);
         }
+    }
+
+    /**
+     * Returns this production rule's head non-terminal symbol. If we consider
+     * a production rule in the form A -> s, the head non-terminal is "A."
+     *
+     * @return  this ProductionRule's head NonTerminal.
+     */
+    public NonTerminal getHeadNonTerminal() {
+        return headNonTerminal;
+    }
+
+    /**
+     * Returns this production rule's derivation.
+     *
+     * @return  this ProductionRule's Symbol derivation in a LinkedList.
+     */
+    public LinkedList<Symbol> getDerivation() {
+        return derivation;
     }
 
     @Override

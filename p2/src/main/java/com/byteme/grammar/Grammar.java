@@ -13,7 +13,7 @@ public final class Grammar {
 
     /**
      * Note: the first rule in this list is considered the rule with our
-     * grammar's head non-terminal.
+     * grammar's start symbol.
      */
     private final LinkedList<ProductionRule> productionRules;
 
@@ -34,12 +34,22 @@ public final class Grammar {
     }
 
     /**
-     * Adds a new ProductionRule to the Grammar.
+     * Adds a new production rule to the grammar.
      *
      * @param   productionRule  -   the ProductionRule to add to this Grammar
      */
     public void addProductionRule(ProductionRule productionRule) {
         productionRules.addLast(productionRule);
+    }
+
+    /**
+     * Returns this grammar's production rules.
+     *
+     * @return  a LinkedList of this Grammar's ProductionRules.
+     */
+    public LinkedList<ProductionRule> getProductionRules() {
+        // TODO: Note that this directly returns the LinkedList reference, so it may be altered by someone else!
+        return productionRules;
     }
 
     @Override
