@@ -3,6 +3,7 @@ package com.byteme.scanner;
 import com.byteme.lexer.ClassLexeme;
 import com.byteme.lexer.DFA;
 import com.byteme.lexer.Lexeme;
+import com.byteme.lexer.Token;
 import com.byteme.lexer.classes.*;
 
 import java.io.File;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -77,8 +79,12 @@ public class Scanner {
             new IntlitClassLexeme(null)
     };
 
+    private LinkedList<Token> scannedTokens;
+
     public Scanner(File f) {
         this.f = f;
+
+        scannedTokens = new LinkedList<>();
     }
 
     private Lexeme getFirstLexemeAccepting(String token) {
@@ -97,6 +103,9 @@ public class Scanner {
         return acceptingLexeme;
     }
 
+    // TODO: eventually rework this to hasToken, getToken, peekToken
+
+    // TODO: rework this to tokenizeFile() or scanFile() and return List<Token>
     public List<Lexeme> tokenize() {
         try {
             // Assume UTF-8 encoding
@@ -180,11 +189,30 @@ public class Scanner {
         }
     }
 
+
+    /* BEGIN TEMPORARY PUBLIC-FACING SCANNER INTERFACE */
+    int tokenIndex = 0;
+
+    public boolean hasNextToken() {
+        return tokenIndex < scannedTokens.size();
+    }
+
+    public Token getNextToken() {
+        return scannedTokens.get(tokenIndex++);
+    }
+
+    public Token peekNextToken() {
+        return scannedTokens.get(tokenIndex);
+    }
+    /* END TEMPORARY PUBLIC-FACING SCANNER INTERFACE */
+
     private boolean consumeToken(String token) {
         // Find a Lexeme that accepts the previous token
         Lexeme acceptingLexeme = getFirstLexemeAccepting(token);
 
         if (null != acceptingLexeme) {
+            scannedTokens.addLast(new Token(acceptingLexeme, token));
+
             if (acceptingLexeme instanceof KeywordLexeme) {
                 lexemeList.add(acceptingLexeme);
             } else {
