@@ -12,12 +12,10 @@ public class FloatlitClassLexeme extends ClassLexeme {
     private static final String LITERAL = "floatlit";
 
     private final DFA dfa;
-    private final String floatlitName;
 
-    public FloatlitClassLexeme(String floatlitName) {
-        super(LITERAL, floatlitName);
+    public FloatlitClassLexeme() {
+        super(LITERAL);
 
-        this.floatlitName = floatlitName;
         this.dfa = constructDFA();
     }
 
@@ -92,12 +90,12 @@ public class FloatlitClassLexeme extends ClassLexeme {
     }
 
     @Override
-    public ClassLexeme newClassLexemeWithS(String s) {
-        return new FloatlitClassLexeme(s);
+    public DFA getDFA() {
+        return dfa;
     }
 
     @Override
-    public DFA getDFA() {
-        return dfa;
+    public String stringify(String token) {
+        return token + ":" + literal;
     }
 }

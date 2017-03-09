@@ -12,12 +12,10 @@ public class IdClassLexeme extends ClassLexeme {
     private static final String LITERAL = "id";
 
     private final DFA dfa;
-    private final String idName;
 
-    public IdClassLexeme(String idName) {
-        super(LITERAL, idName);
+    public IdClassLexeme() {
+        super(LITERAL);
 
-        this.idName = idName;
         this.dfa = constructDFA();
     }
 
@@ -77,12 +75,12 @@ public class IdClassLexeme extends ClassLexeme {
     }
 
     @Override
-    public ClassLexeme newClassLexemeWithS(String s) {
-        return new IdClassLexeme(s);
+    public DFA getDFA() {
+        return dfa;
     }
 
     @Override
-    public DFA getDFA() {
-        return dfa;
+    public String stringify(String token) {
+        return token + ":" + literal;
     }
 }

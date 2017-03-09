@@ -1,6 +1,5 @@
 package com.byteme.scanner;
 
-import com.byteme.lexer.ClassLexeme;
 import com.byteme.lexer.DFA;
 import com.byteme.lexer.Lexeme;
 import com.byteme.lexer.Token;
@@ -11,105 +10,45 @@ import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
-import java.util.List;
 
 /**
  * src
  */
 public class Scanner {
-    private List<Lexeme> lexemeList = new ArrayList<>();
-    private File f;
-    private Lexeme[] lexemes = {
-            new KeywordLexeme("array"),
-            new KeywordLexeme("begin"),
-            new KeywordLexeme("boolean"),
-            new KeywordLexeme("break"),
-            new KeywordLexeme("do"),
-            new KeywordLexeme("else"),
-            new KeywordLexeme("end"),
-            new KeywordLexeme("enddo"),
-            new KeywordLexeme("endif"),
-            new KeywordLexeme("false"),
-            new KeywordLexeme("float"),
-            new KeywordLexeme("for"),
-            new KeywordLexeme("func"),
-            new KeywordLexeme("if"),
-            new KeywordLexeme("in"),
-            new KeywordLexeme("int"),
-            new KeywordLexeme("let"),
-            new KeywordLexeme("of"),
-            new KeywordLexeme("return"),
-            new KeywordLexeme("then"),
-            new KeywordLexeme("to"),
-            new KeywordLexeme("true"),
-            new KeywordLexeme("type"),
-            new KeywordLexeme("unit"),
-            new KeywordLexeme("var"),
-            new KeywordLexeme("while"),
-            new KeywordLexeme(","),
-            new KeywordLexeme(":"),
-            new KeywordLexeme(";"),
-            new KeywordLexeme("("),
-            new KeywordLexeme(")"),
-            new KeywordLexeme("["),
-            new KeywordLexeme("]"),
-            new KeywordLexeme("{"),
-            new KeywordLexeme("}"),
-            new KeywordLexeme("."),
-            new KeywordLexeme("+"),
-            new KeywordLexeme("-"),
-            new KeywordLexeme("*"),
-            new KeywordLexeme("/"),
-            new KeywordLexeme("="),
-            new KeywordLexeme("<>"),
-            new KeywordLexeme("<"),
-            new KeywordLexeme(">"),
-            new KeywordLexeme("<="),
-            new KeywordLexeme(">="),
-            new KeywordLexeme("&"),
-            new KeywordLexeme("|"),
-            new KeywordLexeme(":="),
-            new KeywordLexeme("_"),
-            new CommentClassLexeme(null),
-            new FloatlitClassLexeme(null),
-            new IdClassLexeme(null),
-            new IntlitClassLexeme(null)
-    };
 
+    private int scannedTokensIndex = 0;
+    //private List<Lexeme> lexemeList = new ArrayList<>();
+    private File inputFile;
+    private Lexeme[] lexemes;
     private LinkedList<Token> scannedTokens;
 
-    public Scanner(File f) {
-        this.f = f;
+    /**
+     *
+     * @param inputFile
+     * @param lexemes
+     */
+    public Scanner(File inputFile, Lexeme ... lexemes) {
+        this.inputFile = inputFile;
+        this.lexemes = lexemes;
 
         scannedTokens = new LinkedList<>();
     }
 
-    private Lexeme getFirstLexemeAccepting(String token) {
-        Lexeme acceptingLexeme = null;
-
-        // Iterate over all known lexemes, return first one that accepts this token
-        for (Lexeme st : lexemes) {
-            DFA dfa = st.getDFA();
-
-            if (DFA.DFA_ACCEPT == dfa.evaluate(token)) {
-                acceptingLexeme = st;
-                break;
-            }
+    /**
+     * Scans the input file and generates tokens based on the provided Lexemes.
+     */
+    public void tokenize() {
+        // Allow re-tokenization, in case we ever want to do this
+        if (scannedTokens.size() > 0) {
+            scannedTokens.clear();
+            scannedTokensIndex = 0;
         }
 
-        return acceptingLexeme;
-    }
-
-    // TODO: eventually rework this to hasToken, getToken, peekToken
-
-    // TODO: rework this to tokenizeFile() or scanFile() and return List<Token>
-    public List<Lexeme> tokenize() {
         try {
             // Assume UTF-8 encoding
-            byte fileBytes[] = Files.readAllBytes(Paths.get(f.getPath()));
+            byte fileBytes[] = Files.readAllBytes(Paths.get(inputFile.getPath()));
             char fileChars[] = new String(fileBytes, StandardCharsets.UTF_8).toCharArray();
 
             String token = "";
@@ -134,8 +73,6 @@ public class Scanner {
 
                 // Evaluate each DFA
                 for (Lexeme st : lexemes) {
-                    DFA stDFA = st.getDFA();
-
                     int state = st.getDFA().evaluate(token);
                     int newCount = dfaStateCounter.get(state) + 1;
 
@@ -158,6 +95,7 @@ public class Scanner {
 
                     // If there was no previous token, there is no need to backtrack
                     if (previousToken.length() == 0) {
+                        // This is our error condition: if there is some input after backtracking
                         if (token.trim().length() > 0) { // todo bad way of handling this
                             String fileSoFar = new String(fileChars).substring(0, i + 1);
                             int lineCount = fileSoFar.length() - fileSoFar.replace("\n", "").length() + 1;
@@ -183,29 +121,64 @@ public class Scanner {
                 consumeToken(token);
             }
 
-            return lexemeList;
+            //return lexemeList;
         } catch (IOException ioex) {
-            return null;
+            System.out.println("ERROR: IOException encountered while reading from file");
+            System.out.println("Stack trace below:");
+            ioex.printStackTrace();
         }
     }
 
-
-    /* BEGIN TEMPORARY PUBLIC-FACING SCANNER INTERFACE */
-    int tokenIndex = 0;
-
+    /**
+     * TODO
+     * @return
+     */
     public boolean hasNextToken() {
-        return tokenIndex < scannedTokens.size();
+        return scannedTokensIndex < scannedTokens.size();
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Token getNextToken() {
-        return scannedTokens.get(tokenIndex++);
+        return scannedTokens.get(scannedTokensIndex++);
     }
 
+    /**
+     * TODO
+     * @return
+     */
     public Token peekNextToken() {
-        return scannedTokens.get(tokenIndex);
+        return scannedTokens.get(scannedTokensIndex);
     }
-    /* END TEMPORARY PUBLIC-FACING SCANNER INTERFACE */
 
+    /**
+     * TODO
+     * @param token
+     * @return
+     */
+    private Lexeme getFirstLexemeAccepting(String token) {
+        Lexeme acceptingLexeme = null;
+
+        // Iterate over all known lexemes, return first one that accepts this token
+        for (Lexeme st : lexemes) {
+            DFA dfa = st.getDFA();
+
+            if (DFA.DFA_ACCEPT == dfa.evaluate(token)) {
+                acceptingLexeme = st;
+                break;
+            }
+        }
+
+        return acceptingLexeme;
+    }
+
+    /**
+     * TODO
+     * @param token
+     * @return
+     */
     private boolean consumeToken(String token) {
         // Find a Lexeme that accepts the previous token
         Lexeme acceptingLexeme = getFirstLexemeAccepting(token);
@@ -213,11 +186,11 @@ public class Scanner {
         if (null != acceptingLexeme) {
             scannedTokens.addLast(new Token(acceptingLexeme, token));
 
-            if (acceptingLexeme instanceof KeywordLexeme) {
-                lexemeList.add(acceptingLexeme);
-            } else {
-                lexemeList.add(((ClassLexeme) acceptingLexeme).newClassLexemeWithS(token));
-            }
+//            if (acceptingLexeme instanceof KeywordLexeme) {
+//                lexemeList.add(acceptingLexeme);
+//            } else {
+//                lexemeList.add(((ClassLexeme) acceptingLexeme).newClassLexemeWithS(token));
+//            }
             return true;
         } else {
             // TODO: This should be a scanner error, right?

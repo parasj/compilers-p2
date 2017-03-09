@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class CommentClassLexemeTest {
     @Test
     public void getDFA() throws Exception {
-        CommentClassLexeme id = new CommentClassLexeme("test");
+        CommentClassLexeme id = new CommentClassLexeme();
         DFA dfa = id.getDFA();
 
         assertEquals(DFA.DFA_ACCEPT, dfa.evaluate("/* 123 */"));

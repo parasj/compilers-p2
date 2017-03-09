@@ -1,4 +1,4 @@
-package com.byteme.lexer.classes;
+package com.byteme.lexer;
 
 import com.byteme.lexer.DFA;
 import com.byteme.lexer.Lexeme;
@@ -12,13 +12,11 @@ import java.util.Set;
  * src
  */
 public class KeywordLexeme extends Lexeme {
-    private final String literal;
     private final DFA dfa;
 
     public KeywordLexeme(String literal) {
         super(literal);
 
-        this.literal = literal;
         this.dfa = constructDFA(literal);
     }
 
@@ -53,9 +51,13 @@ public class KeywordLexeme extends Lexeme {
         return new DFA(table, accept);
     }
 
-
     @Override
     public DFA getDFA() {
         return dfa;
+    }
+
+    @Override
+    public String stringify(String token) {
+        return literal;
     }
 }

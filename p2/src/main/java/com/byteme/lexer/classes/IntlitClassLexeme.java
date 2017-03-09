@@ -12,12 +12,10 @@ public class IntlitClassLexeme extends ClassLexeme {
     private static final String LITERAL = "intlit";
 
     private final DFA dfa;
-    private final String intlitName;
 
-    public IntlitClassLexeme(String intlitName) {
-        super(LITERAL, intlitName);
+    public IntlitClassLexeme() {
+        super(LITERAL);
 
-        this.intlitName = intlitName;
         this.dfa = constructDFA();
     }
 
@@ -72,12 +70,12 @@ public class IntlitClassLexeme extends ClassLexeme {
     }
 
     @Override
-    public ClassLexeme newClassLexemeWithS(String s) {
-        return new IntlitClassLexeme(s);
+    public DFA getDFA() {
+        return dfa;
     }
 
     @Override
-    public DFA getDFA() {
-        return dfa;
+    public String stringify(String token) {
+        return token + ":" + literal;
     }
 }

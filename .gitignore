@@ -1,5 +1,5 @@
 .gradle
-/build/
+*/build/
 
 # Ignore Gradle GUI config
 gradle-app.setting
@@ -41,3 +41,4 @@ hs_err_pid*
 
 # testing files
 p1/testing/*
+p2/testing/*

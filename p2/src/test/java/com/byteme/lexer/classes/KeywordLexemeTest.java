@@ -1,6 +1,7 @@
 package com.byteme.lexer.classes;
 
 import com.byteme.lexer.DFA;
+import com.byteme.lexer.KeywordLexeme;
 import org.junit.Test;
 
 import static org.junit.Assert.*;

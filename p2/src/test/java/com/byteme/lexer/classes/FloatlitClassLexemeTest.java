@@ -11,7 +11,7 @@ import static org.junit.Assert.*;
 public class FloatlitClassLexemeTest {
     @Test
     public void getDFA() throws Exception {
-        FloatlitClassLexeme id = new FloatlitClassLexeme("test");
+        FloatlitClassLexeme id = new FloatlitClassLexeme();
         DFA dfa = id.getDFA();
 
         assertEquals(DFA.DFA_ACCEPT, dfa.evaluate("123.123"));

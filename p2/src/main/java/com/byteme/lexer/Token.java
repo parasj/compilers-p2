@@ -30,6 +30,21 @@ public class Token {
         this.value = value;
     }
 
+    /**
+     * TODO
+     * @return
+     */
+    public Lexeme getLexeme() {
+        return lexeme;
+    }
+
+    /**
+     * TODO
+     */
+    public String getValue() {
+        return value;
+    }
+
     @Override
     public String toString() {
         return lexeme.toString() + ":" + value;

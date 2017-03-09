@@ -11,13 +11,11 @@ import java.util.Set;
 public class CommentClassLexeme extends ClassLexeme {
     private static final String LITERAL = "comment";
 
-    private final String comment;
     private final DFA dfa;
 
-    public CommentClassLexeme(String comment) {
-        super(LITERAL, comment);
+    public CommentClassLexeme() {
+        super(LITERAL);
 
-        this.comment = comment;
         this.dfa = constructDFA();
     }
 
@@ -96,21 +94,19 @@ public class CommentClassLexeme extends ClassLexeme {
         return new DFA(table, accept);
     }
 
-    @Override
-    public ClassLexeme newClassLexemeWithS(String s) {
-        return new CommentClassLexeme(s);
-    }
+//    @Override
+//    public ClassLexeme newClassLexemeWithS(String s) {
+//        return new CommentClassLexeme(s);
+//    }
 
     @Override
     public DFA getDFA() {
         return dfa;
     }
 
-    /*
-     * Comment lexemes do not stringify.
-     */
     @Override
-    public String toString() {
+    public String stringify(String token) {
+        // Comment lexemes do not stringify
         return "";
     }
 }

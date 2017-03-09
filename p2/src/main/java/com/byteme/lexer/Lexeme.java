@@ -14,10 +14,13 @@ public abstract class Lexeme {
         this.literal = literal;
     }
 
+    // TODO: eventually just use constructLexemeWithDFA or include in constructor
+    public abstract DFA getDFA();
+
+    public abstract String stringify(String token);
+
     @Override
     public String toString() {
         return literal;
     }
-
-    public abstract DFA getDFA();
 }
