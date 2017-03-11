@@ -1,9 +1,7 @@
 package com.byteme.lexer;
 
 /**
- * TODO
- *
- * Created by ebuntu on 3/8/17.
+ * A Token is simply some input which has been accepted by some Lexeme.
  */
 public class Token {
 
@@ -22,8 +20,8 @@ public class Token {
     /**
      * Constructs a new Token with the specified Lexeme and Value.
      *
-     * @param lexeme TODO
-     * @param value TODO
+     * @param lexeme    TODO
+     * @param value     TODO
      */
     public Token(Lexeme lexeme, String value) {
         this.lexeme = lexeme;
@@ -32,6 +30,7 @@ public class Token {
 
     /**
      * TODO
+     *
      * @return
      */
     public Lexeme getLexeme() {
@@ -40,6 +39,8 @@ public class Token {
 
     /**
      * TODO
+     *
+     * @return
      */
     public String getValue() {
         return value;

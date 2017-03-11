@@ -1,10 +1,12 @@
 package com.byteme;
 
+import com.byteme.grammar.GrammarBuilder;
 import com.byteme.lexer.KeywordLexeme;
 import com.byteme.lexer.Lexeme;
 import com.byteme.lexer.Token;
 import com.byteme.lexer.classes.*;
 import com.byteme.scanner.Scanner;
+import org.dom4j.Document;
 
 import java.io.File;
 
@@ -98,7 +100,19 @@ public class Main {
                         System.out.print(" ");
                 }
             }
-        } else {
+        }
+        // TODO: This is temporary for testing purposes
+        else if (phase.equals("--temporary")) {
+            try {
+                Document doc = GrammarBuilder.parseXML(new File(fnameIn));
+
+                System.out.println(doc.toString());
+            }
+            catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        else {
             printUsage();
             System.exit(1);
         }

@@ -10,13 +10,31 @@ public abstract class Lexeme {
      */
     protected final String literal;
 
+    /**
+     * TODO
+     *
+     * @param literal   TODO
+     */
     public Lexeme(String literal) {
         this.literal = literal;
     }
 
     // TODO: eventually just use constructLexemeWithDFA or include in constructor
+
+    /**
+     * TODO
+     *
+     * @return
+     */
     public abstract DFA getDFA();
 
+    /**
+     * TODO
+     *
+     * @param token TODO
+     *
+     * @return
+     */
     public abstract String stringify(String token);
 
     @Override

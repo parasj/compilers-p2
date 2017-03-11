@@ -3,7 +3,6 @@ package com.byteme.scanner;
 import com.byteme.lexer.DFA;
 import com.byteme.lexer.Lexeme;
 import com.byteme.lexer.Token;
-import com.byteme.lexer.classes.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -14,20 +13,22 @@ import java.util.HashMap;
 import java.util.LinkedList;
 
 /**
- * src
+ * TODO
  */
 public class Scanner {
 
     private int scannedTokensIndex = 0;
-    //private List<Lexeme> lexemeList = new ArrayList<>();
+
     private File inputFile;
     private Lexeme[] lexemes;
     private LinkedList<Token> scannedTokens;
 
     /**
+     * Constructs a new Scanner over the specified Lexemes for a given File.
      *
-     * @param inputFile
-     * @param lexemes
+     * @param inputFile the File to be scanned
+     * @param lexemes   an array of Lexemes with which to accept and tokenize
+     *                  input
      */
     public Scanner(File inputFile, Lexeme ... lexemes) {
         this.inputFile = inputFile;
@@ -37,10 +38,10 @@ public class Scanner {
     }
 
     /**
-     * Scans the input file and generates tokens based on the provided Lexemes.
+     * Scans the input file and generates Tokens based on the provided Lexemes.
      */
     public void tokenize() {
-        // Allow re-tokenization, in case we ever want to do this
+        // Allow re-generation of tokens, in case we ever want to do this
         if (scannedTokens.size() > 0) {
             scannedTokens.clear();
             scannedTokensIndex = 0;
@@ -108,7 +109,7 @@ public class Scanner {
                     }
                     // Otherwise, backtrack until we find a token that is accepted by some Lexeme
                     else {
-                        consumeToken(previousToken);
+                        scanToken(previousToken);
 
                         token = "";
                         i -= 1; // So we can re-evaluate the discarded input
@@ -118,10 +119,8 @@ public class Scanner {
 
             // Consume any leftover tokens
             if (!token.isEmpty()) {
-                consumeToken(token);
+                scanToken(token);
             }
-
-            //return lexemeList;
         } catch (IOException ioex) {
             System.out.println("ERROR: IOException encountered while reading from file");
             System.out.println("Stack trace below:");
@@ -130,43 +129,49 @@ public class Scanner {
     }
 
     /**
-     * TODO
-     * @return
+     * Checks whether there are any unconsumed Tokens in the queue.
+     *
+     * @return true if the Scanner has Tokens to return, else false.
      */
     public boolean hasNextToken() {
         return scannedTokensIndex < scannedTokens.size();
     }
 
     /**
-     * TODO
-     * @return
+     * Returns the next Token in the queue and consumes it.
+     *
+     * @return the next Token in the queue.
      */
     public Token getNextToken() {
         return scannedTokens.get(scannedTokensIndex++);
     }
 
     /**
-     * TODO
-     * @return
+     * Returns the next Token in the queue without consuming it.
+     *
+     * @return the next Token in the queue.
      */
     public Token peekNextToken() {
         return scannedTokens.get(scannedTokensIndex);
     }
 
     /**
-     * TODO
-     * @param token
-     * @return
+     * Returns the first Lexeme which is found to accept the specified input, or
+     * null if no match was not found.
+     *
+     * @param token the input to be matched
+     *
+     * @return the first Lexeme found to accept the given input.
      */
     private Lexeme getFirstLexemeAccepting(String token) {
         Lexeme acceptingLexeme = null;
 
         // Iterate over all known lexemes, return first one that accepts this token
-        for (Lexeme st : lexemes) {
-            DFA dfa = st.getDFA();
+        for (Lexeme l : lexemes) {
+            DFA dfa = l.getDFA();
 
             if (DFA.DFA_ACCEPT == dfa.evaluate(token)) {
-                acceptingLexeme = st;
+                acceptingLexeme = l;
                 break;
             }
         }
@@ -175,25 +180,24 @@ public class Scanner {
     }
 
     /**
-     * TODO
-     * @param token
-     * @return
+     * Tokenizes the given input and adds it to the list of scanned Tokens.
+     *
+     * Note that in order for the input to be tokenized, it must be accepted by
+     * some Lexeme.
+     *
+     * @param token the input to be scanned
+     *
+     * @return true if the input was able to be tokenized, else false.
      */
-    private boolean consumeToken(String token) {
+    private boolean scanToken(String token) {
         // Find a Lexeme that accepts the previous token
         Lexeme acceptingLexeme = getFirstLexemeAccepting(token);
 
         if (null != acceptingLexeme) {
             scannedTokens.addLast(new Token(acceptingLexeme, token));
 
-//            if (acceptingLexeme instanceof KeywordLexeme) {
-//                lexemeList.add(acceptingLexeme);
-//            } else {
-//                lexemeList.add(((ClassLexeme) acceptingLexeme).newClassLexemeWithS(token));
-//            }
             return true;
         } else {
-            // TODO: This should be a scanner error, right?
             return false;
         }
     }
