@@ -1,0 +1,7 @@
+main (a, b, c) {
+	int p, q, r;
+	float m;
+	int k;
+	m = p + m;
+	k = k + p;
+}

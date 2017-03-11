@@ -2,14 +2,12 @@ apply plugin: 'java'
 apply plugin: 'idea'
 
 repositories {
-    mavenCentral()
+  mavenCentral()
 }
 
 dependencies {
-  testCompile 'junit:junit:4.12'
-
-  // https://mvnrepository.com/artifact/dom4j/dom4j
   compile group: 'dom4j', name: 'dom4j', version: '1.6.1'
+  testCompile 'junit:junit:4.12'
 }
 
 jar {
@@ -18,7 +16,12 @@ jar {
            	   'Implementation-Version': '1.0',
            	   'Main-Class': 'com.byteme.Main'
   }
+
   baseName 'compiler'
+
+  from {
+    configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+  }
 }
 
 task wrapper(type: Wrapper) {
