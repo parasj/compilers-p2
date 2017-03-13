@@ -41,4 +41,19 @@ public abstract class Lexeme {
     public String toString() {
         return literal;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Lexeme lexeme = (Lexeme) o;
+
+        return literal != null ? literal.equals(lexeme.literal) : lexeme.literal == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return literal != null ? literal.hashCode() : 0;
+    }
 }

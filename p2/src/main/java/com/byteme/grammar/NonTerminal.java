@@ -18,4 +18,19 @@ public class NonTerminal extends Symbol {
     public String toString() {
         return this.name.toLowerCase();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        NonTerminal nt = (NonTerminal) o;
+
+        return this.name != null ? this.name.equals(nt.name) : nt.name == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return name != null ? name.hashCode() : 0;
+    }
 }
