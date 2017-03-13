@@ -14,26 +14,15 @@ import java.util.*;
  */
 public class GrammarBuilder {
 
-    private static final String ELEMENT_NAME_GRAMMAR = "grammar";
-    private static final String ELEMENT_NAME_PRODUCTIONRULE = "productionRule";
-    private static final String ELEMENT_NAME_NONTERMINAL = "nonTerminal";
-    private static final String ELEMENT_NAME_TERMINAL = "terminal";
+    private static final String ELEMENT_NAME_GRAMMAR = "Grammar";
+    private static final String ELEMENT_NAME_PRODUCTIONRULE = "ProductionRule";
+    private static final String ELEMENT_NAME_NONTERMINAL = "NonTerminal";
+    private static final String ELEMENT_NAME_TERMINAL = "Terminal";
 
     private static final String ATTRIBUTE_NAME_NAME = "name";
     private static final String ATTRIBUTE_NAME_STARTSYMBOL = "startSymbol";
     private static final String ATTRIBUTE_NAME_HEADNONTERMINAL = "headNonTerminal";
     private static final String ATTRIBUTE_NAME_LEXEME = "lexeme";
-
-//    private static ProductionRule buildProductionRule(
-//            final Hashtable<String, Terminal> validTerminals,
-//            final Hashtable<String, NonTerminal> validNonTerminals,
-//            NonTerminal headNonTerminal,
-//            Symbol[] derivation
-//    ) {
-//
-//
-//        return null;
-//    }
 
     /**
      *
@@ -47,6 +36,8 @@ public class GrammarBuilder {
         return saxReader.read(xmlFile);
     }
 
+    // TODO: Currently this assumes the passed-in xmlDoc is a valid grammar XML document.
+    // TODO: Eventually it would be nice to throw a MalformedXMLException or something if this isn't the case.
     public static Grammar buildGrammar(Document xmlDoc, Lexeme ... lexemes) {
         int prIndex = 0;
         Element rootElement = xmlDoc.getRootElement();
@@ -79,8 +70,6 @@ public class GrammarBuilder {
                         // Note: name of Lexeme that matches a Terminal == the name of the Terminal
                         String lexemeName = symbolElement.attributeValue(ATTRIBUTE_NAME_LEXEME);
 
-                        //System.out.println("\tTerminal: {Lexeme=" + lexemeName + "}"); // FIXME
-
                         // Check if Lexeme is recognized
                         if (validLexemes.containsKey(lexemeName)) {
                             Lexeme discoveredLexeme = validLexemes.get(lexemeName);
@@ -89,8 +78,10 @@ public class GrammarBuilder {
                             validTerminals.putIfAbsent(lexemeName, discoveredTerminal);
                         }
                         else {
-                            // TODO: throw an exception. For now print something
-                            System.err.println("Unrecognized lexeme: " + lexemeName);
+                            throw new GrammarBuilderException(
+                                    "Unrecognized Terminal: " + lexemeName,
+                                    GrammarBuilderException.ExceptionSource.UNRECOGNIZED_TERMINAL
+                            );
                         }
                         break;
 
@@ -99,10 +90,12 @@ public class GrammarBuilder {
                         String nonTerminalName = symbolElement.attributeValue(ATTRIBUTE_NAME_NAME);
                         NonTerminal discovered = new NonTerminal(nonTerminalName);
 
-                        // System.out.println("\tNonTerminal: {Rule=" + ruleStr + "}"); // FIXME
-
                         validNonTerminals.putIfAbsent(nonTerminalName, discovered);
                         break;
+
+                    // Ignore if not a Terminal or NonTerminal
+                    default:
+                        continue;
                 }
             }
         }
@@ -122,30 +115,47 @@ public class GrammarBuilder {
             // Encounter derivation
             while (prIter.hasNext()) {
                 Element symbolElement = (Element) prIter.next();
-                String attributeValue = null;
                 Symbol encounteredSymbol = null;
 
                 switch (symbolElement.getName()) {
                     // Encounter a Terminal Symbol in the derivation
                     case ELEMENT_NAME_TERMINAL:
-                        attributeValue = symbolElement.attributeValue(ATTRIBUTE_NAME_LEXEME);
-                        encounteredSymbol = validTerminals.getOrDefault(attributeValue, null);
+                        String lexemeName = symbolElement.attributeValue(ATTRIBUTE_NAME_LEXEME);
+                        encounteredSymbol = validTerminals.getOrDefault(lexemeName, null);
+
+                        // Throw exception if encounteredSymbol is null
+                        if (null == encounteredSymbol) {
+                            throw new GrammarBuilderException(
+                                    "Unrecognized Terminal: " + lexemeName,
+                                    GrammarBuilderException.ExceptionSource.UNRECOGNIZED_TERMINAL
+                            );
+                        }
+
                         break;
 
                     // Encounter a NonTerminal Symbol in the derivation
                     case ELEMENT_NAME_NONTERMINAL:
-                        attributeValue = symbolElement.attributeValue(ATTRIBUTE_NAME_NAME);
-                        encounteredSymbol = validNonTerminals.getOrDefault(attributeValue, null);
+                        String nonTerminalName = symbolElement.attributeValue(ATTRIBUTE_NAME_NAME);
+                        encounteredSymbol = validNonTerminals.getOrDefault(nonTerminalName, null);
+
+                        // Throw exception if encounteredSymbol is null
+                        if (null == encounteredSymbol) {
+                            throw new GrammarBuilderException(
+                                    "Unrecognized NonTerminal: " + nonTerminalName,
+                                    GrammarBuilderException.ExceptionSource.UNRECOGNIZED_NONTERMINAL
+                            );
+                        }
+
                         break;
+
+                    // Ignore if not a Terminal or NonTerminal
+                    default:
+                        continue;
                 }
 
                 // Add Symbol to derivation if it was scanned in the discovery phase (1st iteration)
                 if (null != encounteredSymbol) {
                     derivation[derivationIndex++] = encounteredSymbol;
-                }
-                else {
-                    // FIXME: throw an error
-                    System.err.println("Unrecognized symbol: " + attributeValue);
                 }
             }
 
@@ -154,22 +164,24 @@ public class GrammarBuilder {
                 productionRules[prIndex++] = new ProductionRule(headNonTerminal, derivation);
             }
             else {
-                // FIXME: throw an error
-                System.err.println("Unrecognized head NonTerminal: " + headNonTerminalName);
+                throw new GrammarBuilderException(
+                        "Unrecognized head NonTerminal: " + headNonTerminalName,
+                        GrammarBuilderException.ExceptionSource.UNRECOGNIZED_NONTERMINAL
+                );
             }
         }
 
         return new Grammar(productionRules);
     }
 
-    public static class GrammarBuilderException extends Exception {
+
+    public static class GrammarBuilderException extends RuntimeException {
 
         private ExceptionSource exceptionSource;
 
         public static enum ExceptionSource {
-            MALFORMED_XML,
-            UNRECOGNIZED_TERMINAL,
             UNRECOGNIZED_NONTERMINAL,
+            UNRECOGNIZED_TERMINAL
         }
 
         public GrammarBuilderException(String message, ExceptionSource exceptionSource) {

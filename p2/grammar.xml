@@ -1,413 +1,419 @@
 ﻿<?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE grammar [
-  <!ELEMENT grammar (productionRule*)>
-  <!ATTLIST grammar name CDATA #REQUIRED startSymbol CDATA #REQUIRED>
-  <!ELEMENT productionRule (terminal|nonTerminal)*>
-  <!ATTLIST productionRule headNonTerminal CDATA #REQUIRED>
-  <!ELEMENT terminal EMPTY>
-  <!ATTLIST terminal lexeme CDATA #REQUIRED>
-  <!ELEMENT nonTerminal EMPTY>
-  <!ATTLIST nonTerminal name CDATA #REQUIRED>
+<!DOCTYPE Grammar [
+  <!ELEMENT Grammar (ProductionRule*)>
+  <!ATTLIST Grammar name CDATA #REQUIRED startSymbol CDATA #REQUIRED>
+  <!ELEMENT ProductionRule (Terminal|NonTerminal)*>
+  <!ATTLIST ProductionRule headNonTerminal CDATA #REQUIRED>
+  <!ELEMENT Terminal EMPTY>
+  <!ATTLIST Terminal lexeme CDATA #REQUIRED>
+  <!ELEMENT NonTerminal EMPTY>
+  <!ATTLIST NonTerminal name CDATA #REQUIRED>
 ]>
 
-<grammar name="tiger" startSymbol="program">
+<Grammar name="tiger" startSymbol="program">
   <!-- rule: program -->
-  <productionRule headNonTerminal="program">
-    <terminal lexeme="let"/>
-    <nonTerminal name="program" />
-    <terminal lexeme="in" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="end" />
-  </productionRule>
+  <ProductionRule headNonTerminal="program">
+    <Terminal lexeme="let"/>
+    <NonTerminal name="program" />
+    <Terminal lexeme="in" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="end" />
+  </ProductionRule>
 
   <!-- rule: declseg -->
-  <productionRule headNonTerminal="declseg">
-    <nonTerminal name="typedecls" />
-    <nonTerminal name="vardecls" />
-    <nonTerminal name="funcdecls" />
-  </productionRule>
+  <ProductionRule headNonTerminal="declseg">
+    <NonTerminal name="typedecls" />
+    <NonTerminal name="vardecls" />
+    <NonTerminal name="funcdecls" />
+  </ProductionRule>
 
   <!-- rule: typedecls -->
-  <productionRule headNonTerminal="typedecls">
+  <ProductionRule headNonTerminal="typedecls">
     <!-- a terminal with lexeme = empty string is the empty string terminal -->
-    <terminal lexeme="" />
-  </productionRule>
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="typedecls">
-    <nonTerminal name="typedecl" />
-    <nonTerminal name="typedecls" />
-  </productionRule>
+  <ProductionRule headNonTerminal="typedecls">
+    <NonTerminal name="typedecl" />
+    <NonTerminal name="typedecls" />
+  </ProductionRule>
 
   <!-- rule: typedecl -->
-  <productionRule headNonTerminal="typedecl">
-    <terminal lexeme="type" />
-    <terminal lexeme="id" />
-    <terminal lexeme=":=" />
-    <nonTerminal name="type" />
-    <terminal lexeme=";" />
-  </productionRule>
+  <ProductionRule headNonTerminal="typedecl">
+    <Terminal lexeme="type" />
+    <Terminal lexeme="id" />
+    <Terminal lexeme=":=" />
+    <NonTerminal name="type" />
+    <Terminal lexeme=";" />
+  </ProductionRule>
 
   <!-- rule: type -->
-  <productionRule headNonTerminal="type">
-    <terminal lexeme="boolean" />
-  </productionRule>
+  <ProductionRule headNonTerminal="type">
+    <Terminal lexeme="boolean" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="type">
-    <terminal lexeme="int" />
-  </productionRule>
+  <ProductionRule headNonTerminal="type">
+    <Terminal lexeme="int" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="type">
-    <terminal lexeme="float" />
-  </productionRule>
+  <ProductionRule headNonTerminal="type">
+    <Terminal lexeme="float" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="type">
-    <terminal lexeme="unit" />
-  </productionRule>
+  <ProductionRule headNonTerminal="type">
+    <Terminal lexeme="unit" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="type">
-    <terminal lexeme="id" />
-  </productionRule>
+  <ProductionRule headNonTerminal="type">
+    <Terminal lexeme="id" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="type">
-    <terminal lexeme="array" />
-    <terminal lexeme="[" />
-    <terminal lexeme="intlit" />
-    <terminal lexeme="]" />
-    <terminal lexeme="of" />
-    <nonTerminal name="type" />
-  </productionRule>
+  <ProductionRule headNonTerminal="type">
+    <Terminal lexeme="array" />
+    <Terminal lexeme="[" />
+    <Terminal lexeme="intlit" />
+    <Terminal lexeme="]" />
+    <Terminal lexeme="of" />
+    <NonTerminal name="type" />
+  </ProductionRule>
   
   <!-- rule: vardecls -->
-  <productionRule headNonTerminal="vardecls">
-    <terminal lexeme="" />
-  </productionRule>
+  <ProductionRule headNonTerminal="vardecls">
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="vardecls">
-    <nonTerminal name="vardecl" />
-    <nonTerminal name="vardecls" />
-  </productionRule>
+  <ProductionRule headNonTerminal="vardecls">
+    <NonTerminal name="vardecl" />
+    <NonTerminal name="vardecls" />
+  </ProductionRule>
 
   <!-- rule: vardecl -->
-  <productionRule headNonTerminal="vardecl">
-    <terminal lexeme="var" />
-    <nonTerminal name="ids" />
-    <terminal lexeme=":" />
-    <nonTerminal name="type" />
-    <nonTerminal name="optinit" />
-    <terminal lexeme=";" />
-  </productionRule>
+  <ProductionRule headNonTerminal="vardecl">
+    <Terminal lexeme="var" />
+    <NonTerminal name="ids" />
+    <Terminal lexeme=":" />
+    <NonTerminal name="type" />
+    <NonTerminal name="optinit" />
+    <Terminal lexeme=";" />
+  </ProductionRule>
 
   <!-- rule: ids -->
-  <productionRule headNonTerminal="ids">
-    <terminal lexeme="id" />
-  </productionRule>
+  <ProductionRule headNonTerminal="ids">
+    <Terminal lexeme="id" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="ids">
-    <terminal lexeme="id" />
-    <terminal lexeme="," />
-    <nonTerminal name="ids" />
-  </productionRule>
+  <ProductionRule headNonTerminal="ids">
+    <Terminal lexeme="id" />
+    <Terminal lexeme="," />
+    <NonTerminal name="ids" />
+  </ProductionRule>
 
   <!-- rule: optinit -->
-  <productionRule headNonTerminal="optinit">
-    <terminal lexeme="" />
-  </productionRule>
+  <ProductionRule headNonTerminal="optinit">
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="optinit">
-    <terminal lexeme=":=" />
-    <nonTerminal name="const" />
-  </productionRule>
+  <ProductionRule headNonTerminal="optinit">
+    <Terminal lexeme=":=" />
+    <NonTerminal name="const" />
+  </ProductionRule>
 
   <!-- rule: funcdecls -->
-  <productionRule headNonTerminal="funcdecls">
-    <terminal lexeme="" />
-  </productionRule>
+  <ProductionRule headNonTerminal="funcdecls">
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="funcdecls">
-    <terminal lexeme="func" />
-    <terminal lexeme="id" />
-    <terminal lexeme="(" />
-    <nonTerminal name="params" />
-    <terminal lexeme=")" />
-    <terminal lexeme=":" />
-    <nonTerminal name="type" />
-    <terminal lexeme="begin" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="end" />
-    <terminal lexeme=";" />
-  </productionRule>
+  <ProductionRule headNonTerminal="funcdecls">
+    <NonTerminal name="funcdecl" />
+    <NonTerminal name="funcdecls" />
+  </ProductionRule>
+
+  <!-- rule: funcdecl -->
+  <ProductionRule headNonTerminal="funcdecl">
+    <Terminal lexeme="func" />
+    <Terminal lexeme="id" />
+    <Terminal lexeme="(" />
+    <NonTerminal name="params" />
+    <Terminal lexeme=")" />
+    <Terminal lexeme=":" />
+    <NonTerminal name="type" />
+    <Terminal lexeme="begin" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="end" />
+    <Terminal lexeme=";" />
+  </ProductionRule>
 
   <!-- rule: params -->
-  <productionRule headNonTerminal="params">
-    <terminal lexeme="" />
-  </productionRule>
+  <ProductionRule headNonTerminal="params">
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="params">
-    <nonTerminal name="neparams" />
-  </productionRule>
+  <ProductionRule headNonTerminal="params">
+    <NonTerminal name="neparams" />
+  </ProductionRule>
 
   <!-- rule: neparams -->
-  <productionRule headNonTerminal="neparams">
-    <nonTerminal name="param" />
-  </productionRule>
+  <ProductionRule headNonTerminal="neparams">
+    <NonTerminal name="param" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="neparams">
-    <nonTerminal name="param" />
-    <terminal lexeme="," />
-    <nonTerminal name="neparams" />
-  </productionRule>
+  <ProductionRule headNonTerminal="neparams">
+    <NonTerminal name="param" />
+    <Terminal lexeme="," />
+    <NonTerminal name="neparams" />
+  </ProductionRule>
 
   <!-- rule: param -->
-  <productionRule headNonTerminal="param">
-    <terminal lexeme="id" />
-    <terminal lexeme=":" />
-    <nonTerminal name="type" />
-  </productionRule>
+  <ProductionRule headNonTerminal="param">
+    <Terminal lexeme="id" />
+    <Terminal lexeme=":" />
+    <NonTerminal name="type" />
+  </ProductionRule>
 
   <!-- rule: stmts -->
-  <productionRule headNonTerminal="stmts">
-    <nonTerminal name="fullstmt" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmts">
+    <NonTerminal name="fullstmt" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmts">
-    <nonTerminal name="fullstmt" />
-    <nonTerminal name="stmts" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmts">
+    <NonTerminal name="fullstmt" />
+    <NonTerminal name="stmts" />
+  </ProductionRule>
 
   <!-- rule: fullstmt -->
-  <productionRule headNonTerminal="fullstmt">
-    <nonTerminal name="stmt" />
-    <terminal lexeme=";" />
-  </productionRule>
+  <ProductionRule headNonTerminal="fullstmt">
+    <NonTerminal name="stmt" />
+    <Terminal lexeme=";" />
+  </ProductionRule>
 
   <!-- rule: stmt -->
-  <productionRule headNonTerminal="stmt">
-    <nonTerminal name="lvalue" />
-    <terminal lexeme=":=" />
-    <nonTerminal name="expr" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <NonTerminal name="lvalue" />
+    <Terminal lexeme=":=" />
+    <NonTerminal name="expr" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmt">
-    <terminal lexeme="if" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="then" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="endif" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <Terminal lexeme="if" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="then" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="endif" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmt">
-    <terminal lexeme="if" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="then" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="else" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="endif" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <Terminal lexeme="if" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="then" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="else" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="endif" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmt">
-    <terminal lexeme="while" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="do" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="enddo" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <Terminal lexeme="while" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="do" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="enddo" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmt">
-    <terminal lexeme="for" />
-    <terminal lexeme="id" />
-    <terminal lexeme=":=" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="to" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="do" />
-    <nonTerminal name="stmts" />
-    <terminal lexeme="enddo" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <Terminal lexeme="for" />
+    <Terminal lexeme="id" />
+    <Terminal lexeme=":=" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="to" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="do" />
+    <NonTerminal name="stmts" />
+    <Terminal lexeme="enddo" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmt">
-    <terminal lexeme="break" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <Terminal lexeme="break" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="stmt">
-    <terminal lexeme="return" />
-    <nonTerminal name="expr" />
-  </productionRule>
+  <ProductionRule headNonTerminal="stmt">
+    <Terminal lexeme="return" />
+    <NonTerminal name="expr" />
+  </ProductionRule>
 
   <!-- rule: lvalue -->
-  <productionRule headNonTerminal="lvalue">
-    <terminal lexeme="id" />
-    <nonTerminal name="optoffset" />
-  </productionRule>
+  <ProductionRule headNonTerminal="lvalue">
+    <Terminal lexeme="id" />
+    <NonTerminal name="optoffset" />
+  </ProductionRule>
 
   <!-- rule: optoffset -->
-  <productionRule headNonTerminal="optoffset">
-    <terminal lexeme="" />
-  </productionRule>
+  <ProductionRule headNonTerminal="optoffset">
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="optoffset">
-    <terminal lexeme="[" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="]" />
-  </productionRule>
+  <ProductionRule headNonTerminal="optoffset">
+    <Terminal lexeme="[" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="]" />
+  </ProductionRule>
 
   <!-- rule: exprs -->
-  <productionRule headNonTerminal="exprs">
-    <terminal lexeme="" />
-  </productionRule>
+  <ProductionRule headNonTerminal="exprs">
+    <Terminal lexeme="" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="exprs">
-    <nonTerminal name="neexprs" />
-  </productionRule>
+  <ProductionRule headNonTerminal="exprs">
+    <NonTerminal name="neexprs" />
+  </ProductionRule>
 
   <!-- rule: neexprs -->
-  <productionRule headNonTerminal="neexprs">
-    <nonTerminal name="expr" />
-  </productionRule>
+  <ProductionRule headNonTerminal="neexprs">
+    <NonTerminal name="expr" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="neexprs">
-    <nonTerminal name="expr" />
-    <terminal lexeme="," />
-    <nonTerminal name="neexprs" />
-  </productionRule>
+  <ProductionRule headNonTerminal="neexprs">
+    <NonTerminal name="expr" />
+    <Terminal lexeme="," />
+    <NonTerminal name="neexprs" />
+  </ProductionRule>
 
   <!-- rule: expr -->
-  <productionRule headNonTerminal="expr">
-    <nonTerminal name="clause" />
-  </productionRule>
+  <ProductionRule headNonTerminal="expr">
+    <NonTerminal name="clause" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="expr">
-    <nonTerminal name="expr" />
-    <terminal lexeme="|" />
-    <nonTerminal name="clause" />
-  </productionRule>
+  <ProductionRule headNonTerminal="expr">
+    <NonTerminal name="expr" />
+    <Terminal lexeme="|" />
+    <NonTerminal name="clause" />
+  </ProductionRule>
 
   <!-- rule: clause -->
-  <productionRule headNonTerminal="clause">
-    <nonTerminal name="pred" />
-  </productionRule>
+  <ProductionRule headNonTerminal="clause">
+    <NonTerminal name="pred" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="clause">
-    <nonTerminal name="clause" />
-    <terminal lexeme="&amp;" />
-    <nonTerminal name="pred" />
-  </productionRule>
+  <ProductionRule headNonTerminal="clause">
+    <NonTerminal name="clause" />
+    <Terminal lexeme="&amp;" />
+    <NonTerminal name="pred" />
+  </ProductionRule>
 
   <!-- rule: pred -->
-  <productionRule headNonTerminal="pred">
-    <nonTerminal name="expr" />
-  </productionRule>
+  <ProductionRule headNonTerminal="pred">
+    <NonTerminal name="expr" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="pred">
-    <nonTerminal name="expr" />
-    <nonTerminal name="boolop" />
-    <nonTerminal name="expr" />
-  </productionRule>
+  <ProductionRule headNonTerminal="pred">
+    <NonTerminal name="expr" />
+    <NonTerminal name="boolop" />
+    <NonTerminal name="expr" />
+  </ProductionRule>
 
   <!-- rule: boolop -->
-  <productionRule headNonTerminal="boolop">
-    <terminal lexeme="=" />
-  </productionRule>
+  <ProductionRule headNonTerminal="boolop">
+    <Terminal lexeme="=" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="boolop">
-    <terminal lexeme="&lt;&gt;" />
-  </productionRule>
+  <ProductionRule headNonTerminal="boolop">
+    <Terminal lexeme="&lt;&gt;" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="boolop">
-    <terminal lexeme="&lt;=" />
-  </productionRule>
+  <ProductionRule headNonTerminal="boolop">
+    <Terminal lexeme="&lt;=" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="boolop">
-    <terminal lexeme="&gt;=" />
-  </productionRule>
+  <ProductionRule headNonTerminal="boolop">
+    <Terminal lexeme="&gt;=" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="boolop">
-    <terminal lexeme="&lt;" />
-  </productionRule>
+  <ProductionRule headNonTerminal="boolop">
+    <Terminal lexeme="&lt;" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="boolop">
-    <terminal lexeme="&gt;" />
-  </productionRule>
+  <ProductionRule headNonTerminal="boolop">
+    <Terminal lexeme="&gt;" />
+  </ProductionRule>
 
   <!-- rule: expr (again) -->
-  <productionRule headNonTerminal="expr">
-    <nonTerminal name="term" />
-  </productionRule>
+  <ProductionRule headNonTerminal="expr">
+    <NonTerminal name="term" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="expr">
-    <nonTerminal name="expr" />
-    <nonTerminal name="linop" />
-    <nonTerminal name="term" />
-  </productionRule>
+  <ProductionRule headNonTerminal="expr">
+    <NonTerminal name="expr" />
+    <NonTerminal name="linop" />
+    <NonTerminal name="term" />
+  </ProductionRule>
 
   <!-- rule: linop -->
-  <productionRule headNonTerminal="linop">
-    <terminal lexeme="+" />
-  </productionRule>
+  <ProductionRule headNonTerminal="linop">
+    <Terminal lexeme="+" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="linop">
-    <terminal lexeme="-" />
-  </productionRule>
+  <ProductionRule headNonTerminal="linop">
+    <Terminal lexeme="-" />
+  </ProductionRule>
 
   <!-- rule: term -->
-  <productionRule headNonTerminal="term">
-    <nonTerminal name="factor" />
-  </productionRule>
+  <ProductionRule headNonTerminal="term">
+    <NonTerminal name="factor" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="term">
-    <nonTerminal name="term" />
-    <nonTerminal name="nonlinop" />
-    <nonTerminal name="factor" />
-  </productionRule>
+  <ProductionRule headNonTerminal="term">
+    <NonTerminal name="term" />
+    <NonTerminal name="nonlinop" />
+    <NonTerminal name="factor" />
+  </ProductionRule>
 
   <!-- rule: nonlinop -->
-  <productionRule headNonTerminal="nonlinop">
-    <terminal lexeme="*" />
-  </productionRule>
+  <ProductionRule headNonTerminal="nonlinop">
+    <Terminal lexeme="*" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="nonlinop">
-    <terminal lexeme="/" />
-  </productionRule>
+  <ProductionRule headNonTerminal="nonlinop">
+    <Terminal lexeme="/" />
+  </ProductionRule>
 
   <!-- rule: factor -->
-  <productionRule headNonTerminal="factor">
-    <nonTerminal name="const" />
-  </productionRule>
+  <ProductionRule headNonTerminal="factor">
+    <NonTerminal name="const" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="factor">
-    <terminal lexeme="id" />
-  </productionRule>
+  <ProductionRule headNonTerminal="factor">
+    <Terminal lexeme="id" />
+  </ProductionRule>
   
-  <productionRule headNonTerminal="factor">
-    <terminal lexeme="id" />
-    <terminal lexeme="[" />
-    <nonTerminal name="expr" />
-    <terminal lexeme="]" />
-  </productionRule>
+  <ProductionRule headNonTerminal="factor">
+    <Terminal lexeme="id" />
+    <Terminal lexeme="[" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme="]" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="factor">
-    <terminal lexeme="id" />
-    <terminal lexeme="(" />
-    <nonTerminal name="exprs" />
-    <terminal lexeme=")" />
-  </productionRule>
+  <ProductionRule headNonTerminal="factor">
+    <Terminal lexeme="id" />
+    <Terminal lexeme="(" />
+    <NonTerminal name="exprs" />
+    <Terminal lexeme=")" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="factor">
-    <terminal lexeme="(" />
-    <nonTerminal name="expr" />
-    <terminal lexeme=")" />
-  </productionRule>
+  <ProductionRule headNonTerminal="factor">
+    <Terminal lexeme="(" />
+    <NonTerminal name="expr" />
+    <Terminal lexeme=")" />
+  </ProductionRule>
 
   <!-- rule: const -->
-  <productionRule headNonTerminal="const">
-    <terminal lexeme="intlit" />
-  </productionRule>
+  <ProductionRule headNonTerminal="const">
+    <Terminal lexeme="intlit" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="const">
-    <terminal lexeme="floatlit" />
-  </productionRule>
+  <ProductionRule headNonTerminal="const">
+    <Terminal lexeme="floatlit" />
+  </ProductionRule>
 
-  <productionRule headNonTerminal="const">
-    <terminal lexeme="_" />
-  </productionRule>
-</grammar>
+  <ProductionRule headNonTerminal="const">
+    <Terminal lexeme="_" />
+  </ProductionRule>
+</Grammar>
