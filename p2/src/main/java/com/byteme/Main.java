@@ -1,5 +1,6 @@
 package com.byteme;
 
+import com.byteme.grammar.Grammar;
 import com.byteme.grammar.GrammarBuilder;
 import com.byteme.lexer.KeywordLexeme;
 import com.byteme.lexer.Lexeme;
@@ -9,6 +10,9 @@ import com.byteme.scanner.Scanner;
 import org.dom4j.Document;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.LinkedList;
 
 public class Main {
 
@@ -102,11 +106,17 @@ public class Main {
             }
         }
         // TODO: This is temporary for testing purposes
-        else if (phase.equals("--temporary")) {
+        else if (phase.equals("--buildgrammar")) {
             try {
+                Lexeme[] grammarLexemes = new Lexeme[lexemes.length + 1];
+                LinkedList<Lexeme> grammarLexemesList = new LinkedList<>();
                 Document doc = GrammarBuilder.parseXML(new File(fnameIn));
 
-                System.out.println(doc.toString());
+                Collections.addAll(grammarLexemesList, lexemes);
+                grammarLexemesList.add(new KeywordLexeme("")); // to match epsilon
+                grammarLexemesList.toArray(grammarLexemes);
+
+                System.out.println(GrammarBuilder.buildGrammar(doc, grammarLexemes));
             }
             catch (Exception ex) {
                 ex.printStackTrace();
