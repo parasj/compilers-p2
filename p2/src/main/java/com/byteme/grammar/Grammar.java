@@ -41,6 +41,7 @@ public final class Grammar {
         this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
+
     /**
      * Adds a new production rule to the grammar.
      *
@@ -75,7 +76,7 @@ public final class Grammar {
 
         sb.append("}");
 
-        //Use to see the FirstSet!
+        //Use to see the FirstSet/FollowSet
 //        sb.append(firstSet.toString());
 //        sb.append(followSet.toString());
 
