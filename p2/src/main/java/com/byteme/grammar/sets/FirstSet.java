@@ -91,9 +91,7 @@ public final class FirstSet {
                 if (i == k && firstSet.get(pr.getDerivation().get(k)) != null && firstSet.get(pr.getDerivation().get(k)).contains(tepsilon)){
                     rhs.add(tepsilon);
                 }
-                if (this.firstSet.get(pr.getHeadNonTerminal()) != null  && (rhs == null || this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs))) {
-                    changing = false;
-                } else{
+                if (this.firstSet.get(pr.getHeadNonTerminal()) == null  || (rhs != null && !this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs))) {
                     addAllToMap(this.firstSet, pr.getHeadNonTerminal(), rhs);
                     changing = true;
                 }
@@ -133,7 +131,7 @@ public final class FirstSet {
 
         for (Map.Entry<Symbol, HashSet<Terminal>> entry: firstSet.entrySet()) {
             if(entry.getKey().getClass() != Terminal.class) {
-                sb.append(entry.getKey().toString() + " : ");
+                sb.append("\t" + entry.getKey().toString() + " : ");
                 for (Terminal t : entry.getValue()) {
                     sb.append(t.toString() + ", ");
                 }

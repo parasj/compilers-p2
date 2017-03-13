@@ -83,7 +83,7 @@ public final class Grammar {
         StringBuilder sb = new StringBuilder("grammar {\n");
 
         for (ProductionRule pr : productionRules) {
-            sb.append("(" + (++index) + ")\t" + pr + "\n");
+            sb.append("\t(" + (++index) + ")\t" + pr + "\n");
         }
 
         sb.append("}\n");
