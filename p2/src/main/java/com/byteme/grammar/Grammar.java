@@ -1,15 +1,8 @@
 package com.byteme.grammar;
 
 import com.byteme.grammar.Sets.FirstSet;
-import com.byteme.lexer.KeywordLexeme;
-import com.byteme.lexer.Lexeme;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
-import java.util.HashMap;
-
-import static com.byteme.Main.lexemes;
 
 /**
  * The Grammar class describes a context-free grammar.
@@ -76,6 +69,9 @@ public final class Grammar {
         }
 
         sb.append("}");
+
+        //Use to see the FirstSet!
+//        sb.append(firstSet.toString());
 
         return sb.toString();
     }

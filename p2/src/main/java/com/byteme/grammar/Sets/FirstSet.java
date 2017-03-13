@@ -25,6 +25,10 @@ public final class FirstSet {
     }
 
 
+    public HashSet<Terminal> get(Symbol s) {
+        return firstSet.get(s);
+    }
+
     /**
      * Generates the first set for the grammar.
      *
@@ -101,4 +105,25 @@ public final class FirstSet {
 
         return sb.toString();
     }
+
+    public HashMap<Symbol, HashSet<Terminal>> getFirstSet() {
+        return firstSet;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        FirstSet firstSet1 = (FirstSet) o;
+
+        return firstSet != null ? firstSet.equals(firstSet1.firstSet) : firstSet1.firstSet == null;
+    }
+
+    @Override
+    public int hashCode() {
+        return firstSet != null ? firstSet.hashCode() : 0;
+    }
+
+
 }
