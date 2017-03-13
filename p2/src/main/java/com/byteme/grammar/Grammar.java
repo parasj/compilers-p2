@@ -57,19 +57,11 @@ public final class Grammar {
             this.languages.put(headNonTerminal, language);
         }
 
-        this.firstSet = new FirstSet(this.productionRules);
-        this.followSet = new FollowSet(this.productionRules, this.firstSet);
+        // TODO: Un-comment this. It's causing a NPE
+//        this.firstSet = new FirstSet(this.productionRules);
+//        this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
-
-//    /**
-//     * Adds a new production rule to the grammar.
-//     *
-//     * @param   productionRule  -   the ProductionRule to add to this Grammar
-//     */
-//    public void addProductionRule(ProductionRule productionRule) {
-//        productionRules.addLast(productionRule);
-//    }
 
     /**
      * Returns this grammar's production rules.
@@ -96,7 +88,7 @@ public final class Grammar {
 
         sb.append("}");
 
-        //Use to see the FirstSet/FollowSet
+        // Use to see the FirstSet/FollowSet
 //        sb.append(firstSet.toString());
 //        sb.append(followSet.toString());
 

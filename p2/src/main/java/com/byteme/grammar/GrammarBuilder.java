@@ -14,6 +14,27 @@ import java.util.*;
  */
 public class GrammarBuilder {
 
+    private static final String ELEMENT_NAME_GRAMMAR = "grammar";
+    private static final String ELEMENT_NAME_PRODUCTIONRULE = "productionRule";
+    private static final String ELEMENT_NAME_NONTERMINAL = "nonTerminal";
+    private static final String ELEMENT_NAME_TERMINAL = "terminal";
+
+    private static final String ATTRIBUTE_NAME_NAME = "name";
+    private static final String ATTRIBUTE_NAME_STARTSYMBOL = "startSymbol";
+    private static final String ATTRIBUTE_NAME_HEADNONTERMINAL = "headNonTerminal";
+    private static final String ATTRIBUTE_NAME_LEXEME = "lexeme";
+
+//    private static ProductionRule buildProductionRule(
+//            final Hashtable<String, Terminal> validTerminals,
+//            final Hashtable<String, NonTerminal> validNonTerminals,
+//            NonTerminal headNonTerminal,
+//            Symbol[] derivation
+//    ) {
+//
+//
+//        return null;
+//    }
+
     /**
      *
      * @param xmlFile
@@ -27,21 +48,13 @@ public class GrammarBuilder {
     }
 
     public static Grammar buildGrammar(Document xmlDoc, Lexeme ... lexemes) {
-        /*
-         *      First iteration over the XML "discovers" all NonTerminals, and also checks that each
-         *      Terminal corresponds to a lexeme.
-         *
-         *      Second iteration over the XML builds the Grammar. Here, if we find a ProductionRule
-         *      with an unrecognized NonTerminal, we can fail.
-         *
-         */
+        int prIndex = 0;
         Element rootElement = xmlDoc.getRootElement();
-        Iterator rootIter = rootElement.elementIterator("productionRule"); // TODO: maybe make the argument a const?
-        LinkedList<ProductionRule> productionRulesList = new LinkedList<>();
-        ProductionRule[] productionRules;
         Hashtable<String, Lexeme> validLexemes = new Hashtable<>();
         Hashtable<String, Terminal> validTerminals = new Hashtable<>();
         Hashtable<String, NonTerminal> validNonTerminals = new Hashtable<>();
+        Iterator rootIter = rootElement.elementIterator(ELEMENT_NAME_PRODUCTIONRULE);
+        ProductionRule[] productionRules = new ProductionRule[rootElement.elements().size()];
 
         // Construct Lexeme Hashtable
         for (Lexeme l : lexemes) validLexemes.putIfAbsent(l.getLiteral(), l);
@@ -50,7 +63,7 @@ public class GrammarBuilder {
         while (rootIter.hasNext()) {
             Element prElement = (Element) rootIter.next();
             Iterator prIter = prElement.elementIterator();
-            String headNonTerminalName = prElement.attributeValue("headNonTerminal"); // TODO: maybe make the argument a const?
+            String headNonTerminalName = prElement.attributeValue(ATTRIBUTE_NAME_HEADNONTERMINAL);
             NonTerminal headNonTerminal = new NonTerminal(headNonTerminalName);
 
             // Discover head NonTerminal
@@ -62,9 +75,9 @@ public class GrammarBuilder {
 
                 switch (symbolElement.getName()) {
                     // Discover a Terminal Symbol in the derivation
-                    case "terminal": // TODO: maybe make the case argument a const?
+                    case ELEMENT_NAME_TERMINAL:
                         // Note: name of Lexeme that matches a Terminal == the name of the Terminal
-                        String lexemeName = symbolElement.attributeValue("lexeme"); // TODO: maybe make the argument a const?
+                        String lexemeName = symbolElement.attributeValue(ATTRIBUTE_NAME_LEXEME);
 
                         //System.out.println("\tTerminal: {Lexeme=" + lexemeName + "}"); // FIXME
 
@@ -82,8 +95,8 @@ public class GrammarBuilder {
                         break;
 
                     // Discover a NonTerminal Symbol in the derivation
-                    case "nonterminal": // TODO: maybe make the case argument a const?
-                        String nonTerminalName = symbolElement.attributeValue("name"); // TODO: maybe make the argument a const
+                    case ELEMENT_NAME_NONTERMINAL:
+                        String nonTerminalName = symbolElement.attributeValue(ATTRIBUTE_NAME_NAME);
                         NonTerminal discovered = new NonTerminal(nonTerminalName);
 
                         // System.out.println("\tNonTerminal: {Rule=" + ruleStr + "}"); // FIXME
@@ -95,25 +108,57 @@ public class GrammarBuilder {
         }
 
         // Get a new Iterator
-        rootIter = rootElement.elementIterator("productionRule"); // TODO: maybe make the argument a const?
+        rootIter = rootElement.elementIterator(ELEMENT_NAME_PRODUCTIONRULE);
 
         // 2nd iteration: build all ProductionRules
         while (rootIter.hasNext()) {
+            int derivationIndex = 0;
             Element prElement = (Element) rootIter.next();
             Iterator prIter = prElement.elementIterator();
+            String headNonTerminalName = prElement.attributeValue(ATTRIBUTE_NAME_HEADNONTERMINAL);
+            NonTerminal headNonTerminal = validNonTerminals.getOrDefault(headNonTerminalName, null);
+            Symbol[] derivation = new Symbol[prElement.elements().size()];
 
-
-
-            // Discover derivation
+            // Encounter derivation
             while (prIter.hasNext()) {
-                // TODO XKCD
+                Element symbolElement = (Element) prIter.next();
+                String attributeValue = null;
+                Symbol encounteredSymbol = null;
+
+                switch (symbolElement.getName()) {
+                    // Encounter a Terminal Symbol in the derivation
+                    case ELEMENT_NAME_TERMINAL:
+                        attributeValue = symbolElement.attributeValue(ATTRIBUTE_NAME_LEXEME);
+                        encounteredSymbol = validTerminals.getOrDefault(attributeValue, null);
+                        break;
+
+                    // Encounter a NonTerminal Symbol in the derivation
+                    case ELEMENT_NAME_NONTERMINAL:
+                        attributeValue = symbolElement.attributeValue(ATTRIBUTE_NAME_NAME);
+                        encounteredSymbol = validNonTerminals.getOrDefault(attributeValue, null);
+                        break;
+                }
+
+                // Add Symbol to derivation if it was scanned in the discovery phase (1st iteration)
+                if (null != encounteredSymbol) {
+                    derivation[derivationIndex++] = encounteredSymbol;
+                }
+                else {
+                    // FIXME: throw an error
+                    System.err.println("Unrecognized symbol: " + attributeValue);
+                }
+            }
+
+            // Construct this ProductionRule if the head NonTerminal was scanned in discovery phase
+            if (null != headNonTerminal) {
+                productionRules[prIndex++] = new ProductionRule(headNonTerminal, derivation);
+            }
+            else {
+                // FIXME: throw an error
+                System.err.println("Unrecognized head NonTerminal: " + headNonTerminalName);
             }
         }
 
-        // Initialize and populate productionRules array, now that we know its size
-        productionRules = new ProductionRule[productionRulesList.size()];
-
-        productionRulesList.toArray(productionRules);
         return new Grammar(productionRules);
     }
 

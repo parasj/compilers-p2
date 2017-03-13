@@ -29,7 +29,7 @@
 
   <!-- rule: typedecls -->
   <productionRule headNonTerminal="typedecls">
-    <!-- a terminal with lexeme = empty string is the empty string terminal -->  
+    <!-- a terminal with lexeme = empty string is the empty string terminal -->
     <terminal lexeme="" />
   </productionRule>
 
