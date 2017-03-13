@@ -1,4 +1,4 @@
-package com.byteme.grammar.Sets;
+package com.byteme.grammar.sets;
 
 import com.byteme.grammar.ProductionRule;
 import com.byteme.grammar.Symbol;

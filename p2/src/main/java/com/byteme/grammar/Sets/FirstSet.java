@@ -1,6 +1,5 @@
-package com.byteme.grammar.Sets;
+package com.byteme.grammar.sets;
 
-import com.byteme.grammar.NonTerminal;
 import com.byteme.grammar.ProductionRule;
 import com.byteme.grammar.Symbol;
 import com.byteme.grammar.Terminal;
@@ -37,7 +36,7 @@ public final class FirstSet {
 
         LinkedList<ProductionRule> copyofPR = (LinkedList<ProductionRule>)productionRules.clone();
 
-        //Populate First Sets for terminals
+        //Populate First sets for terminals
         for(Lexeme l : lexemes) {
             //TODO: Fix this hacky behavior
             Terminal t = new Terminal("NA",l);

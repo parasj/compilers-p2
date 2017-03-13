@@ -7,7 +7,7 @@ package com.byteme.grammar;
  */
 public abstract class Symbol {
 
-    // declared protected for ease-of-access in subclasses
+    // Declared protected for ease-of-access in subclasses
     protected final String name;
 
     /**

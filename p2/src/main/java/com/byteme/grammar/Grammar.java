@@ -1,7 +1,7 @@
 package com.byteme.grammar;
 
-import com.byteme.grammar.Sets.FirstSet;
-import com.byteme.grammar.Sets.FollowSet;
+import com.byteme.grammar.sets.FirstSet;
+import com.byteme.grammar.sets.FollowSet;
 
 import java.util.Hashtable;
 import java.util.LinkedList;
