@@ -64,24 +64,6 @@ public final class FirstSet {
         boolean changing = true;
         while(changing) {
             changing = false;
-//            for (int k = 0; k < copyofPR.size(); k++) {
-//                Terminal[] terminals;
-//                ProductionRule pr = copyofPR.get(k);
-//                int i = pr.getDerivation().size() - 1;
-//                for (int j = 0; j < pr.getDerivation().size(); j++) {
-//                    Symbol s = pr.getDerivation().get(j);
-//                    if (this.firstSet.get(s) == null || this.firstSet.get(s).isEmpty()
-//                            || !this.firstSet.get(s).contains(tepsilon)) {
-//                        i = j;
-//                        break;
-//                    }
-//                }
-//
-//                terminals = new Terminal[this.firstSet.get(pr.getDerivation().get(i)).size()];
-//
-//                this.firstSet.get(pr.getDerivation().get(i)).toArray(terminals);
-//                addToMap(this.firstSet, pr.getHeadNonTerminal(), terminals);
-//            }
             for (ProductionRule pr:productionRules) {
                 int k = pr.getDerivation().size();
                 for (int j = 0; j < pr.getDerivation().size(); j++) {
@@ -92,6 +74,25 @@ public final class FirstSet {
                         break;
                     }
                 }
+                HashSet<Terminal> rhs = new HashSet<Terminal>();
+                rhs = firstSet.get(pr.getDerivation().get(k));
+                rhs.remove(tepsilon);
+                int i = 1;
+                while(firstSet.get(pr.getDerivation().get(i)).contains(tepsilon) && i <= k - 1) {
+                    rhs.addAll(firstSet.get(pr.getDerivation().get(i+1)));
+                    rhs.remove(tepsilon);
+                    i++;
+                }
+                if (i == k && firstSet.get(pr.getDerivation().get(k)).contains(tepsilon)){
+                    rhs.add(tepsilon);
+                }
+                if (this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs)) {
+                    changing = false;
+                } else{
+                    addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal[]) rhs.toArray());
+                    changing = true;
+                }
+
             }
         }
 
