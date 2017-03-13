@@ -90,8 +90,6 @@ public class GrammarBuilder {
 
                         validNonTerminals.putIfAbsent(nonTerminalName, discovered);
                         break;
-
-                    // TODO maybe handle malformed XML
                 }
             }
         }
