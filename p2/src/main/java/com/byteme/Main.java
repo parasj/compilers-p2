@@ -1,6 +1,5 @@
 package com.byteme;
 
-import com.byteme.grammar.Grammar;
 import com.byteme.grammar.GrammarBuilder;
 import com.byteme.lexer.KeywordLexeme;
 import com.byteme.lexer.Lexeme;
@@ -11,7 +10,6 @@ import org.dom4j.Document;
 import org.dom4j.DocumentException;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 
