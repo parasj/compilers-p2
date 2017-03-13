@@ -3,6 +3,7 @@ package com.byteme.grammar;
 import com.byteme.grammar.Sets.FirstSet;
 import com.byteme.grammar.Sets.FollowSet;
 
+import java.util.Hashtable;
 import java.util.LinkedList;
 
 /**
@@ -19,6 +20,13 @@ public final class Grammar {
      * grammar's start symbol.
      */
     private final LinkedList<ProductionRule> productionRules;
+
+    /**
+     * A language for some NonTerminal is the set of all ProductionRules with it as its head
+     * NonTerminal.
+     */
+    private final Hashtable<NonTerminal, LinkedList<ProductionRule>> languages;
+
     private FirstSet firstSet;
     private FollowSet followSet;
 
@@ -31,10 +39,22 @@ public final class Grammar {
      */
     public Grammar(ProductionRule ... productionRules) {
         this.productionRules = new LinkedList<>();
+        this.languages = new Hashtable<>();
 
         // add initial production rules to list
         for (ProductionRule pr : productionRules) {
+            NonTerminal headNonTerminal = pr.getHeadNonTerminal();
+            LinkedList<ProductionRule> language = languages.getOrDefault(
+                    headNonTerminal, new LinkedList<>()
+            );
+
             this.productionRules.addLast(pr);
+
+            // Update list of ProductionRules linked to this NonTerminal
+            language.addLast(pr);
+
+            // Update languages. Even though we modify ref, we must add in case it was not present
+            this.languages.put(headNonTerminal, language);
         }
 
         this.firstSet = new FirstSet(this.productionRules);
@@ -42,14 +62,14 @@ public final class Grammar {
     }
 
 
-    /**
-     * Adds a new production rule to the grammar.
-     *
-     * @param   productionRule  -   the ProductionRule to add to this Grammar
-     */
-    public void addProductionRule(ProductionRule productionRule) {
-        productionRules.addLast(productionRule);
-    }
+//    /**
+//     * Adds a new production rule to the grammar.
+//     *
+//     * @param   productionRule  -   the ProductionRule to add to this Grammar
+//     */
+//    public void addProductionRule(ProductionRule productionRule) {
+//        productionRules.addLast(productionRule);
+//    }
 
     /**
      * Returns this grammar's production rules.
