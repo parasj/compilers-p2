@@ -46,6 +46,8 @@ public final class FirstSet {
         Lexeme  lepsilon = new KeywordLexeme("");
         Terminal tepsilon = new Terminal("", lepsilon);
 
+
+
         addToMap(this.firstSet, tepsilon, tepsilon);
 
         //Populate for epsilon
@@ -65,7 +67,7 @@ public final class FirstSet {
         while(changing) {
             changing = false;
             for (ProductionRule pr:productionRules) {
-                int k = pr.getDerivation().size();
+                int k = pr.getDerivation().size() - 1;
                 for (int j = 0; j < pr.getDerivation().size(); j++) {
                     Symbol s = pr.getDerivation().get(j);
                     if (this.firstSet.get(s) == null || this.firstSet.get(s).isEmpty()
@@ -76,23 +78,24 @@ public final class FirstSet {
                 }
                 HashSet<Terminal> rhs = new HashSet<Terminal>();
                 rhs = firstSet.get(pr.getDerivation().get(k));
-                rhs.remove(tepsilon);
-                int i = 1;
+                if (rhs != null) {
+                    rhs.remove(tepsilon);
+                }
+
+                int i = 0;
                 while(firstSet.get(pr.getDerivation().get(i)) != null && firstSet.get(pr.getDerivation().get(i)).contains(tepsilon) && i <= k - 1) {
                     rhs.addAll(firstSet.get(pr.getDerivation().get(i+1)));
                     rhs.remove(tepsilon);
                     i++;
                 }
-                if (i == k && firstSet.get(pr.getDerivation().get(k)).contains(tepsilon)){
+                if (i == k && firstSet.get(pr.getDerivation().get(k)) != null && firstSet.get(pr.getDerivation().get(k)).contains(tepsilon)){
                     rhs.add(tepsilon);
                 }
-                System.out.println(toString());
-                System.out.println("HNT : " + pr.getHeadNonTerminal());
-                if (this.firstSet.get(pr.getHeadNonTerminal()) == null || !this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs)) {
-                    addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal[]) rhs.toArray());
-                    changing = true;
-                } else{
+                if (this.firstSet.get(pr.getHeadNonTerminal()) != null  && (rhs == null || this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs))) {
                     changing = false;
+                } else{
+                    addAllToMap(this.firstSet, pr.getHeadNonTerminal(), rhs);
+                    changing = true;
                 }
 
             }
@@ -115,19 +118,30 @@ public final class FirstSet {
         map.put(key,list);
     }
 
+    private void addAllToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, HashSet<Terminal> val){
+        if (key == null || val == null){
+            return;
+        }
+        for(Terminal t : val) {
+            addToMap(map, key, t);
+        }
+    }
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("FirstList {\n");
 
         for (Map.Entry<Symbol, HashSet<Terminal>> entry: firstSet.entrySet()) {
-            sb.append(entry.getKey().toString() + " : ");
-            for (Terminal t : entry.getValue()) {
-                sb.append(t.toString() + ", ");
+            if(entry.getKey().getClass() != Terminal.class) {
+                sb.append(entry.getKey().toString() + " : ");
+                for (Terminal t : entry.getValue()) {
+                    sb.append(t.toString() + ", ");
+                }
+                sb.append("\n");
             }
-            sb.append("\n");
         }
 
-        sb.append("}");
+        sb.append("}\n");
 
         return sb.toString();
     }

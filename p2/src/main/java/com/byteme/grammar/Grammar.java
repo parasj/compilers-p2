@@ -86,7 +86,7 @@ public final class Grammar {
             sb.append("(" + (++index) + ")\t" + pr + "\n");
         }
 
-        sb.append("}");
+        sb.append("}\n");
 
         // Use to see the FirstSet/FollowSet
         sb.append(firstSet.toString());
