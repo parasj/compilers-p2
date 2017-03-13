@@ -24,6 +24,10 @@ public class GrammarBuilder {
     private static final String ATTRIBUTE_NAME_HEADNONTERMINAL = "headNonTerminal";
     private static final String ATTRIBUTE_NAME_LEXEME = "lexeme";
 
+    /*
+     * In the discovery phase, the GrammarBuilder iterates over all Terminal and NonTerminal
+     * elements and updates the lists of valid Terminals and NonTerminals, respectively.
+     */
     private static void doDiscoveryPhase(
             Iterator rootIter,
             Hashtable<String, Lexeme> validLexemes,
@@ -56,12 +60,14 @@ public class GrammarBuilder {
 
                             validTerminals.putIfAbsent(lexemeName, discoveredTerminal);
                         }
-                        else {
-                            throw new GrammarBuilderException(
-                                    "Unrecognized Terminal: " + lexemeName,
-                                    GrammarBuilderException.ExceptionSource.UNRECOGNIZED_TERMINAL
-                            );
-                        }
+                        // This case is also handled by doBuildingPhase.
+//                        else {
+//                            throw new GrammarBuilderException(
+//                                    "Unrecognized Terminal: " + lexemeName,
+//                                    GrammarBuilderException.ExceptionSource.UNRECOGNIZED_TERMINAL
+//                            );
+//                        }
+
                         break;
 
                     // Discover a NonTerminal Symbol in the derivation
@@ -80,6 +86,12 @@ public class GrammarBuilder {
         }
     }
 
+    /*
+     * In the building phase, the GrammarBuilder iterates over all ProductionRule elements and, if
+     * all Symbols are valid, builds the ProductionRule.
+     *
+     * Can throw a GrammarBuilderException.
+     */
     private static void doBuildingPhase(
         Iterator rootIter,
         Hashtable<String, Terminal> validTerminals,
@@ -147,12 +159,14 @@ public class GrammarBuilder {
             if (null != headNonTerminal) {
                 productionRules[prIndex++] = new ProductionRule(headNonTerminal, derivation);
             }
-            else {
-                throw new GrammarBuilderException(
-                        "Unrecognized head NonTerminal: " + headNonTerminalName,
-                        GrammarBuilderException.ExceptionSource.UNRECOGNIZED_NONTERMINAL
-                );
-            }
+            // TODO: How would this else-block ever be called? The head NonTerminal is always valid
+            // TODO: by default, right?
+//            else {
+//                throw new GrammarBuilderException(
+//                        "Unrecognized head NonTerminal: " + headNonTerminalName,
+//                        GrammarBuilderException.ExceptionSource.UNRECOGNIZED_NONTERMINAL
+//                );
+//            }
         }
     }
 
@@ -168,8 +182,16 @@ public class GrammarBuilder {
         return saxReader.read(xmlFile);
     }
 
-    // TODO: Currently this assumes the passed-in xmlDoc is a valid grammar XML document.
-    // TODO: Eventually it would be nice to throw a MalformedXMLException or something if this isn't the case.
+    /**
+     * TODO: Documentation
+     *
+     * TODO | Currently this assumes the passed-in xmlDoc is a valid grammar XML document.
+     * TODO | Eventually it would be nice to throw a MalformedXMLException or something if this
+     * TODO | isn't the case.
+     * @param xmlDoc
+     * @param lexemes
+     * @return
+     */
     public static Grammar buildGrammar(Document xmlDoc, Lexeme ... lexemes) {
         Element rootElement = xmlDoc.getRootElement();
         Hashtable<String, Lexeme> validLexemes = new Hashtable<>();
@@ -194,11 +216,27 @@ public class GrammarBuilder {
     }
 
 
+    /**
+     * A GrammarBuilderException is an unchecked Exception that might be thrown while parsing an
+     * XML document describing some Grammar.
+     *
+     * Such an Exception may occur as a result of a malformed XML Grammar or an improperly-defined
+     * Grammar.
+     *
+     * A malformed XML Grammar simply does not match the expected format of a Grammar XML document.
+     *
+     * An improperly-defined Grammar does not contain enough information to be built:
+     *     (1) A NonTerminal appears in a ProductionRule body but does not appear as the head
+     *         NonTerminal of some other ProductionRule.
+     *
+     *     (2) A Terminal appears whose Lexeme is not found in the supplied pool of Lexemes.
+     */
     public static class GrammarBuilderException extends RuntimeException {
 
         private ExceptionSource exceptionSource;
 
         public static enum ExceptionSource {
+            MALFORMED_XML_GRAMMAR,
             UNRECOGNIZED_NONTERMINAL,
             UNRECOGNIZED_TERMINAL
         }
