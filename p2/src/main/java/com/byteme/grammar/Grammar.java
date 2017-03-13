@@ -4,6 +4,7 @@ import com.byteme.lexer.KeywordLexeme;
 import com.byteme.lexer.Lexeme;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.HashMap;
 
@@ -23,7 +24,7 @@ public final class Grammar {
      * grammar's start symbol.
      */
     private final LinkedList<ProductionRule> productionRules;
-    private HashMap<Symbol, ArrayList<Terminal>> firstSet;
+    private HashMap<Symbol, HashSet<Terminal>> firstSet;
 
     /**
      * Constructs a Grammar and initializes it with the provided production
@@ -67,8 +68,8 @@ public final class Grammar {
      *
      * @return a Hash map of the firsts set
      */
-    private HashMap<Symbol, ArrayList<Terminal>> generateFirstSet() {
-        this.firstSet = new HashMap<Symbol, ArrayList<Terminal>>();
+    private HashMap<Symbol, HashSet<Terminal>> generateFirstSet() {
+        this.firstSet = new HashMap<Symbol, HashSet<Terminal>>();
 
         //Populate First Sets for terminals
         for(Lexeme l : lexemes) {
@@ -86,17 +87,21 @@ public final class Grammar {
             if (pr.getDerivation().getFirst().equals(tepsilon)) {
                 addToMap(this.firstSet, pr.getHeadNonTerminal(), tepsilon);
             }
+
+
         }
+
+
 
         return firstSet;
     }
 
-    private void addToMap(HashMap<Symbol, ArrayList<Terminal>> map, Symbol key, Terminal val){
-        ArrayList<Terminal> list;
+    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal val){
+        HashSet<Terminal> list;
         if(map.get(key) != null){
             list = map.get(key);
         } else {
-            list = new ArrayList<Terminal>();
+            list = new HashSet<Terminal>();
         }
         list.add(val);
         map.put(key,list);
