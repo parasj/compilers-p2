@@ -61,6 +61,7 @@ public final class FirstSet {
 //                addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal) pr.getDerivation().getFirst());
 //            }
         }
+
         //TODO: BROKEN AF
         //Add the last non-nullable symbol's First set
         boolean changing = true;
@@ -76,8 +77,14 @@ public final class FirstSet {
                         break;
                     }
                 }
-                HashSet<Terminal> rhs = new HashSet<Terminal>();
-                rhs = firstSet.get(pr.getDerivation().get(k));
+
+                HashSet<Terminal> rhs;
+
+                if(firstSet.get(pr.getDerivation().get(k)) != null) {
+                    rhs = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(k)));
+                } else {
+                    rhs = firstSet.get(pr.getDerivation().get(k));
+                }
                 if (rhs != null) {
                     rhs.remove(tepsilon);
                 }
