@@ -29,7 +29,7 @@ public final class Terminal extends Symbol {
 
     @Override
     public String toString() {
-        return this.name.toUpperCase();
+        return this.lexeme.toString();
     }
 
     @Override

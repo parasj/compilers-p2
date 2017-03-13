@@ -89,7 +89,7 @@ public final class Grammar {
         sb.append("}");
 
         // Use to see the FirstSet/FollowSet
-//        sb.append(firstSet.toString());
+        sb.append(firstSet.toString());
 //        sb.append(followSet.toString());
 
         return sb.toString();

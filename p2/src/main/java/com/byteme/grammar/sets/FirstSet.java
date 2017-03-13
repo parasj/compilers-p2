@@ -78,7 +78,7 @@ public final class FirstSet {
                 rhs = firstSet.get(pr.getDerivation().get(k));
                 rhs.remove(tepsilon);
                 int i = 1;
-                while(firstSet.get(pr.getDerivation().get(i)).contains(tepsilon) && i <= k - 1) {
+                while(firstSet.get(pr.getDerivation().get(i)) != null && firstSet.get(pr.getDerivation().get(i)).contains(tepsilon) && i <= k - 1) {
                     rhs.addAll(firstSet.get(pr.getDerivation().get(i+1)));
                     rhs.remove(tepsilon);
                     i++;
@@ -86,11 +86,13 @@ public final class FirstSet {
                 if (i == k && firstSet.get(pr.getDerivation().get(k)).contains(tepsilon)){
                     rhs.add(tepsilon);
                 }
-                if (this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs)) {
-                    changing = false;
-                } else{
+                System.out.println(toString());
+                System.out.println("HNT : " + pr.getHeadNonTerminal());
+                if (this.firstSet.get(pr.getHeadNonTerminal()) == null || !this.firstSet.get(pr.getHeadNonTerminal()).containsAll(rhs)) {
                     addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal[]) rhs.toArray());
                     changing = true;
+                } else{
+                    changing = false;
                 }
 
             }
