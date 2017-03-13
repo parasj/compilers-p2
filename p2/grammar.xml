@@ -3,7 +3,7 @@
   <!ELEMENT grammar (productionRule*)>
   <!ATTLIST grammar name CDATA #REQUIRED startSymbol CDATA #REQUIRED>
   <!ELEMENT productionRule (terminal|nonTerminal)*>
-  <!ATTLIST productionRule headNonterminal CDATA #REQUIRED>
+  <!ATTLIST productionRule headNonTerminal CDATA #REQUIRED>
   <!ELEMENT terminal EMPTY>
   <!ATTLIST terminal lexeme CDATA #REQUIRED>
   <!ELEMENT nonTerminal EMPTY>
@@ -12,7 +12,7 @@
 
 <grammar name="tiger" startSymbol="program">
   <!-- rule: program -->
-  <productionRule headNonterminal="program">
+  <productionRule headNonTerminal="program">
     <terminal lexeme="let"/>
     <nonTerminal name="program" />
     <terminal lexeme="in" />
@@ -21,25 +21,25 @@
   </productionRule>
 
   <!-- rule: declseg -->
-  <productionRule headNonterminal="declseg">
+  <productionRule headNonTerminal="declseg">
     <nonTerminal name="typedecls" />
     <nonTerminal name="vardecls" />
     <nonTerminal name="funcdecls" />
   </productionRule>
 
   <!-- rule: typedecls -->
-  <productionRule headNonterminal="typedecls">
+  <productionRule headNonTerminal="typedecls">
     <!-- a terminal with lexeme = empty string is the empty string terminal -->  
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="typedecls">
+  <productionRule headNonTerminal="typedecls">
     <nonTerminal name="typedecl" />
     <nonTerminal name="typedecls" />
   </productionRule>
 
   <!-- rule: typedecl -->
-  <productionRule headNonterminal="typedecl">
+  <productionRule headNonTerminal="typedecl">
     <terminal lexeme="type" />
     <terminal lexeme="id" />
     <terminal lexeme=":=" />
@@ -48,27 +48,27 @@
   </productionRule>
 
   <!-- rule: type -->
-  <productionRule headNonterminal="type">
+  <productionRule headNonTerminal="type">
     <terminal lexeme="boolean" />
   </productionRule>
 
-  <productionRule headNonterminal="type">
+  <productionRule headNonTerminal="type">
     <terminal lexeme="int" />
   </productionRule>
 
-  <productionRule headNonterminal="type">
+  <productionRule headNonTerminal="type">
     <terminal lexeme="float" />
   </productionRule>
 
-  <productionRule headNonterminal="type">
+  <productionRule headNonTerminal="type">
     <terminal lexeme="unit" />
   </productionRule>
 
-  <productionRule headNonterminal="type">
+  <productionRule headNonTerminal="type">
     <terminal lexeme="id" />
   </productionRule>
 
-  <productionRule headNonterminal="type">
+  <productionRule headNonTerminal="type">
     <terminal lexeme="array" />
     <terminal lexeme="[" />
     <terminal lexeme="intlit" />
@@ -78,17 +78,17 @@
   </productionRule>
   
   <!-- rule: vardecls -->
-  <productionRule headNonterminal="vardecls">
+  <productionRule headNonTerminal="vardecls">
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="vardecls">
+  <productionRule headNonTerminal="vardecls">
     <nonTerminal name="vardecl" />
     <nonTerminal name="vardecls" />
   </productionRule>
 
   <!-- rule: vardecl -->
-  <productionRule headNonterminal="vardecl">
+  <productionRule headNonTerminal="vardecl">
     <terminal lexeme="var" />
     <nonTerminal name="ids" />
     <terminal lexeme=":" />
@@ -98,32 +98,32 @@
   </productionRule>
 
   <!-- rule: ids -->
-  <productionRule headNonterminal="ids">
+  <productionRule headNonTerminal="ids">
     <terminal lexeme="id" />
   </productionRule>
 
-  <productionRule headNonterminal="ids">
+  <productionRule headNonTerminal="ids">
     <terminal lexeme="id" />
     <terminal lexeme="," />
     <nonTerminal name="ids" />
   </productionRule>
 
   <!-- rule: optinit -->
-  <productionRule headNonterminal="optinit">
+  <productionRule headNonTerminal="optinit">
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="optinit">
+  <productionRule headNonTerminal="optinit">
     <terminal lexeme=":=" />
     <nonTerminal name="const" />
   </productionRule>
 
   <!-- rule: funcdecls -->
-  <productionRule headNonterminal="funcdecls">
+  <productionRule headNonTerminal="funcdecls">
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="funcdecls">
+  <productionRule headNonTerminal="funcdecls">
     <terminal lexeme="func" />
     <terminal lexeme="id" />
     <terminal lexeme="(" />
@@ -138,56 +138,56 @@
   </productionRule>
 
   <!-- rule: params -->
-  <productionRule headNonterminal="params">
+  <productionRule headNonTerminal="params">
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="params">
+  <productionRule headNonTerminal="params">
     <nonTerminal name="neparams" />
   </productionRule>
 
   <!-- rule: neparams -->
-  <productionRule headNonterminal="neparams">
+  <productionRule headNonTerminal="neparams">
     <nonTerminal name="param" />
   </productionRule>
 
-  <productionRule headNonterminal="neparams">
+  <productionRule headNonTerminal="neparams">
     <nonTerminal name="param" />
     <terminal lexeme="," />
     <nonTerminal name="neparams" />
   </productionRule>
 
   <!-- rule: param -->
-  <productionRule headNonterminal="param">
+  <productionRule headNonTerminal="param">
     <terminal lexeme="id" />
     <terminal lexeme=":" />
     <nonTerminal name="type" />
   </productionRule>
 
   <!-- rule: stmts -->
-  <productionRule headNonterminal="stmts">
+  <productionRule headNonTerminal="stmts">
     <nonTerminal name="fullstmt" />
   </productionRule>
 
-  <productionRule headNonterminal="stmts">
+  <productionRule headNonTerminal="stmts">
     <nonTerminal name="fullstmt" />
     <nonTerminal name="stmts" />
   </productionRule>
 
   <!-- rule: fullstmt -->
-  <productionRule headNonterminal="fullstmt">
+  <productionRule headNonTerminal="fullstmt">
     <nonTerminal name="stmt" />
     <terminal lexeme=";" />
   </productionRule>
 
   <!-- rule: stmt -->
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <nonTerminal name="lvalue" />
     <terminal lexeme=":=" />
     <nonTerminal name="expr" />
   </productionRule>
 
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <terminal lexeme="if" />
     <nonTerminal name="expr" />
     <terminal lexeme="then" />
@@ -195,7 +195,7 @@
     <terminal lexeme="endif" />
   </productionRule>
 
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <terminal lexeme="if" />
     <nonTerminal name="expr" />
     <terminal lexeme="then" />
@@ -205,7 +205,7 @@
     <terminal lexeme="endif" />
   </productionRule>
 
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <terminal lexeme="while" />
     <nonTerminal name="expr" />
     <terminal lexeme="do" />
@@ -213,7 +213,7 @@
     <terminal lexeme="enddo" />
   </productionRule>
 
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <terminal lexeme="for" />
     <terminal lexeme="id" />
     <terminal lexeme=":=" />
@@ -225,189 +225,189 @@
     <terminal lexeme="enddo" />
   </productionRule>
 
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <terminal lexeme="break" />
   </productionRule>
 
-  <productionRule headNonterminal="stmt">
+  <productionRule headNonTerminal="stmt">
     <terminal lexeme="return" />
     <nonTerminal name="expr" />
   </productionRule>
 
   <!-- rule: lvalue -->
-  <productionRule headNonterminal="lvalue">
+  <productionRule headNonTerminal="lvalue">
     <terminal lexeme="id" />
     <nonTerminal name="optoffset" />
   </productionRule>
 
   <!-- rule: optoffset -->
-  <productionRule headNonterminal="optoffset">
+  <productionRule headNonTerminal="optoffset">
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="optoffset">
+  <productionRule headNonTerminal="optoffset">
     <terminal lexeme="[" />
     <nonTerminal name="expr" />
     <terminal lexeme="]" />
   </productionRule>
 
   <!-- rule: exprs -->
-  <productionRule headNonterminal="exprs">
+  <productionRule headNonTerminal="exprs">
     <terminal lexeme="" />
   </productionRule>
 
-  <productionRule headNonterminal="exprs">
+  <productionRule headNonTerminal="exprs">
     <nonTerminal name="neexprs" />
   </productionRule>
 
   <!-- rule: neexprs -->
-  <productionRule headNonterminal="neexprs">
+  <productionRule headNonTerminal="neexprs">
     <nonTerminal name="expr" />
   </productionRule>
 
-  <productionRule headNonterminal="neexprs">
+  <productionRule headNonTerminal="neexprs">
     <nonTerminal name="expr" />
     <terminal lexeme="," />
     <nonTerminal name="neexprs" />
   </productionRule>
 
   <!-- rule: expr -->
-  <productionRule headNonterminal="expr">
+  <productionRule headNonTerminal="expr">
     <nonTerminal name="clause" />
   </productionRule>
 
-  <productionRule headNonterminal="expr">
+  <productionRule headNonTerminal="expr">
     <nonTerminal name="expr" />
     <terminal lexeme="|" />
     <nonTerminal name="clause" />
   </productionRule>
 
   <!-- rule: clause -->
-  <productionRule headNonterminal="clause">
+  <productionRule headNonTerminal="clause">
     <nonTerminal name="pred" />
   </productionRule>
 
-  <productionRule headNonterminal="clause">
+  <productionRule headNonTerminal="clause">
     <nonTerminal name="clause" />
     <terminal lexeme="&amp;" />
     <nonTerminal name="pred" />
   </productionRule>
 
   <!-- rule: pred -->
-  <productionRule headNonterminal="pred">
+  <productionRule headNonTerminal="pred">
     <nonTerminal name="expr" />
   </productionRule>
 
-  <productionRule headNonterminal="pred">
+  <productionRule headNonTerminal="pred">
     <nonTerminal name="expr" />
     <nonTerminal name="boolop" />
     <nonTerminal name="expr" />
   </productionRule>
 
   <!-- rule: boolop -->
-  <productionRule headNonterminal="boolop">
+  <productionRule headNonTerminal="boolop">
     <terminal lexeme="=" />
   </productionRule>
 
-  <productionRule headNonterminal="boolop">
+  <productionRule headNonTerminal="boolop">
     <terminal lexeme="&lt;&gt;" />
   </productionRule>
 
-  <productionRule headNonterminal="boolop">
+  <productionRule headNonTerminal="boolop">
     <terminal lexeme="&lt;=" />
   </productionRule>
 
-  <productionRule headNonterminal="boolop">
+  <productionRule headNonTerminal="boolop">
     <terminal lexeme="&gt;=" />
   </productionRule>
 
-  <productionRule headNonterminal="boolop">
+  <productionRule headNonTerminal="boolop">
     <terminal lexeme="&lt;" />
   </productionRule>
 
-  <productionRule headNonterminal="boolop">
+  <productionRule headNonTerminal="boolop">
     <terminal lexeme="&gt;" />
   </productionRule>
 
   <!-- rule: expr (again) -->
-  <productionRule headNonterminal="expr">
+  <productionRule headNonTerminal="expr">
     <nonTerminal name="term" />
   </productionRule>
 
-  <productionRule headNonterminal="expr">
+  <productionRule headNonTerminal="expr">
     <nonTerminal name="expr" />
     <nonTerminal name="linop" />
     <nonTerminal name="term" />
   </productionRule>
 
   <!-- rule: linop -->
-  <productionRule headNonterminal="linop">
+  <productionRule headNonTerminal="linop">
     <terminal lexeme="+" />
   </productionRule>
 
-  <productionRule headNonterminal="linop">
+  <productionRule headNonTerminal="linop">
     <terminal lexeme="-" />
   </productionRule>
 
   <!-- rule: term -->
-  <productionRule headNonterminal="term">
+  <productionRule headNonTerminal="term">
     <nonTerminal name="factor" />
   </productionRule>
 
-  <productionRule headNonterminal="term">
+  <productionRule headNonTerminal="term">
     <nonTerminal name="term" />
     <nonTerminal name="nonlinop" />
     <nonTerminal name="factor" />
   </productionRule>
 
   <!-- rule: nonlinop -->
-  <productionRule headNonterminal="nonlinop">
+  <productionRule headNonTerminal="nonlinop">
     <terminal lexeme="*" />
   </productionRule>
 
-  <productionRule headNonterminal="nonlinop">
+  <productionRule headNonTerminal="nonlinop">
     <terminal lexeme="/" />
   </productionRule>
 
   <!-- rule: factor -->
-  <productionRule headNonterminal="factor">
+  <productionRule headNonTerminal="factor">
     <nonTerminal name="const" />
   </productionRule>
 
-  <productionRule headNonterminal="factor">
+  <productionRule headNonTerminal="factor">
     <terminal lexeme="id" />
   </productionRule>
   
-  <productionRule headNonterminal="factor">
+  <productionRule headNonTerminal="factor">
     <terminal lexeme="id" />
     <terminal lexeme="[" />
     <nonTerminal name="expr" />
     <terminal lexeme="]" />
   </productionRule>
 
-  <productionRule headNonterminal="factor">
+  <productionRule headNonTerminal="factor">
     <terminal lexeme="id" />
     <terminal lexeme="(" />
     <nonTerminal name="exprs" />
     <terminal lexeme=")" />
   </productionRule>
 
-  <productionRule headNonterminal="factor">
+  <productionRule headNonTerminal="factor">
     <terminal lexeme="(" />
     <nonTerminal name="expr" />
     <terminal lexeme=")" />
   </productionRule>
 
   <!-- rule: const -->
-  <productionRule headNonterminal="const">
+  <productionRule headNonTerminal="const">
     <terminal lexeme="intlit" />
   </productionRule>
 
-  <productionRule headNonterminal="const">
+  <productionRule headNonTerminal="const">
     <terminal lexeme="floatlit" />
   </productionRule>
 
-  <productionRule headNonterminal="const">
+  <productionRule headNonTerminal="const">
     <terminal lexeme="_" />
   </productionRule>
 </grammar>

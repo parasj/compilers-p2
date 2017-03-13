@@ -102,6 +102,8 @@ public class GrammarBuilder {
             Element prElement = (Element) rootIter.next();
             Iterator prIter = prElement.elementIterator();
 
+
+
             // Discover derivation
             while (prIter.hasNext()) {
                 // TODO XKCD
