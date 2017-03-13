@@ -17,7 +17,8 @@ import java.util.LinkedList;
 public class Main {
 
     // TODO: Move this to GrammarBuilder or Grammar or something
-    private static Lexeme[] lexemes = {
+    //Made public to use
+    public static Lexeme[] lexemes = {
             new KeywordLexeme("array"),
             new KeywordLexeme("begin"),
             new KeywordLexeme("boolean"),

@@ -1,6 +1,14 @@
 package com.byteme.grammar;
 
+import com.byteme.lexer.KeywordLexeme;
+import com.byteme.lexer.Lexeme;
+
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.HashMap;
+
+import static com.byteme.Main.lexemes;
 
 /**
  * The Grammar class describes a context-free grammar.
@@ -16,6 +24,7 @@ public final class Grammar {
      * grammar's start symbol.
      */
     private final LinkedList<ProductionRule> productionRules;
+    private HashMap<Symbol, HashSet<Terminal>> firstSet;
 
     /**
      * Constructs a Grammar and initializes it with the provided production
@@ -31,6 +40,8 @@ public final class Grammar {
         for (ProductionRule pr : productionRules) {
             this.productionRules.addLast(pr);
         }
+
+        firstSet = generateFirstSet();
     }
 
     /**
@@ -50,6 +61,50 @@ public final class Grammar {
     public LinkedList<ProductionRule> getProductionRules() {
         // TODO: Note that this directly returns the LinkedList reference, so it may be altered by someone else!
         return productionRules;
+    }
+
+    /**
+     * Generates the first set for the grammar.
+     *
+     * @return a Hash map of the firsts set
+     */
+    private HashMap<Symbol, HashSet<Terminal>> generateFirstSet() {
+        this.firstSet = new HashMap<Symbol, HashSet<Terminal>>();
+
+        //Populate First Sets for terminals
+        for(Lexeme l : lexemes) {
+            //TODO: Fix this hacky behavior
+            Terminal t = new Terminal("NA",l);
+            addToMap(this.firstSet,t,t);
+        }
+
+        Lexeme  lepsilon = new KeywordLexeme("");
+        Terminal tepsilon = new Terminal("", lepsilon);
+
+        for (ProductionRule pr : productionRules) {
+            //If the first element is a terminal and epsilon
+            //This should be covered by equals: pr.getDerivation().getFirst() instanceof Terminal
+            if (pr.getDerivation().getFirst().equals(tepsilon)) {
+                addToMap(this.firstSet, pr.getHeadNonTerminal(), tepsilon);
+            }
+
+
+        }
+
+
+
+        return firstSet;
+    }
+
+    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal val){
+        HashSet<Terminal> list;
+        if(map.get(key) != null){
+            list = map.get(key);
+        } else {
+            list = new HashSet<Terminal>();
+        }
+        list.add(val);
+        map.put(key,list);
     }
 
     @Override
