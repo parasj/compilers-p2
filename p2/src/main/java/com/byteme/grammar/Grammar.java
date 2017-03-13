@@ -88,7 +88,22 @@ public final class Grammar {
                 addToMap(this.firstSet, pr.getHeadNonTerminal(), tepsilon);
             }
 
+        }
+        //Add the last non-nullable symbol's First set
+        for (ProductionRule pr : productionRules) {
+            if (!pr.getDerivation().getFirst().equals(tepsilon)) {
+                int i = pr.getDerivation().size() - 1;
+                for (int j = 0; j < pr.getDerivation().size(); j++) {
+                    Symbol s = pr.getDerivation().get(j);
+                    if (this.firstSet.get(s) == null || this.firstSet.get(s).isEmpty()
+                            || !this.firstSet.get(s).contains(tepsilon)) {
+                        i = j;
+                        break;
+                    }
+                }
 
+                addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal[]) this.firstSet.get(pr.getDerivation().get(i)).toArray());
+            }
         }
 
 
@@ -96,14 +111,16 @@ public final class Grammar {
         return firstSet;
     }
 
-    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal val){
+    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal ... val){
         HashSet<Terminal> list;
         if(map.get(key) != null){
             list = map.get(key);
         } else {
             list = new HashSet<Terminal>();
         }
-        list.add(val);
+        for (Terminal v : val) {
+            list.add(v);
+        }
         map.put(key,list);
     }
 
