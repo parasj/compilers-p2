@@ -80,14 +80,16 @@ public final class FirstSet {
 
                 HashSet<Terminal> rhs;
 
-                if(firstSet.get(pr.getDerivation().get(k)) != null) {
-                    rhs = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(k)));
+                if(firstSet.get(pr.getDerivation().get(0)) != null) {
+                    rhs = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(0)));
                 } else {
-                    rhs = firstSet.get(pr.getDerivation().get(k));
+                    rhs = new HashSet<Terminal>();
                 }
                 if (rhs != null) {
                     rhs.remove(tepsilon);
                 }
+
+
 
                 int i = 0;
                 while(firstSet.get(pr.getDerivation().get(i)) != null && firstSet.get(pr.getDerivation().get(i)).contains(tepsilon) && i <= k - 1) {
