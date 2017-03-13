@@ -58,7 +58,7 @@ public final class Grammar {
         }
 
         this.firstSet = new FirstSet(this.productionRules);
-        this.followSet = new FollowSet(this.productionRules, this.firstSet);
+//        this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
 

@@ -46,38 +46,52 @@ public final class FirstSet {
         Lexeme  lepsilon = new KeywordLexeme("");
         Terminal tepsilon = new Terminal("", lepsilon);
 
+        addToMap(this.firstSet, tepsilon, tepsilon);
 
+        //Populate for epsilon
         for (ProductionRule pr : copyofPR) {
             //If the first element is a terminal and epsilon
             //This should be covered by equals: pr.getDerivation().getFirst() instanceof Terminal
             if (pr.getDerivation().getFirst().equals(tepsilon)) {
                 addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal) pr.getDerivation().getFirst());
-            } else if (pr.getDerivation().getFirst().getClass() == Terminal.class) {
-                addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal) pr.getDerivation().getFirst());
             }
+//            } else if (pr.getDerivation().getFirst().getClass() == Terminal.class) {
+//                addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal) pr.getDerivation().getFirst());
+//            }
         }
         //TODO: BROKEN AF
         //Add the last non-nullable symbol's First set
         boolean changing = true;
         while(changing) {
             changing = false;
-            for (int k = 0; k < copyofPR.size(); k++) {
-                Terminal[] terminals;
-                ProductionRule pr = copyofPR.get(k);
-                int i = pr.getDerivation().size() - 1;
+//            for (int k = 0; k < copyofPR.size(); k++) {
+//                Terminal[] terminals;
+//                ProductionRule pr = copyofPR.get(k);
+//                int i = pr.getDerivation().size() - 1;
+//                for (int j = 0; j < pr.getDerivation().size(); j++) {
+//                    Symbol s = pr.getDerivation().get(j);
+//                    if (this.firstSet.get(s) == null || this.firstSet.get(s).isEmpty()
+//                            || !this.firstSet.get(s).contains(tepsilon)) {
+//                        i = j;
+//                        break;
+//                    }
+//                }
+//
+//                terminals = new Terminal[this.firstSet.get(pr.getDerivation().get(i)).size()];
+//
+//                this.firstSet.get(pr.getDerivation().get(i)).toArray(terminals);
+//                addToMap(this.firstSet, pr.getHeadNonTerminal(), terminals);
+//            }
+            for (ProductionRule pr:productionRules) {
+                int k = pr.getDerivation().size();
                 for (int j = 0; j < pr.getDerivation().size(); j++) {
                     Symbol s = pr.getDerivation().get(j);
                     if (this.firstSet.get(s) == null || this.firstSet.get(s).isEmpty()
                             || !this.firstSet.get(s).contains(tepsilon)) {
-                        i = j;
+                        k = j;
                         break;
                     }
                 }
-
-                terminals = new Terminal[this.firstSet.get(pr.getDerivation().get(i)).size()];
-
-                this.firstSet.get(pr.getDerivation().get(i)).toArray(terminals);
-                addToMap(this.firstSet, pr.getHeadNonTerminal(), terminals);
             }
         }
 
