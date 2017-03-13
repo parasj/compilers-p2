@@ -37,6 +37,10 @@ public abstract class Lexeme {
      */
     public abstract String stringify(String token);
 
+    public String getLiteral() {
+        return literal;
+    }
+
     @Override
     public String toString() {
         return literal;

@@ -44,9 +44,7 @@ public class GrammarBuilder {
         Hashtable<String, NonTerminal> validNonTerminals = new Hashtable<>();
 
         // Construct Lexeme Hashtable
-        for (Lexeme l : lexemes) {
-
-        }
+        for (Lexeme l : lexemes) validLexemes.putIfAbsent(l.getLiteral(), l);
 
         // 1st iteration: discover all NonTerminals, check that each Terminal has recognized Lexeme
         while (rootIter.hasNext()) {
@@ -65,11 +63,22 @@ public class GrammarBuilder {
                 switch (symbolElement.getName()) {
                     // Discover a Terminal Symbol in the derivation
                     case "terminal": // TODO: maybe make the case argument a const?
-                        String lexemeStr = symbolElement.attributeValue("lexeme"); // TODO: maybe make the argument a const?
+                        // Note: name of Lexeme that matches a Terminal == the name of the Terminal
+                        String lexemeName = symbolElement.attributeValue("lexeme"); // TODO: maybe make the argument a const?
 
-                        //System.out.println("\tTerminal: {Lexeme=" + lexemeStr + "}"); // FIXME
+                        //System.out.println("\tTerminal: {Lexeme=" + lexemeName + "}"); // FIXME
 
-                        // TODO: Check that lexeme is valid + add to validTerminals
+                        // Check if Lexeme is recognized
+                        if (validLexemes.containsKey(lexemeName)) {
+                            Lexeme discoveredLexeme = validLexemes.get(lexemeName);
+                            Terminal discoveredTerminal = new Terminal(lexemeName, discoveredLexeme);
+
+                            validTerminals.putIfAbsent(lexemeName, discoveredTerminal);
+                        }
+                        else {
+                            // TODO: throw an exception. For now print something
+                            System.err.println("Unrecognized lexeme: " + lexemeName);
+                        }
                         break;
 
                     // Discover a NonTerminal Symbol in the derivation
@@ -84,6 +93,20 @@ public class GrammarBuilder {
 
                     // TODO maybe handle malformed XML
                 }
+            }
+        }
+
+        // Get a new Iterator
+        rootIter = rootElement.elementIterator("productionRule"); // TODO: maybe make the argument a const?
+
+        // 2nd iteration: build all ProductionRules
+        while (rootIter.hasNext()) {
+            Element prElement = (Element) rootIter.next();
+            Iterator prIter = prElement.elementIterator();
+
+            // Discover derivation
+            while (prIter.hasNext()) {
+                // TODO XKCD
             }
         }
 
