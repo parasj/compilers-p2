@@ -1,5 +1,6 @@
 package com.byteme.grammar;
 
+import com.byteme.grammar.Sets.FirstSet;
 import com.byteme.lexer.KeywordLexeme;
 import com.byteme.lexer.Lexeme;
 
@@ -24,7 +25,7 @@ public final class Grammar {
      * grammar's start symbol.
      */
     private final LinkedList<ProductionRule> productionRules;
-    private HashMap<Symbol, HashSet<Terminal>> firstSet;
+    private FirstSet firstSet;
 
     /**
      * Constructs a Grammar and initializes it with the provided production
@@ -41,7 +42,7 @@ public final class Grammar {
             this.productionRules.addLast(pr);
         }
 
-        firstSet = generateFirstSet();
+        this.firstSet = new FirstSet(this.productionRules);
     }
 
     /**
@@ -63,66 +64,7 @@ public final class Grammar {
         return productionRules;
     }
 
-    /**
-     * Generates the first set for the grammar.
-     *
-     * @return a Hash map of the firsts set
-     */
-    private HashMap<Symbol, HashSet<Terminal>> generateFirstSet() {
-        this.firstSet = new HashMap<Symbol, HashSet<Terminal>>();
 
-        //Populate First Sets for terminals
-        for(Lexeme l : lexemes) {
-            //TODO: Fix this hacky behavior
-            Terminal t = new Terminal("NA",l);
-            addToMap(this.firstSet,t,t);
-        }
-
-        Lexeme  lepsilon = new KeywordLexeme("");
-        Terminal tepsilon = new Terminal("", lepsilon);
-
-        for (ProductionRule pr : productionRules) {
-            //If the first element is a terminal and epsilon
-            //This should be covered by equals: pr.getDerivation().getFirst() instanceof Terminal
-            if (pr.getDerivation().getFirst().equals(tepsilon)) {
-                addToMap(this.firstSet, pr.getHeadNonTerminal(), tepsilon);
-            }
-
-        }
-        //Add the last non-nullable symbol's First set
-        for (ProductionRule pr : productionRules) {
-            if (!pr.getDerivation().getFirst().equals(tepsilon)) {
-                int i = pr.getDerivation().size() - 1;
-                for (int j = 0; j < pr.getDerivation().size(); j++) {
-                    Symbol s = pr.getDerivation().get(j);
-                    if (this.firstSet.get(s) == null || this.firstSet.get(s).isEmpty()
-                            || !this.firstSet.get(s).contains(tepsilon)) {
-                        i = j;
-                        break;
-                    }
-                }
-
-                addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal[]) this.firstSet.get(pr.getDerivation().get(i)).toArray());
-            }
-        }
-
-
-
-        return firstSet;
-    }
-
-    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal ... val){
-        HashSet<Terminal> list;
-        if(map.get(key) != null){
-            list = map.get(key);
-        } else {
-            list = new HashSet<Terminal>();
-        }
-        for (Terminal v : val) {
-            list.add(v);
-        }
-        map.put(key,list);
-    }
 
     @Override
     public String toString() {
