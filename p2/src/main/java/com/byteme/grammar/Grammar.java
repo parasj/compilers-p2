@@ -1,6 +1,7 @@
 package com.byteme.grammar;
 
 import com.byteme.grammar.Sets.FirstSet;
+import com.byteme.grammar.Sets.FollowSet;
 
 import java.util.LinkedList;
 
@@ -19,6 +20,7 @@ public final class Grammar {
      */
     private final LinkedList<ProductionRule> productionRules;
     private FirstSet firstSet;
+    private FollowSet followSet;
 
     /**
      * Constructs a Grammar and initializes it with the provided production
@@ -36,6 +38,7 @@ public final class Grammar {
         }
 
         this.firstSet = new FirstSet(this.productionRules);
+        this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
     /**
@@ -57,7 +60,9 @@ public final class Grammar {
         return productionRules;
     }
 
-
+    public FirstSet getFirstSet() {
+        return firstSet;
+    }
 
     @Override
     public String toString() {
@@ -72,6 +77,7 @@ public final class Grammar {
 
         //Use to see the FirstSet!
 //        sb.append(firstSet.toString());
+//        sb.append(followSet.toString());
 
         return sb.toString();
     }

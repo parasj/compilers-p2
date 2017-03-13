@@ -25,7 +25,7 @@ public final class FirstSet {
     }
 
 
-    public HashSet<Terminal> get(Symbol s) {
+    public HashSet<Terminal> getHSet(Symbol s) {
         return firstSet.get(s);
     }
 
