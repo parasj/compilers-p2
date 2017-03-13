@@ -24,33 +24,12 @@ public class GrammarBuilder {
     private static final String ATTRIBUTE_NAME_HEADNONTERMINAL = "headNonTerminal";
     private static final String ATTRIBUTE_NAME_LEXEME = "lexeme";
 
-    /**
-     *
-     * @param xmlFile
-     * @return
-     * @throws DocumentException
-     */
-    public static Document parseXML(File xmlFile) throws DocumentException {
-        SAXReader saxReader = new SAXReader();
-
-        return saxReader.read(xmlFile);
-    }
-
-    // TODO: Currently this assumes the passed-in xmlDoc is a valid grammar XML document.
-    // TODO: Eventually it would be nice to throw a MalformedXMLException or something if this isn't the case.
-    public static Grammar buildGrammar(Document xmlDoc, Lexeme ... lexemes) {
-        int prIndex = 0;
-        Element rootElement = xmlDoc.getRootElement();
-        Hashtable<String, Lexeme> validLexemes = new Hashtable<>();
-        Hashtable<String, Terminal> validTerminals = new Hashtable<>();
-        Hashtable<String, NonTerminal> validNonTerminals = new Hashtable<>();
-        Iterator rootIter = rootElement.elementIterator(ELEMENT_NAME_PRODUCTIONRULE);
-        ProductionRule[] productionRules = new ProductionRule[rootElement.elements().size()];
-
-        // Construct Lexeme Hashtable
-        for (Lexeme l : lexemes) validLexemes.putIfAbsent(l.getLiteral(), l);
-
-        // 1st iteration: discover all NonTerminals, check that each Terminal has recognized Lexeme
+    private static void doDiscoveryPhase(
+            Iterator rootIter,
+            Hashtable<String, Lexeme> validLexemes,
+            Hashtable<String, Terminal> validTerminals,
+            Hashtable<String, NonTerminal> validNonTerminals
+    ) {
         while (rootIter.hasNext()) {
             Element prElement = (Element) rootIter.next();
             Iterator prIter = prElement.elementIterator();
@@ -99,11 +78,16 @@ public class GrammarBuilder {
                 }
             }
         }
+    }
 
-        // Get a new Iterator
-        rootIter = rootElement.elementIterator(ELEMENT_NAME_PRODUCTIONRULE);
+    private static void doBuildingPhase(
+        Iterator rootIter,
+        Hashtable<String, Terminal> validTerminals,
+        Hashtable<String, NonTerminal> validNonTerminals,
+        ProductionRule[] productionRules
+    ) {
+        int prIndex = 0;
 
-        // 2nd iteration: build all ProductionRules
         while (rootIter.hasNext()) {
             int derivationIndex = 0;
             Element prElement = (Element) rootIter.next();
@@ -170,6 +154,41 @@ public class GrammarBuilder {
                 );
             }
         }
+    }
+
+    /**
+     *
+     * @param xmlFile
+     * @return
+     * @throws DocumentException
+     */
+    public static Document parseXML(File xmlFile) throws DocumentException {
+        SAXReader saxReader = new SAXReader();
+
+        return saxReader.read(xmlFile);
+    }
+
+    // TODO: Currently this assumes the passed-in xmlDoc is a valid grammar XML document.
+    // TODO: Eventually it would be nice to throw a MalformedXMLException or something if this isn't the case.
+    public static Grammar buildGrammar(Document xmlDoc, Lexeme ... lexemes) {
+        Element rootElement = xmlDoc.getRootElement();
+        Hashtable<String, Lexeme> validLexemes = new Hashtable<>();
+        Hashtable<String, Terminal> validTerminals = new Hashtable<>();
+        Hashtable<String, NonTerminal> validNonTerminals = new Hashtable<>();
+        Iterator rootIter = rootElement.elementIterator(ELEMENT_NAME_PRODUCTIONRULE);
+        ProductionRule[] productionRules = new ProductionRule[rootElement.elements().size()];
+
+        // Construct Lexeme Hashtable
+        for (Lexeme l : lexemes) validLexemes.putIfAbsent(l.getLiteral(), l);
+
+        // 1st iteration: discover all NonTerminals, check that each Terminal has recognized Lexeme
+        doDiscoveryPhase(rootIter, validLexemes, validTerminals, validNonTerminals);
+
+        // Get a new Iterator
+        rootIter = rootElement.elementIterator(ELEMENT_NAME_PRODUCTIONRULE);
+
+        // 2nd iteration: build all ProductionRules
+        doBuildingPhase(rootIter, validTerminals, validNonTerminals, productionRules);
 
         return new Grammar(productionRules);
     }

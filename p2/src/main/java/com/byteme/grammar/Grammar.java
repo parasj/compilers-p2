@@ -57,8 +57,8 @@ public final class Grammar {
             this.languages.put(headNonTerminal, language);
         }
 
-        this.firstSet = new FirstSet(this.productionRules);
-        this.followSet = new FollowSet(this.productionRules, this.firstSet);
+//        this.firstSet = new FirstSet(this.productionRules);
+//        this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
 
