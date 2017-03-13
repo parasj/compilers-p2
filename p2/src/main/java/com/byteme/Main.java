@@ -106,12 +106,13 @@ public class Main {
                 }
             }
         }
-        // TODO: This is temporary for testing purposes
-        else if (phase.equals("--buildgrammar")) {
+        else if (phase.equals("--grammar")) {
+            final String GRAMMAR_XML_PATH = "grammar.xml";
+
             try {
                 Lexeme[] grammarLexemes = new Lexeme[lexemes.length + 1];
                 LinkedList<Lexeme> grammarLexemesList = new LinkedList<>();
-                Document doc = GrammarBuilder.parseXML(new File(fnameIn));
+                Document doc = GrammarBuilder.parseXML(new File(GRAMMAR_XML_PATH));
 
                 Collections.addAll(grammarLexemesList, lexemes);
                 grammarLexemesList.add(new KeywordLexeme("")); // to match epsilon

@@ -63,6 +63,7 @@ public final class FirstSet {
         while(changing) {
             changing = false;
             for (int k = 0; k < copyofPR.size(); k++) {
+                Terminal[] terminals;
                 ProductionRule pr = copyofPR.get(k);
                 int i = pr.getDerivation().size() - 1;
                 for (int j = 0; j < pr.getDerivation().size(); j++) {
@@ -74,7 +75,10 @@ public final class FirstSet {
                     }
                 }
 
-                addToMap(this.firstSet, pr.getHeadNonTerminal(), (Terminal[]) this.firstSet.get(pr.getDerivation().get(i)).toArray());
+                terminals = new Terminal[this.firstSet.get(pr.getDerivation().get(i)).size()];
+
+                this.firstSet.get(pr.getDerivation().get(i)).toArray(terminals);
+                addToMap(this.firstSet, pr.getHeadNonTerminal(), terminals);
             }
         }
 

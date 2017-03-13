@@ -57,9 +57,8 @@ public final class Grammar {
             this.languages.put(headNonTerminal, language);
         }
 
-        // TODO: Un-comment this. It's causing a NPE
-//        this.firstSet = new FirstSet(this.productionRules);
-//        this.followSet = new FollowSet(this.productionRules, this.firstSet);
+        this.firstSet = new FirstSet(this.productionRules);
+        this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
 

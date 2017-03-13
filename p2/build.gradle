@@ -10,6 +10,7 @@ dependencies {
   testCompile 'junit:junit:4.12'
 }
 
+// For compiling into a fat jar
 jar {
   manifest {
     attributes 'Implementation-Title': 'BTC - the byteme tiger compiler',
@@ -25,5 +26,5 @@ jar {
 }
 
 task wrapper(type: Wrapper) {
-    gradleVersion = '2.2'
+  gradleVersion = '2.2'
 }
