@@ -1,8 +1,12 @@
 package com.byteme.grammar.sets;
 
+import com.byteme.grammar.NonTerminal;
 import com.byteme.grammar.ProductionRule;
 import com.byteme.grammar.Symbol;
 import com.byteme.grammar.Terminal;
+import com.byteme.lexer.KeywordLexeme;
+import com.byteme.lexer.Lexeme;
+import org.omg.CORBA.TRANSACTION_MODE;
 
 import java.util.HashMap;
 import java.util.HashSet;
@@ -19,30 +23,92 @@ public class FollowSet {
         this.followSet = generateFollowSet(productionRules, firstSet);
     }
 
-    public HashSet<Terminal> get(Symbol s) {
+    public HashSet<Terminal> getHSet(Symbol s) {
         return followSet.get(s);
     }
 
     private HashMap<Symbol, HashSet<Terminal>> generateFollowSet(LinkedList<ProductionRule> productionRules, FirstSet fs) {
+        followSet = new HashMap<Symbol, HashSet<Terminal>>();
         HashMap<Symbol, HashSet<Terminal>> firstSet = fs.getFirstSet();
 
+        Lexeme lepsilon = new KeywordLexeme("");
+        Terminal tepsilon = new Terminal("", lepsilon);
+
+        Lexeme leof = new KeywordLexeme("end");
+        Terminal teof = new Terminal("end", leof);
+
+        System.out.println(teof);
+        addToMap(followSet, productionRules.getFirst().getHeadNonTerminal(), teof);
 
 
-        return null;
+        boolean changing = true;
+        int c = 0;
+        while(changing) {
+            changing = false;
+            for(ProductionRule pr : productionRules) {
+                HashSet<Terminal> trailer;
+
+                if(followSet.get(pr.getHeadNonTerminal()) != null) {
+                    trailer = new HashSet<Terminal>(followSet.get(pr.getHeadNonTerminal()));
+                } else {
+                    trailer = new HashSet<Terminal>();
+                }
+
+                for (int i = pr.getDerivation().size() -  1; i >= 0; i--) {
+                    if (pr.getDerivation().get(i).getClass() == NonTerminal.class) {
+                        if (followSet.get(pr.getDerivation().get(i)) == null && trailer.isEmpty()) {
+                            followSet.put(pr.getDerivation().get(i), new HashSet<Terminal>(trailer));
+                            changing = true;
+                        } else if (followSet.get(pr.getDerivation().get(i)) != null && !trailer.isEmpty() && !followSet.get(pr.getDerivation().get(i)).containsAll(trailer)) {
+                            addAllToMap(followSet, pr.getDerivation().get(i), trailer);
+                            changing = true;
+                        }
+
+                        if (firstSet.get(pr.getDerivation().get(i)).contains(tepsilon)) {
+                            firstSet.get(pr.getDerivation().get(i)).clone();
+                            HashSet<Terminal> temp = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(i)));
+                            temp.remove(tepsilon);
+                            trailer.addAll(temp);
+                        } else {
+                            HashSet<Terminal> temp = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(i)));
+                            trailer.addAll(temp);
+                        }
+                    } else {
+                        if(firstSet.get(pr.getHeadNonTerminal()) != null) {
+                            trailer = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(i)));
+                        } else {
+                            trailer = new HashSet<Terminal>();
+                        }
+                    }
+                }
+            }
+
+        }
+
+        return followSet;
     }
 
 
-    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal ... val){
+    private void addToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, Terminal val){
         HashSet<Terminal> list;
         if(map.get(key) != null){
             list = map.get(key);
         } else {
             list = new HashSet<Terminal>();
         }
-        for (Terminal v : val) {
-            list.add(v);
-        }
+
+        list.add(val);
         map.put(key,list);
+    }
+
+    private void addAllToMap(HashMap<Symbol, HashSet<Terminal>> map, Symbol key, HashSet<Terminal> val){
+        if (key == null || val == null){
+            return;
+        }
+
+        for(Terminal t : val) {
+            addToMap(map, key, t);
+        }
     }
 
     public HashMap<Symbol, HashSet<Terminal>> getFollowSet() {
@@ -66,17 +132,23 @@ public class FollowSet {
 
     @Override
     public String toString() {
-        StringBuilder sb = new StringBuilder("FirstList {\n");
+        StringBuilder sb = new StringBuilder("FollowList {\n");
+
+//        if (this.followSet == null) {
+//            System.out.println("Empty");
+//        }
 
         for (Map.Entry<Symbol, HashSet<Terminal>> entry: followSet.entrySet()) {
-            sb.append(entry.getKey().toString() + " : ");
-            for (Terminal t : entry.getValue()) {
-                sb.append(t.toString() + ", ");
+            if(entry.getKey().getClass() != Terminal.class) {
+                sb.append("\t" + entry.getKey().toString() + " : ");
+                for (Terminal t : entry.getValue()) {
+                    sb.append(t.toString() + ", ");
+                }
+                sb.append("\n");
             }
-            sb.append("\n");
         }
 
-        sb.append("}");
+        sb.append("}\n");
 
         return sb.toString();
     }

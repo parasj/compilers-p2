@@ -34,8 +34,6 @@ public final class FirstSet {
     private HashMap<Symbol, HashSet<Terminal>> generateFirstSet(LinkedList<ProductionRule> productionRules) {
         this.firstSet = new HashMap<Symbol, HashSet<Terminal>>();
 
-        LinkedList<ProductionRule> copyofPR = (LinkedList<ProductionRule>)productionRules.clone();
-
         //Populate First sets for terminals
         for(Lexeme l : lexemes) {
             //TODO: Fix this hacky behavior
@@ -51,7 +49,7 @@ public final class FirstSet {
         addToMap(this.firstSet, tepsilon, tepsilon);
 
         //Populate for epsilon
-        for (ProductionRule pr : copyofPR) {
+        for (ProductionRule pr : productionRules) {
             //If the first element is a terminal and epsilon
             //This should be covered by equals: pr.getDerivation().getFirst() instanceof Terminal
             if (pr.getDerivation().getFirst().equals(tepsilon)) {

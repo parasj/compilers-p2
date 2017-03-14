@@ -59,7 +59,7 @@ public final class Grammar {
 
 
         this.firstSet = new FirstSet(this.productionRules);
-//        this.followSet = new FollowSet(this.productionRules, this.firstSet);
+        this.followSet = new FollowSet(this.productionRules, this.firstSet);
     }
 
 
@@ -77,6 +77,10 @@ public final class Grammar {
         return firstSet;
     }
 
+    public FollowSet getFollowSet() {
+        return followSet;
+    }
+
     @Override
     public String toString() {
         int index = 0;
@@ -89,8 +93,8 @@ public final class Grammar {
         sb.append("}\n");
 
         // Use to see the FirstSet/FollowSet
-        sb.append(firstSet.toString());
-//        sb.append(followSet.toString());
+//        sb.append(firstSet.toString());
+        sb.append(followSet.toString());
 
         return sb.toString();
     }
