@@ -42,7 +42,6 @@ public class FollowSet {
 
 
         boolean changing = true;
-        int c = 0;
         while(changing) {
             changing = false;
             for(ProductionRule pr : productionRules) {
@@ -56,7 +55,7 @@ public class FollowSet {
 
                 for (int i = pr.getDerivation().size() -  1; i >= 0; i--) {
                     if (pr.getDerivation().get(i).getClass() == NonTerminal.class) {
-                        if (followSet.get(pr.getDerivation().get(i)) == null && trailer.isEmpty()) {
+                        if (followSet.get(pr.getDerivation().get(i)) == null && !trailer.isEmpty()) {
                             followSet.put(pr.getDerivation().get(i), new HashSet<Terminal>(trailer));
                             changing = true;
                         } else if (followSet.get(pr.getDerivation().get(i)) != null && !trailer.isEmpty() && !followSet.get(pr.getDerivation().get(i)).containsAll(trailer)) {
@@ -65,13 +64,12 @@ public class FollowSet {
                         }
 
                         if (firstSet.get(pr.getDerivation().get(i)).contains(tepsilon)) {
-                            firstSet.get(pr.getDerivation().get(i)).clone();
                             HashSet<Terminal> temp = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(i)));
                             temp.remove(tepsilon);
                             trailer.addAll(temp);
                         } else {
                             HashSet<Terminal> temp = new HashSet<Terminal>(firstSet.get(pr.getDerivation().get(i)));
-                            trailer.addAll(temp);
+                            trailer = temp;
                         }
                     } else {
                         if(firstSet.get(pr.getHeadNonTerminal()) != null) {
