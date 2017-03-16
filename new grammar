@@ -1,0 +1,105 @@
+program →let declseg in stmts end (1)
+declseg →typedecls vardecls funcdecls (2)
+typedecls →ϵ (3)
+typedecls →typedecl typedecls (4)
+typedecl →type id := type ; (5)
+type →boolean (6)
+type →int (7)
+type →float (8)
+type →unit (9)
+type →id (10)
+type →array [ intlit ] of type (11)
+vardecls →ϵ (12)
+vardecls →vardecl vardecls (13)
+vardecl →var ids : type optinit; (14)
+
+ids →id idst(15)
+idst → ϵ
+	, ids (16)
+
+optinit →ϵ (17)
+optinit →:= const (18)
+funcdecls →ϵ (19)
+funcdecls →funcdecl funcdecls (20)
+funcdecl →func id ( params ) : type begin stmts end ; (21)
+params →ϵ (22)
+params →neparams (23)
+neparams →param neparamst(24)
+
+neparamst → ϵ
+		, neparams
+
+param →id : type (26)
+stmts →fullstmt stmtst (27)
+
+stmtst → ϵ
+		stmts
+
+fullstmt →stmt ; (29)
+stmt →lvalue := expr (30)
+stmt →if expr then stmts stmtt (31)
+stmt →while expr do stmts enddo (33)
+stmt →for id := expr to expr do stmts enddo (34)
+stmt →break (35)
+stmt →return expr (36)
+
+stmtt → endif
+		else stmts endif
+
+lvalue →id optoffset (37)
+optoffset →ϵ (38)
+optoffset →[ expr ] (39)
+exprs →ϵ (40)
+exprs →neexprs (41)
+neexprs →expr neexprst(42)
+
+neexprst → ϵ
+		, neexprs
+
+
+//issssueeee
+expr →clause expr'(44)
+expr →term expr'(56)
+expr' →ϵ
+		| clause expr'
+		linop term expr'
+
+clause →pred clause' (46)
+
+clause' →ϵ
+		& pred clause'
+
+pred →expr predt(48)
+
+predt →ϵ
+		boolop expr
+
+boolop →= (50)
+boolop →<> (51)
+boolop →<= (52)
+boolop →>= (53)
+boolop →< (54)
+boolop →> (55)
+
+
+linop →+ (58)
+linop →- (59)
+term →factor term'(60)
+
+term' → ϵ
+		nonlinop factor term'
+
+
+nonlinop →* (62)
+nonlinop →/ (63)
+factor →const (64)
+factor →id factort(65)
+
+factort → ϵ
+		 [ expr ]
+		 ( exprs )
+
+factor →( expr ) (68)
+const →intlit (69)
+const →floatlit (70)
+const →_ (71)

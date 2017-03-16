@@ -41,14 +41,22 @@ public final class Grammar {
         this.productionRules = new LinkedList<>();
         this.languages = new Hashtable<>();
 
-        // add initial production rules to list
+        //Left factor
+
         for (ProductionRule pr : productionRules) {
+            NonTerminal headNonTerminal = pr.getHeadNonTerminal();
+
+            
+
+            this.productionRules.addLast(pr);
+        }
+
+        // add initial production rules to list
+        for (ProductionRule pr : this.productionRules) {
             NonTerminal headNonTerminal = pr.getHeadNonTerminal();
             LinkedList<ProductionRule> language = languages.getOrDefault(
                     headNonTerminal, new LinkedList<>()
             );
-
-            this.productionRules.addLast(pr);
 
             // Update list of ProductionRules linked to this NonTerminal
             language.addLast(pr);
