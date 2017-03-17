@@ -59,27 +59,28 @@ neexprst → ϵ
 
 //issssueeee
 expr →clause expr'(44)
-expr →term expr'(56)
+aexpr →term aexpr'(56)//CHANGE
 expr' →ϵ
 		| clause expr'
-		linop term expr'
+aexpr' → ϵ
+		linop term aexpr'//CHANGE
 
 clause →pred clause' (46)
 
 clause' →ϵ
 		& pred clause'
 
-pred →expr predt(48)
+pred →aexpr predt(48)//CHANGE
 
 predt →ϵ
-		boolop expr
+		cmp aexpr
 
-boolop →= (50)
-boolop →<> (51)
-boolop →<= (52)
-boolop →>= (53)
-boolop →< (54)
-boolop →> (55)
+cmp →= (50)
+cmp →<> (51)
+cmp →<= (52)
+cmp →>= (53)
+cmp →< (54)
+cmp →> (55)
 
 
 linop →+ (58)
@@ -103,3 +104,6 @@ factor →( expr ) (68)
 const →intlit (69)
 const →floatlit (70)
 const →_ (71)
+//CHANGE
+const →true (69)
+const →false

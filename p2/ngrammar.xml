@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE Grammar [
   <!ELEMENT Grammar (ProductionRule*)>
   <!ATTLIST Grammar name CDATA #REQUIRED startSymbol CDATA #REQUIRED>
@@ -14,7 +14,7 @@
   <!-- rule: program -->
   <ProductionRule headNonTerminal="program">
     <Terminal lexeme="let"/>
-    <NonTerminal name="program" />
+    <NonTerminal name="declseg" />
     <Terminal lexeme="in" />
     <NonTerminal name="stmts" />
     <Terminal lexeme="end" />
@@ -100,10 +100,16 @@
   <!-- rule: ids -->
   <ProductionRule headNonTerminal="ids">
     <Terminal lexeme="id" />
+    <NonTerminal name="idst" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="ids">
-    <Terminal lexeme="id" />
+
+  <!-- rule: idst -->
+  <ProductionRule headNonTerminal="idst">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="idst">
     <Terminal lexeme="," />
     <NonTerminal name="ids" />
   </ProductionRule>
@@ -155,10 +161,14 @@
   <!-- rule: neparams -->
   <ProductionRule headNonTerminal="neparams">
     <NonTerminal name="param" />
+    <NonTerminal name="neparamst" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="neparams">
-    <NonTerminal name="param" />
+  <ProductionRule headNonTerminal="neparamst">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="neparamst">
     <Terminal lexeme="," />
     <NonTerminal name="neparams" />
   </ProductionRule>
@@ -173,10 +183,14 @@
   <!-- rule: stmts -->
   <ProductionRule headNonTerminal="stmts">
     <NonTerminal name="fullstmt" />
+    <NonTerminal name="stmtst" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="stmts">
-    <NonTerminal name="fullstmt" />
+  <ProductionRule headNonTerminal="stmtst">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="stmtst">
     <NonTerminal name="stmts" />
   </ProductionRule>
 
@@ -197,17 +211,16 @@
     <Terminal lexeme="if" />
     <NonTerminal name="expr" />
     <Terminal lexeme="then" />
-    <NonTerminal name="stmts" />
+    <NonTerminal name="stmtt" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="stmtt">
     <Terminal lexeme="endif" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="stmt">
-    <Terminal lexeme="if" />
-    <NonTerminal name="expr" />
-    <Terminal lexeme="then" />
-    <NonTerminal name="stmts" />
+  <ProductionRule headNonTerminal="stmtt">
     <Terminal lexeme="else" />
-    <NonTerminal name="stmts" />
+    <NonTerminal name="stmts" /> 
     <Terminal lexeme="endif" />
   </ProductionRule>
 
@@ -269,10 +282,14 @@
   <!-- rule: neexprs -->
   <ProductionRule headNonTerminal="neexprs">
     <NonTerminal name="expr" />
+    <NonTerminal name="neexprst" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="neexprs">
-    <NonTerminal name="expr" />
+  <ProductionRule headNonTerminal="neexprst">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="neexprst">
     <Terminal lexeme="," />
     <NonTerminal name="neexprs" />
   </ProductionRule>
@@ -280,68 +297,87 @@
   <!-- rule: expr -->
   <ProductionRule headNonTerminal="expr">
     <NonTerminal name="clause" />
+    <NonTerminal name="exprl" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="expr">
-    <NonTerminal name="expr" />
+  <ProductionRule headNonTerminal="aexpr">
+    <NonTerminal name="term" />
+    <NonTerminal name="aexprl" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="exprl">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="exprl">
     <Terminal lexeme="|" />
     <NonTerminal name="clause" />
+    <NonTerminal name="exprl" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="expr">
-    <NonTerminal name="term" />
-  </ProductionRule>
+<ProductionRule headNonTerminal="aexprl">
+  <Terminal lexeme="" />
+</ProductionRule>
 
-  <ProductionRule headNonTerminal="expr">
-    <NonTerminal name="expr" />
+  <ProductionRule headNonTerminal="aexprl">
     <NonTerminal name="linop" />
     <NonTerminal name="term" />
+    <NonTerminal name="aexprl" />
   </ProductionRule>
 
   <!-- rule: clause -->
   <ProductionRule headNonTerminal="clause">
     <NonTerminal name="pred" />
+    <NonTerminal name="clausel" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="clause">
-    <NonTerminal name="clause" />
+  <ProductionRule headNonTerminal="clausel">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="clausel">
     <Terminal lexeme="&amp;" />
     <NonTerminal name="pred" />
+    <NonTerminal name="clausel" />
   </ProductionRule>
 
   <!-- rule: pred -->
   <ProductionRule headNonTerminal="pred">
-    <NonTerminal name="expr" />
+    <NonTerminal name="aexpr" />
+    <NonTerminal name="predt" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="pred">
-    <NonTerminal name="expr" />
-    <NonTerminal name="boolop" />
+  <ProductionRule headNonTerminal="predt">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="predt">
+    <NonTerminal name="cmp" />
     <NonTerminal name="expr" />
   </ProductionRule>
 
   <!-- rule: boolop -->
-  <ProductionRule headNonTerminal="boolop">
+  <ProductionRule headNonTerminal="cmp">
     <Terminal lexeme="=" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="boolop">
+  <ProductionRule headNonTerminal="cmp">
     <Terminal lexeme="&lt;&gt;" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="boolop">
+  <ProductionRule headNonTerminal="cmp">
     <Terminal lexeme="&lt;=" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="boolop">
+  <ProductionRule headNonTerminal="cmp">
     <Terminal lexeme="&gt;=" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="boolop">
+  <ProductionRule headNonTerminal="cmp">
     <Terminal lexeme="&lt;" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="boolop">
+  <ProductionRule headNonTerminal="cmp">
     <Terminal lexeme="&gt;" />
   </ProductionRule>
 
@@ -357,12 +393,17 @@
   <!-- rule: term -->
   <ProductionRule headNonTerminal="term">
     <NonTerminal name="factor" />
+    <NonTerminal name="terml" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="term">
-    <NonTerminal name="term" />
+  <ProductionRule headNonTerminal="terml">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="terml">
     <NonTerminal name="nonlinop" />
     <NonTerminal name="factor" />
+    <NonTerminal name="terml" />
   </ProductionRule>
 
   <!-- rule: nonlinop -->
@@ -381,17 +422,20 @@
 
   <ProductionRule headNonTerminal="factor">
     <Terminal lexeme="id" />
+    <NonTerminal name="factort" />
   </ProductionRule>
   
-  <ProductionRule headNonTerminal="factor">
-    <Terminal lexeme="id" />
+  <ProductionRule headNonTerminal="factort">
+    <Terminal lexeme="" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="factort">
     <Terminal lexeme="[" />
     <NonTerminal name="expr" />
     <Terminal lexeme="]" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="factor">
-    <Terminal lexeme="id" />
+  <ProductionRule headNonTerminal="factort">
     <Terminal lexeme="(" />
     <NonTerminal name="exprs" />
     <Terminal lexeme=")" />
@@ -414,5 +458,13 @@
 
   <ProductionRule headNonTerminal="const">
     <Terminal lexeme="_" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="const">
+    <Terminal lexeme="true" />
+  </ProductionRule>
+
+  <ProductionRule headNonTerminal="const">
+    <Terminal lexeme="false" />
   </ProductionRule>
 </Grammar>
