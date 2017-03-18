@@ -15,6 +15,7 @@ public class LLParser {
     private final LL1ParseTable table;
     private final Grammar g;
     private static final Terminal teof = new Terminal("end", new KeywordLexeme("end"));
+    private static final Terminal tepsilon = new Terminal("", new KeywordLexeme(""));
 
     public LLParser(LL1ParseTable table, Grammar g) {
         this.table = table;
@@ -38,6 +39,8 @@ public class LLParser {
             if (node == null) {
                 assert stack.isEmpty() : "Stack is not empty!";
                 assert cursor == source.size() - 1 : "Not at end of input!";
+                removeTails(rootNode);
+//              removeRecursion(rootNode);
                 return rootNode;
             }
 
@@ -76,7 +79,7 @@ public class LLParser {
         }
 
         removeTails(rootNode);
-        removeRecursion(rootNode);
+//        removeRecursion(rootNode);
 
         return rootNode;
     }
@@ -89,42 +92,30 @@ public class LLParser {
     }
 
     public void removeTails(ASTNode root) {
-        HashMap<String, String> tails = new HashMap<String, String>();
-        tails.put("neparams","neparamst");
-        tails.put("stmts","stmtst");
-        tails.put("stmt","stmtt");
-        tails.put("neexprs","neexprst");
-        tails.put("pred","predt");
 
-
-        Stack<ASTNode> nodes = new Stack<>();
-        nodes.push(root);
-        while(!nodes.isEmpty()) {
-            ASTNode pnode = nodes.pop();
-            if (pnode != null) {
-                if (pnode.getClass() == ASTNodeNonterminal.class) {
-                    if (tails.containsKey(((ASTNodeNonterminal) pnode).getProductionRule().getHeadNonTerminal().toString())) {
-                        String t = ((ASTNodeNonterminal) pnode).getProductionRule().getHeadNonTerminal().toString();
-                        for (ASTNode s : ((ASTNodeNonterminal) pnode).getChildren()) {
-                            if (s.getClass() == ASTNodeNonterminal.class &&
-                                    ((ASTNodeNonterminal) s).getProductionRule().getHeadNonTerminal().toString().equals(tails.get(t))) {
-                                ArrayList<ASTNode> temp = new ArrayList<>(((ASTNodeNonterminal) s).getChildren());
-                                ((ASTNodeNonterminal) pnode).removeChild(s);
-                                for (ASTNode n : temp) {
-//                                    if (n.getClass() != ASTNodeTerminal.class && ((ASTNodeTerminal)n).get)
-                                    ((ASTNodeNonterminal) pnode).pushChild(n);
-                                }
-                            }
+        if (root instanceof ASTNodeNonterminal) {
+            ASTNodeNonterminal NNT = (ASTNodeNonterminal) root;
+            for(int i = 0; i < NNT.getChildren().size(); i++) {
+                if (NNT.getChildren().get(i) instanceof ASTNodeNonterminal) {
+                    ASTNodeNonterminal child = (ASTNodeNonterminal) NNT.getChildren().get(i);
+                    removeTails(child);
+                    if (child.getProductionRule().getHeadNonTerminal().toString().endsWith("tail")) {
+                        if (child.getProductionRule().getDerivation().contains(tepsilon)) {
+                            NNT.getProductionRule().getDerivation().removeLast();
+                        } else {
+                            NNT.getProductionRule().getDerivation().removeLast();
+                            NNT.getProductionRule().getDerivation().addAll(child.getProductionRule().getDerivation());
                         }
-                    }
-                }
-                if (pnode.getClass() == ASTNodeNonterminal.class) {
-                    for (ASTNode n : ((ASTNodeNonterminal) pnode).getChildren()) {
-                        nodes.push(n);
+                        NNT.getChildren().remove(i);
+                        for (int j = 0; j < child.getChildren().size(); j++) {
+                            NNT.getChildren().add(i + j, child.getChildren().get(j));
+                        }
+                        i+=child.getChildren().size() - 1;
                     }
                 }
             }
         }
+
     }
 
     public void removeRecursion(ASTNode root) {
