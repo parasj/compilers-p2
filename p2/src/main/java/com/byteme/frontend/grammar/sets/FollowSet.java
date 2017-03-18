@@ -36,7 +36,6 @@ public class FollowSet {
         Lexeme leof = new KeywordLexeme("end");
         Terminal teof = new Terminal("end", leof);
 
-        System.out.println(teof);
         addToMap(followSet, productionRules.getFirst().getHeadNonTerminal(), teof);
 
 

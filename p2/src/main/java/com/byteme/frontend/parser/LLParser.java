@@ -4,9 +4,11 @@ import com.byteme.frontend.grammar.*;
 import com.byteme.frontend.grammar.sets.LL1ParseTable;
 import com.byteme.frontend.lexer.KeywordLexeme;
 import com.byteme.frontend.lexer.Token;
+import com.byteme.frontend.lexer.classes.CommentClassLexeme;
 import com.byteme.util.Tuple2;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * p2
@@ -22,7 +24,9 @@ public class LLParser {
         this.g = g;
     }
 
-    public ASTNode parse(List<Token> source) {
+    public ASTNode parse(List<Token> sourceIn) {
+        List<Token> source = sourceIn.stream().filter(x -> !(x.getLexeme() instanceof CommentClassLexeme)).collect(Collectors.toList());
+
         ASTNodeNonterminal rootNode = new ASTNodeNonterminal(getRootProductionRule(g), new ArrayList<>());
         Stack<Tuple2<Symbol, ASTNode>> stack = new Stack<>();
         stack.push(new Tuple2<>(teof, null));

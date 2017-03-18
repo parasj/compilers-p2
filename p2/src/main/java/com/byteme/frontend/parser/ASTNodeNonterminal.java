@@ -85,9 +85,20 @@ public class ASTNodeNonterminal implements ASTNode {
         StringBuilder delim = new StringBuilder("\n");
         IntStream.range(0, level + 1).forEach(x -> delim.append("\t"));
 
-        List<String> childrenList = children.stream().map(x -> x.toSExpression(level + 1)).collect(Collectors.toList());
-        String childStr = String.join(delim, childrenList);
-        String s = String.format("(%s[%s] %s%s)", productionRule.getHeadNonTerminal().getName(), productionRule, delim, childStr);
+        List<String> childrenList =
+                children.stream().map(x -> x.toSExpression(level + 1))
+                        .map(String::trim)
+                        .filter(x -> x.length() > 0)
+                        .collect(Collectors.toList());
+
+        String childStr = String.join(" ", childrenList); // delim
+
+        String s;
+        if (childStr.length() > 0) {
+            s = String.format("(%s %s)", productionRule.getHeadNonTerminal().getName(), childStr);
+        } else {
+            s = String.format("%s", productionRule.getHeadNonTerminal().getName());
+        }
         return s;
     }
 }

@@ -82,7 +82,6 @@ public class Main {
     private static void doParsingPhase(String fileName) throws DocumentException {
         List<Token> toks = lexTokens(new File(fileName));
         Grammar g = buildGrammar();
-        System.out.println(g);
         LLParser parser = new LLParser(g.getParseTable(), g);
         ASTNode n = parser.parse(toks);
         System.out.println(n.toSExpression(0));
