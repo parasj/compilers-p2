@@ -69,6 +69,7 @@ public class LLParser {
         }
 
         removeTails(rootNode);
+        removeRecursion(rootNode);
 
         return rootNode;
     }
@@ -135,7 +136,7 @@ public class LLParser {
             if (c instanceof ASTNodeNonterminal) {
                 ASTNodeNonterminal ntchild = (ASTNodeNonterminal)c;
 
-                rrHelper((ASTNodeNonterminal)root, ntchild, expr, clause);
+                rrHelper((ASTNodeNonterminal)root, ntchild, expr, clause, etoc);
 
                 removeRecursion(c);
 
@@ -153,9 +154,38 @@ public class LLParser {
                     ASTNodeNonterminal right = (ASTNodeNonterminal) ntchild.getChildren().remove(2);
 
                     if (left.getProductionRule().getHeadNonTerminal().equals(child)) {
-                        left = new ASTNodeNonterminal(parr, left);
+                        ArrayList<ASTNode> t = new ArrayList<>();
+                        t.add(left);
+                        left = new ASTNodeNonterminal(parr, t);
                     }
 
+                    if (right.getProductionRule().getHeadNonTerminal().equals(child)) {
+                        ntchild.getChildren().add(0, left);
+                        ntchild.getChildren().add(1, mid);
+                        ntchild.getChildren().add(2, right);
+                        break;
+                    }
+
+                    if (right.getChildren().size() == 1) {
+                        ntchild.getChildren().add(0, left);
+                        ntchild.getChildren().add(1, mid);
+                        ntchild.getChildren().add(2, right.getChildren().get(0));
+                        break;
+                    } else {
+                        assert right.getChildren().size() != 3 : String.format("The size of %s : %s is wrong", right.toString(), right.getChildren().size());
+                        ArrayList<ASTNode> t = new ArrayList<>();
+                        t.add(left);
+                        t.add(mid);
+                        t.add(right.getChildren().get(0));
+                        ntchild.getChildren().add(0, new ASTNodeNonterminal(parr, t));
+                        ntchild.getChildren().add(1, right.getChildren().get(1));
+                        ntchild.getChildren().add(2, right.getChildren().get(2));
+
+                    }
+
+
+                } else {
+                    break;
                 }
             }
         }
