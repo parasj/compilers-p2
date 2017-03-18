@@ -49,6 +49,6 @@ public class ASTNodeTerminal implements ASTNode {
     public String toSExpression(int level) {
         if (token == null)
             return "";
-        return token.getValue();
+        return token.getValue().toLowerCase();
     }
 }
