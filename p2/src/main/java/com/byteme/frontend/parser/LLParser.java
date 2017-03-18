@@ -39,9 +39,13 @@ public class LLParser {
                 cursor++;
                 ((ASTNodeTerminal) node).setToken(current);
             } else if (top instanceof NonTerminal) {
-                ProductionRule pr = table.get((NonTerminal) top, new Terminal(current.getValue(), current.getLexeme()));
+                ProductionRule pr = table.get((NonTerminal) top, new Terminal("NA", current.getLexeme()));
                 ((ASTNodeNonterminal) node).setProductionRule(pr);
                 ((ASTNodeNonterminal) node).setToken(current);
+
+                if (pr == null) {
+                    System.out.println();
+                }
 
                 assert pr != null : String.format("PR does not exist in table for %s(%s)", top, current);
                 LinkedList<Symbol> derivationLL = pr.getDerivation();

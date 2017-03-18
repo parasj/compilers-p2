@@ -102,7 +102,7 @@ public class LL1ParseTable {
             if (this == o) return true;
             if (!(o instanceof ParseTableKey)) return false;
             ParseTableKey key = (ParseTableKey) o;
-            return nt == key.nt && t == key.t;
+            return nt.equals(key.nt) && t.equals(key.t);
         }
 
         @Override
