@@ -63,6 +63,7 @@ public class LLParser {
                     }
 
                     Tuple2<Symbol, ASTNode> tup2 = new Tuple2<>(s, newnode);
+                    ((ASTNodeNonterminal) node).pushChild(newnode);
                     stack.push(tup2);
                 }
             }
