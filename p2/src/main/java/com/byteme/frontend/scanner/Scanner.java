@@ -95,14 +95,14 @@ public class Scanner implements Iterator<Token> {
                 if (lexemes.length == dfaStateCounter.get(DFA.DFA_DEAD)) {
                     String previousToken = token.substring(0, token.length() - 1);
 
+                    String fileSoFar = new String(fileChars).substring(0, i + 1);
+                    int lineCount = fileSoFar.length() - fileSoFar.replace("\n", "").length() + 1;
+                    int charCount = fileSoFar.length() - fileSoFar.lastIndexOf('\n') - token.length();
+
                     // If there was no previous token, there is no need to backtrack
                     if (previousToken.length() == 0) {
                         // This is our error condition: if there is some input after backtracking
                         if (token.trim().length() > 0) { // todo bad way of handling this
-                            String fileSoFar = new String(fileChars).substring(0, i + 1);
-                            int lineCount = fileSoFar.length() - fileSoFar.replace("\n", "").length() + 1;
-                            int charCount = fileSoFar.length() - fileSoFar.lastIndexOf('\n') - 1;
-
                             System.out.println("line " + lineCount + ":" + charCount + " scanner error");
                             System.exit(1);
                         }
@@ -110,7 +110,7 @@ public class Scanner implements Iterator<Token> {
                     }
                     // Otherwise, backtrack until we find a token that is accepted by some Lexeme
                     else {
-                        scanToken(previousToken);
+                        scanToken(previousToken, lineCount, charCount);
 
                         token = "";
                         i -= 1; // So we can re-evaluate the discarded input
@@ -120,7 +120,14 @@ public class Scanner implements Iterator<Token> {
 
             // Consume any leftover tokens
             if (!token.isEmpty()) {
-                scanToken(token);
+                if (!scanToken(token, -1, -1)) {
+                    String fileSoFar = new String(fileChars).substring(0, fileChars.length - token.length());
+
+                    int lineCount = fileSoFar.length() - fileSoFar.replace("\n", "").length() + 1;
+                    int charCount = fileSoFar.length() - fileSoFar.lastIndexOf('\n');
+                    System.out.println("line " + lineCount + ":" + charCount + " scanner error");
+                    System.exit(1);
+                }
             }
         } catch (IOException ioex) {
             System.out.println("ERROR: IOException encountered while reading from file");
@@ -185,15 +192,17 @@ public class Scanner implements Iterator<Token> {
      * Note that in order for the input to be tokenized, it must be accepted by
      * some Lexeme.
      *
-     * @param token the input to be scanned
+     * @param token        the input to be scanned
+     * @param line
+     * @param linePosition
      * @return true if the input was able to be tokenized, else false.
      */
-    private boolean scanToken(String token) {
+    private boolean scanToken(String token, int line, int linePosition) {
         // Find a Lexeme that accepts the previous token
         Lexeme acceptingLexeme = getFirstLexemeAccepting(token);
 
         if (null != acceptingLexeme) {
-            scannedTokens.addLast(new Token(acceptingLexeme, token));
+            scannedTokens.addLast(new Token(acceptingLexeme, token, line, linePosition));
 
             return true;
         } else {

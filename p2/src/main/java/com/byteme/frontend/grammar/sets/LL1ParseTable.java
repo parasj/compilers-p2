@@ -13,13 +13,12 @@ import java.util.*;
  * p2
  */
 public class LL1ParseTable {
+    private static final Lexeme lepsilon = new KeywordLexeme("");
+    private static final Terminal tepsilon = new Terminal("", lepsilon);
     private final FirstSet first;
     private final FollowSet follow;
     private final List<ProductionRule> productionRules;
     private final Map<ParseTableKey, ProductionRule> parseTable;
-
-    private static final Lexeme lepsilon = new KeywordLexeme("");
-    private static final Terminal tepsilon = new Terminal("", lepsilon);
 
     public LL1ParseTable(FirstSet first, FollowSet follow, List<ProductionRule> productionRules) {
         this.first = first;

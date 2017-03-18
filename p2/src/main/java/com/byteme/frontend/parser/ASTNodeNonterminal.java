@@ -3,14 +3,15 @@ package com.byteme.frontend.parser;
 import com.byteme.frontend.grammar.ProductionRule;
 import com.byteme.frontend.lexer.Token;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
  * p2
  */
-public class ASTNodeNonterminal implements ASTNode {
+public class ASTNodeNonterminal extends ASTNode {
     private List<ASTNode> children;
     private ProductionRule productionRule;
     private Token token;
@@ -24,12 +25,18 @@ public class ASTNodeNonterminal implements ASTNode {
         return children;
     }
 
+    public void setChildren(List<ASTNode> children) {
+        this.children = children;
+    }
+
     public void pushChild(ASTNode child) {
         children.add(0, child);
+        child.setParent(this);
     }
 
     public void removeChild(ASTNode child) {
         children.remove(child);
+        child.setParent(null);
     }
 
     public Token getToken() {
@@ -42,10 +49,6 @@ public class ASTNodeNonterminal implements ASTNode {
 
     public ProductionRule getProductionRule() {
         return productionRule;
-    }
-
-    public void setChildren(List<ASTNode> children) {
-        this.children = children;
     }
 
     public void setProductionRule(ProductionRule productionRule) {
@@ -95,9 +98,9 @@ public class ASTNodeNonterminal implements ASTNode {
 
         String s;
         if (childStr.length() > 0) {
-            s = String.format("(%s %s)", productionRule.getHeadNonTerminal().getName(), childStr);
+            s = String.format("(%s %s)", productionRule.getHeadNonTerminal().getName().toLowerCase(), childStr);
         } else {
-            s = String.format("%s", productionRule.getHeadNonTerminal().getName());
+            s = String.format("%s", productionRule.getHeadNonTerminal().getName().toLowerCase());
         }
         return s;
     }

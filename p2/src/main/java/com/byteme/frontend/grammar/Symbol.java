@@ -34,7 +34,7 @@ public abstract class Symbol implements Comparable<Symbol> {
     }
 
     @Override
-    public int compareTo(Symbol other){
+    public int compareTo(Symbol other) {
         return this.name.compareTo(other.name);
     }
 }

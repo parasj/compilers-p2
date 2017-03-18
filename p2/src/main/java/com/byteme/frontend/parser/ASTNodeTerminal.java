@@ -2,12 +2,10 @@ package com.byteme.frontend.parser;
 
 import com.byteme.frontend.lexer.Token;
 
-import java.util.stream.IntStream;
-
 /**
  * p2
  */
-public class ASTNodeTerminal implements ASTNode {
+public class ASTNodeTerminal extends ASTNode {
     private Token token;
 
     public ASTNodeTerminal(Token token) {
@@ -49,6 +47,6 @@ public class ASTNodeTerminal implements ASTNode {
     public String toSExpression(int level) {
         if (token == null)
             return "";
-        return token.getValue();
+        return token.getValue().toLowerCase();
     }
 }

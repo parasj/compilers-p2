@@ -15,10 +15,10 @@ import java.util.stream.Collectors;
  * p2
  */
 public class LLParser {
-    private final LL1ParseTable table;
-    private final Grammar g;
     private static final Terminal teof = new Terminal("end", new KeywordLexeme("end"));
     private static final Terminal tepsilon = new Terminal("", new KeywordLexeme(""));
+    private final LL1ParseTable table;
+    private final Grammar g;
 
     public LLParser(LL1ParseTable table, Grammar g) {
         this.table = table;
@@ -57,14 +57,13 @@ public class LLParser {
                 ((ASTNodeNonterminal) node).setProductionRule(pr);
                 ((ASTNodeNonterminal) node).setToken(current);
 
+                // assert pr != null : String.format("PR does not exist in table for %s(%s)", top, current);
                 if (pr == null) {
-                    System.out.println();
+                    System.out.printf("line %d:%d parser error", current.getLine(), current.getLinePosition());
+                    System.exit(1);
                 }
-
-                assert pr != null : String.format("PR does not exist in table for %s(%s)", top, current);
                 LinkedList<Symbol> derivationLL = pr.getDerivation();
 
-                assert derivationLL != null : String.format("Derivation does not exist for pr[%s] %s(%s)", pr, top, current);
                 ArrayList<Symbol> derivation = new ArrayList<>(derivationLL);
                 for (int i = derivation.size() - 1; i >= 0; i--) { // reverse?
                     Symbol s = derivation.get(i);
@@ -100,7 +99,7 @@ public class LLParser {
 
         if (root instanceof ASTNodeNonterminal) {
             ASTNodeNonterminal NNT = (ASTNodeNonterminal) root;
-            for(int i = 0; i < NNT.getChildren().size(); i++) {
+            for (int i = 0; i < NNT.getChildren().size(); i++) {
                 if (NNT.getChildren().get(i) instanceof ASTNodeNonterminal) {
                     ASTNodeNonterminal child = (ASTNodeNonterminal) NNT.getChildren().get(i);
                     removeTails(child);
@@ -116,7 +115,7 @@ public class LLParser {
                         for (int j = 0; j < child.getChildren().size(); j++) {
                             NNT.getChildren().add(i + j, child.getChildren().get(j));
                         }
-                        i+=child.getChildren().size() - 1;
+                        i += child.getChildren().size() - 1;
                     }
                 }
             }
@@ -179,10 +178,6 @@ public class LLParser {
                         }
                         currNT.getChildren().remove(i);
                         currNT.getChildren().add(i, n);
-                    }
-
-                    for (ASTNode c : currNT.getChildren()) {
-                        stack.push(c);
                     }
                 }
 
