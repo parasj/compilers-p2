@@ -100,16 +100,16 @@
   <!-- rule: ids -->
   <ProductionRule headNonTerminal="ids">
     <Terminal lexeme="id" />
-    <NonTerminal name="idst" />
+    <NonTerminal name="idstail" />
   </ProductionRule>
 
 
   <!-- rule: idst -->
-  <ProductionRule headNonTerminal="idst">
+  <ProductionRule headNonTerminal="idstail">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="idst">
+  <ProductionRule headNonTerminal="idstail">
     <Terminal lexeme="," />
     <NonTerminal name="ids" />
   </ProductionRule>
@@ -161,14 +161,14 @@
   <!-- rule: neparams -->
   <ProductionRule headNonTerminal="neparams">
     <NonTerminal name="param" />
-    <NonTerminal name="neparamst" />
+    <NonTerminal name="neparamstail" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="neparamst">
+  <ProductionRule headNonTerminal="neparamstail">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="neparamst">
+  <ProductionRule headNonTerminal="neparamstail">
     <Terminal lexeme="," />
     <NonTerminal name="neparams" />
   </ProductionRule>
@@ -183,14 +183,14 @@
   <!-- rule: stmts -->
   <ProductionRule headNonTerminal="stmts">
     <NonTerminal name="fullstmt" />
-    <NonTerminal name="stmtst" />
+    <NonTerminal name="stmtstail" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="stmtst">
+  <ProductionRule headNonTerminal="stmtstail">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="stmtst">
+  <ProductionRule headNonTerminal="stmtstail">
     <NonTerminal name="stmts" />
   </ProductionRule>
 
@@ -212,14 +212,14 @@
     <NonTerminal name="expr" />
     <Terminal lexeme="then" />
     <NonTerminal name="stmts" />
-    <NonTerminal name="stmtt" />
+    <NonTerminal name="stmttail" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="stmtt">
+  <ProductionRule headNonTerminal="stmttail">
     <Terminal lexeme="endif" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="stmtt">
+  <ProductionRule headNonTerminal="stmttail">
     <Terminal lexeme="else" />
     <NonTerminal name="stmts" /> 
     <Terminal lexeme="endif" />
@@ -283,14 +283,14 @@
   <!-- rule: neexprs -->
   <ProductionRule headNonTerminal="neexprs">
     <NonTerminal name="expr" />
-    <NonTerminal name="neexprst" />
+    <NonTerminal name="neexprstail" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="neexprst">
+  <ProductionRule headNonTerminal="neexprstail">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="neexprst">
+  <ProductionRule headNonTerminal="neexprstail">
     <Terminal lexeme="," />
     <NonTerminal name="neexprs" />
   </ProductionRule>
@@ -298,61 +298,61 @@
   <!-- rule: expr -->
   <ProductionRule headNonTerminal="expr">
     <NonTerminal name="clause" />
-    <NonTerminal name="exprl" />
+    <NonTerminal name="exprleft" />
   </ProductionRule>
 
   <ProductionRule headNonTerminal="aexpr">
     <NonTerminal name="term" />
-    <NonTerminal name="aexprl" />
+    <NonTerminal name="aexprleft" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="exprl">
+  <ProductionRule headNonTerminal="exprleft">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="exprl">
+  <ProductionRule headNonTerminal="exprleft">
     <Terminal lexeme="|" />
     <NonTerminal name="clause" />
-    <NonTerminal name="exprl" />
+    <NonTerminal name="exprleft" />
   </ProductionRule>
 
-<ProductionRule headNonTerminal="aexprl">
+<ProductionRule headNonTerminal="aexprleft">
   <Terminal lexeme="" />
 </ProductionRule>
 
-  <ProductionRule headNonTerminal="aexprl">
+  <ProductionRule headNonTerminal="aexprleft">
     <NonTerminal name="linop" />
     <NonTerminal name="term" />
-    <NonTerminal name="aexprl" />
+    <NonTerminal name="aexprleft" />
   </ProductionRule>
 
   <!-- rule: clause -->
   <ProductionRule headNonTerminal="clause">
     <NonTerminal name="pred" />
-    <NonTerminal name="clausel" />
+    <NonTerminal name="clauseleft" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="clausel">
+  <ProductionRule headNonTerminal="clauseleft">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="clausel">
+  <ProductionRule headNonTerminal="clauseleft">
     <Terminal lexeme="&amp;" />
     <NonTerminal name="pred" />
-    <NonTerminal name="clausel" />
+    <NonTerminal name="clauseleft" />
   </ProductionRule>
 
   <!-- rule: pred -->
   <ProductionRule headNonTerminal="pred">
     <NonTerminal name="aexpr" />
-    <NonTerminal name="predt" />
+    <NonTerminal name="predtail" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="predt">
+  <ProductionRule headNonTerminal="predtail">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="predt">
+  <ProductionRule headNonTerminal="predtail">
     <NonTerminal name="cmp" />
     <NonTerminal name="aexpr" />
   </ProductionRule>
@@ -394,17 +394,17 @@
   <!-- rule: term -->
   <ProductionRule headNonTerminal="term">
     <NonTerminal name="factor" />
-    <NonTerminal name="terml" />
+    <NonTerminal name="termleft" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="terml">
+  <ProductionRule headNonTerminal="termleft">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="terml">
+  <ProductionRule headNonTerminal="termleft">
     <NonTerminal name="nonlinop" />
     <NonTerminal name="factor" />
-    <NonTerminal name="terml" />
+    <NonTerminal name="termleft" />
   </ProductionRule>
 
   <!-- rule: nonlinop -->
@@ -423,20 +423,20 @@
 
   <ProductionRule headNonTerminal="factor">
     <Terminal lexeme="id" />
-    <NonTerminal name="factort" />
+    <NonTerminal name="factortail" />
   </ProductionRule>
   
-  <ProductionRule headNonTerminal="factort">
+  <ProductionRule headNonTerminal="factortail">
     <Terminal lexeme="" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="factort">
+  <ProductionRule headNonTerminal="factortail">
     <Terminal lexeme="[" />
     <NonTerminal name="expr" />
     <Terminal lexeme="]" />
   </ProductionRule>
 
-  <ProductionRule headNonTerminal="factort">
+  <ProductionRule headNonTerminal="factortail">
     <Terminal lexeme="(" />
     <NonTerminal name="exprs" />
     <Terminal lexeme=")" />
