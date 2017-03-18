@@ -85,4 +85,23 @@ public final class ProductionRule {
 
         return sb.toString();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        ProductionRule that = (ProductionRule) o;
+
+        if (headNonTerminal != null ? !headNonTerminal.equals(that.headNonTerminal) : that.headNonTerminal != null)
+            return false;
+        return derivation != null ? derivation.equals(that.derivation) : that.derivation == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = headNonTerminal != null ? headNonTerminal.hashCode() : 0;
+        result = 31 * result + (derivation != null ? derivation.hashCode() : 0);
+        return result;
+    }
 }
