@@ -150,8 +150,21 @@ public class LLParser {
                         ASTNode n = currNT.getChildren().get(i);
                         if (n instanceof ASTNodeNonterminal) {
                             if (((ASTNodeNonterminal) n).getProductionRule().equals(pr)) {
+                                System.out.println(((ASTNodeNonterminal) n).getProductionRule());
                                 while (true) {
-                                    ASTNodeNonterminal m = (ASTNodeNonterminal) ((ASTNodeNonterminal) n).getChildren().get(1);
+                                    ASTNodeNonterminal m;
+
+                                    int inn = 0;
+                                    for (ASTNode te : ((ASTNodeNonterminal) n).getChildren()) {
+                                        ASTNodeNonterminal ten = (ASTNodeNonterminal) te;
+                                        System.out.println(inn++ + " ; " + ten.getProductionRule());
+                                    }
+
+                                    if (((ASTNodeNonterminal) n).getChildren().size() == 2) {
+                                        m = (ASTNodeNonterminal) ((ASTNodeNonterminal) n).getChildren().get(1);
+                                    } else {
+                                        m = (ASTNodeNonterminal) ((ASTNodeNonterminal) n).getChildren().get(3);
+                                    }
                                     if (m.getProductionRule().getDerivation().contains(tepsilon)) {
                                         ((ASTNodeNonterminal) n).removeChild(m);
                                         break;
@@ -160,6 +173,8 @@ public class LLParser {
                                         n = m;
                                     }
                                 }
+                                currNT.getChildren().remove(i);
+                                currNT.getChildren().add(i, n);
                             }
                         }
                         currNT.getChildren().remove(i);
