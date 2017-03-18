@@ -11,21 +11,21 @@ import java.util.stream.IntStream;
  * p2
  */
 public class ASTNodeNonterminal implements ASTNode {
-    private Deque<ASTNode> children;
+    private List<ASTNode> children;
     private ProductionRule productionRule;
     private Token token;
 
     public ASTNodeNonterminal(ProductionRule productionRule, List<ASTNode> children) {
-        this.children = new ArrayDeque<>(children);
+        this.children = new ArrayList<>(children);
         this.productionRule = productionRule;
     }
 
     public List<ASTNode> getChildren() {
-        return new ArrayList<>(children);
+        return children;
     }
 
     public void pushChild(ASTNode child) {
-        children.push(child);
+        children.add(0, child);
     }
 
     public void removeChild(ASTNode child) {
@@ -44,7 +44,7 @@ public class ASTNodeNonterminal implements ASTNode {
         return productionRule;
     }
 
-    public void setChildren(Deque<ASTNode> children) {
+    public void setChildren(List<ASTNode> children) {
         this.children = children;
     }
 
