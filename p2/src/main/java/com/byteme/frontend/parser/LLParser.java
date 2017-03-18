@@ -33,6 +33,8 @@ public class LLParser {
             Symbol top = toptup.x;
             ASTNode node = toptup.y;
 
+            System.out.println(top);
+
 
             if (top instanceof Terminal && ((Terminal) top).getLexeme().equals(current.getLexeme())) {
                 // consume terminal

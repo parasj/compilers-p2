@@ -211,6 +211,7 @@
     <Terminal lexeme="if" />
     <NonTerminal name="expr" />
     <Terminal lexeme="then" />
+    <NonTerminal name="stmts" />
     <NonTerminal name="stmtt" />
   </ProductionRule>
 
