@@ -83,6 +83,10 @@ public final class Grammar {
         return productionRules;
     }
 
+    public Hashtable<NonTerminal, LinkedList<ProductionRule>> getLanguages() {
+        return languages;
+    }
+
     public FirstSet getFirstSet() {
         return firstSet;
     }
