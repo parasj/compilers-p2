@@ -99,16 +99,17 @@ public class LLParser {
 
         if (root instanceof ASTNodeNonterminal) {
             ASTNodeNonterminal NNT = (ASTNodeNonterminal) root;
-            System.out.println(NNT.getProductionRule().toString());
+//            System.out.println(NNT.getProductionRule().toString());
             for(int i = 0; i < NNT.getChildren().size(); i++) {
                 if (NNT.getChildren().get(i) instanceof ASTNodeNonterminal) {
                     ASTNodeNonterminal child = (ASTNodeNonterminal) NNT.getChildren().get(i);
                     removeTails(child);
                     if (child.getProductionRule().getHeadNonTerminal().toString().endsWith("tail")) {
                         if (child.getProductionRule().getDerivation().contains(tepsilon)) {
-                            NNT.getProductionRule().getDerivation().removeLast();
+                            NNT.getProductionRule().getDerivation().remove(child.getProductionRule().getHeadNonTerminal());
+
                         } else {
-                            NNT.getProductionRule().getDerivation().removeLast();
+                            NNT.getProductionRule().getDerivation().remove(child.getProductionRule().getHeadNonTerminal());
                             NNT.getProductionRule().getDerivation().addAll(child.getProductionRule().getDerivation());
                         }
                         NNT.getChildren().remove(i);
