@@ -353,7 +353,7 @@
 
   <ProductionRule headNonTerminal="predt">
     <NonTerminal name="cmp" />
-    <NonTerminal name="expr" />
+    <NonTerminal name="aexpr" />
   </ProductionRule>
 
   <!-- rule: boolop -->
