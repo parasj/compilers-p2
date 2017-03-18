@@ -78,4 +78,43 @@ public class LLParser {
                 return pr;
         throw new NullPointerException("Missing root production rule");
     }
+
+    public void removeTails(ASTNode root) {
+        HashMap<String, String> tails = new HashMap<String, String>();
+        tails.put("neparams","neparamst");
+        tails.put("stmts","stmtst");
+        tails.put("stmt","stmtt");
+        tails.put("neexprs","neexprst");
+        tails.put("pred","predt");
+
+
+        Stack<ASTNode> nodes = new Stack<>();
+        nodes.push(root);
+        while(!nodes.isEmpty()) {
+            ASTNode pnode = nodes.pop();
+            if (pnode != null) {
+                if (pnode.getClass() == ASTNodeNonterminal.class) {
+                    if (tails.containsKey(((ASTNodeNonterminal) pnode).getProductionRule().getHeadNonTerminal().toString())) {
+                        String t = ((ASTNodeNonterminal) pnode).getProductionRule().getHeadNonTerminal().toString();
+                        for (ASTNode s : ((ASTNodeNonterminal) pnode).getChildren()) {
+                            if (s.getClass() == ASTNodeNonterminal.class &&
+                                    ((ASTNodeNonterminal) s).getProductionRule().getHeadNonTerminal().toString().equals(tails.get(t))) {
+                                ArrayList<ASTNode> temp = new ArrayList<>(((ASTNodeNonterminal) s).getChildren());
+                                ((ASTNodeNonterminal) pnode).removeChild(s);
+                                for (ASTNode n : temp) {
+//                                    if (n.getClass() != ASTNodeTerminal.class && ((ASTNodeTerminal)n).get)
+                                    ((ASTNodeNonterminal) pnode).pushChild(n);
+                                }
+                            }
+                        }
+                    }
+                }
+                if (pnode.getClass() == ASTNodeNonterminal.class) {
+                    for (ASTNode n : ((ASTNodeNonterminal) pnode).getChildren()) {
+                        nodes.push(n);
+                    }
+                }
+            }
+        }
+    }
 }
