@@ -33,7 +33,6 @@ public class LLParser {
             Symbol top = toptup.x;
             ASTNode node = toptup.y;
 
-
             if (top instanceof Terminal && ((Terminal) top).getLexeme().equals(current.getLexeme())) {
                 // consume terminal
                 cursor++;
@@ -68,6 +67,8 @@ public class LLParser {
                 }
             }
         }
+
+        removeTails(rootNode);
 
         return rootNode;
     }
@@ -117,4 +118,37 @@ public class LLParser {
             }
         }
     }
+
+//    public void removeRecursion(ASTNode root) {
+//
+//        for(ASTNode c : ((ASTNodeNonterminal)root).getChildren()) {
+//            if (c instanceof ASTNodeNonterminal) {
+//                ASTNodeNonterminal ntchild = (ASTNodeNonterminal)c;
+//
+//                rrHelper((ASTNodeNonterminal)root, ntchild, "expr", "clause");
+//
+//                removeRecursion(c);
+//
+//            }
+//        }
+//    }
+//
+//    public void rrHelper(ASTNodeNonterminal root, ASTNodeNonterminal ntchild, String parent, String child) {
+//        if (!root.getProductionRule().getHeadNonTerminal().toString().equals(parent)
+//                && !ntchild.getProductionRule().getHeadNonTerminal().toString().equals(parent)) {
+//            while(true) {
+//                if (ntchild.getChildren().size() == 3) {
+//                    ASTNodeNonterminal left = (ASTNodeNonterminal)ntchild.getChildren().remove(0);
+//                    ASTNode mid = ntchild.getChildren().remove(1);
+//                    ASTNodeNonterminal right = (ASTNodeNonterminal) ntchild.getChildren().remove(2);
+//
+//                    if (left.getProductionRule().getHeadNonTerminal().toString().equals(child)) {
+//                        left = new ASTNodeNonterminal(parent, left);
+//                    }
+//
+//                }
+//            }
+//        }
+//    }
+
 }
