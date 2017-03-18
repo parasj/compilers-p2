@@ -4,6 +4,8 @@ import com.byteme.frontend.grammar.ProductionRule;
 import com.byteme.frontend.lexer.Token;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 /**
  * p2
@@ -75,5 +77,17 @@ public class ASTNodeNonterminal implements ASTNode {
                 "children=" + children +
                 ", productionRule=" + productionRule +
                 '}';
+    }
+
+
+    @Override
+    public String toSExpression(int level) {
+        StringBuilder delim = new StringBuilder("\n");
+        IntStream.range(0, level + 1).forEach(x -> delim.append("\t"));
+
+        List<String> childrenList = children.stream().map(x -> x.toSExpression(level + 1)).collect(Collectors.toList());
+        String childStr = String.join(delim, childrenList);
+        String s = String.format("(%s[%s] %s%s)", productionRule.getHeadNonTerminal().getName(), productionRule, delim, childStr);
+        return s;
     }
 }

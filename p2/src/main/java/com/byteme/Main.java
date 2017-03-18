@@ -2,10 +2,10 @@ package com.byteme;
 
 import com.byteme.frontend.grammar.Grammar;
 import com.byteme.frontend.grammar.GrammarBuilder;
-import com.byteme.frontend.grammar.ProductionRule;
 import com.byteme.frontend.lexer.KeywordLexeme;
 import com.byteme.frontend.lexer.Lexeme;
 import com.byteme.frontend.lexer.Token;
+import com.byteme.frontend.parser.ASTNode;
 import com.byteme.frontend.parser.LLParser;
 import com.byteme.frontend.scanner.Scanner;
 import org.dom4j.Document;
@@ -84,10 +84,8 @@ public class Main {
         Grammar g = buildGrammar();
         System.out.println(g);
         LLParser parser = new LLParser(g.getParseTable(), g);
-        parser.parse(toks);
-//                .map(ProductionRule::toString)
-//                .collect(Collectors.toList());
-//        System.out.println(String.join("\n", matchedRules));
+        ASTNode n = parser.parse(toks);
+        System.out.println(n.toSExpression(0));
     }
 
     /*

@@ -30,12 +30,19 @@ public class LLParser {
         for (int cursor = 0; cursor < source.size(); ) {
             Token current = source.get(cursor);
             Tuple2<Symbol, ASTNode> toptup = stack.pop();
+
+            assert toptup != null;
             Symbol top = toptup.x;
             ASTNode node = toptup.y;
 
+            if (node == null) {
+                assert stack.isEmpty() : "Stack is not empty!";
+                assert cursor == source.size() - 1 : "Not at end of input!";
+                return rootNode;
+            }
+
 
             if (top instanceof Terminal && ((Terminal) top).getLexeme().equals(current.getLexeme())) {
-                // consume terminal
                 cursor++;
                 ((ASTNodeTerminal) node).setToken(current);
             } else if (top instanceof NonTerminal) {
