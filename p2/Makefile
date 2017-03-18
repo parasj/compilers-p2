@@ -8,6 +8,7 @@ install:
 clean:
 	gradle clean
 	rm -f ./compiler.jar
+	rm -f ./testing/compiler.jar
 
 test:
 	gradle test
@@ -17,6 +18,7 @@ build: FORCE
 
 copy:
 	cp ./build/libs/compiler.jar ./
+	cp ./compiler.jar ./testing/
 
 FORCE:
 
@@ -28,3 +30,6 @@ run-grammar: build copy
 
 run-ast: build copy
 	java -ea -jar compiler.jar $(src) --ast
+
+grade: copy
+	(cd testing && ./grade.sh)

@@ -17,15 +17,21 @@ public class Token {
      */
     private final String value;
 
+    private final int line;
+    private final int linePosition;
+
     /**
      * Constructs a new Token with the specified Lexeme and Value.
-     *
-     * @param lexeme TODO
+     *  @param lexeme TODO
      * @param value  TODO
+     * @param line
+     * @param linePosition
      */
-    public Token(Lexeme lexeme, String value) {
+    public Token(Lexeme lexeme, String value, int line, int linePosition) {
         this.lexeme = lexeme;
         this.value = value;
+        this.line = line;
+        this.linePosition = linePosition;
     }
 
     /**
@@ -44,6 +50,14 @@ public class Token {
      */
     public String getValue() {
         return value;
+    }
+
+    public int getLine() {
+        return line;
+    }
+
+    public int getLinePosition() {
+        return linePosition;
     }
 
     @Override

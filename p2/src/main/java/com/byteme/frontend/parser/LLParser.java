@@ -56,14 +56,13 @@ public class LLParser {
                 ((ASTNodeNonterminal) node).setProductionRule(pr);
                 ((ASTNodeNonterminal) node).setToken(current);
 
+                // assert pr != null : String.format("PR does not exist in table for %s(%s)", top, current);
                 if (pr == null) {
-                    System.out.println();
+                    System.out.printf("line %d:%d parser error", current.getLine(), current.getLinePosition());
+                    System.exit(1);
                 }
-
-                assert pr != null : String.format("PR does not exist in table for %s(%s)", top, current);
                 LinkedList<Symbol> derivationLL = pr.getDerivation();
 
-                assert derivationLL != null : String.format("Derivation does not exist for pr[%s] %s(%s)", pr, top, current);
                 ArrayList<Symbol> derivation = new ArrayList<>(derivationLL);
                 for (int i = derivation.size() - 1; i >= 0; i--) { // reverse?
                     Symbol s = derivation.get(i);

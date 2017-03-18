@@ -46,7 +46,7 @@ public class Main {
             toks.add(scanner.getNextToken());
         }
 
-        toks.add(new Token(new KeywordLexeme("end"), ""));
+        toks.add(new Token(new KeywordLexeme("end"), "", -1, 0));
 
         return toks;
     }
