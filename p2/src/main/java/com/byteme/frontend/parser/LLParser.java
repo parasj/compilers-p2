@@ -34,7 +34,7 @@ public class LLParser {
             assert toptup != null;
             Symbol top = toptup.x;
             ASTNode node = toptup.y;
-            
+
             if (node == null) {
                 assert stack.isEmpty() : "Stack is not empty!";
                 assert cursor == source.size() - 1 : "Not at end of input!";
