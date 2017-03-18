@@ -26,6 +26,10 @@ public class ASTNodeNonterminal implements ASTNode {
         children.push(child);
     }
 
+    public void removeChild(ASTNode child) {
+        children.remove(child);
+    }
+
     public Token getToken() {
         return token;
     }
