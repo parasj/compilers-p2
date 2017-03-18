@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
 /**
  * p2
  */
-public class ASTNodeNonterminal implements ASTNode {
+public class ASTNodeNonterminal extends ASTNode {
     private List<ASTNode> children;
     private ProductionRule productionRule;
     private Token token;
@@ -26,10 +26,12 @@ public class ASTNodeNonterminal implements ASTNode {
 
     public void pushChild(ASTNode child) {
         children.add(0, child);
+        child.setParent(this);
     }
 
     public void removeChild(ASTNode child) {
         children.remove(child);
+        child.setParent(null);
     }
 
     public Token getToken() {

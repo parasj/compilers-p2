@@ -7,7 +7,7 @@ import java.util.stream.IntStream;
 /**
  * p2
  */
-public class ASTNodeTerminal implements ASTNode {
+public class ASTNodeTerminal extends ASTNode {
     private Token token;
 
     public ASTNodeTerminal(Token token) {
