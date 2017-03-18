@@ -22,8 +22,9 @@ public class Token {
 
     /**
      * Constructs a new Token with the specified Lexeme and Value.
-     *  @param lexeme TODO
-     * @param value  TODO
+     *
+     * @param lexeme       TODO
+     * @param value        TODO
      * @param line
      * @param linePosition
      */

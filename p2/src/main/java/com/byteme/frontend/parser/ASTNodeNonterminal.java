@@ -3,7 +3,8 @@ package com.byteme.frontend.parser;
 import com.byteme.frontend.grammar.ProductionRule;
 import com.byteme.frontend.lexer.Token;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -22,6 +23,10 @@ public class ASTNodeNonterminal extends ASTNode {
 
     public List<ASTNode> getChildren() {
         return children;
+    }
+
+    public void setChildren(List<ASTNode> children) {
+        this.children = children;
     }
 
     public void pushChild(ASTNode child) {
@@ -44,10 +49,6 @@ public class ASTNodeNonterminal extends ASTNode {
 
     public ProductionRule getProductionRule() {
         return productionRule;
-    }
-
-    public void setChildren(List<ASTNode> children) {
-        this.children = children;
     }
 
     public void setProductionRule(ProductionRule productionRule) {

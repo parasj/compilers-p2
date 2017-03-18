@@ -192,7 +192,7 @@ public class Scanner implements Iterator<Token> {
      * Note that in order for the input to be tokenized, it must be accepted by
      * some Lexeme.
      *
-     * @param token the input to be scanned
+     * @param token        the input to be scanned
      * @param line
      * @param linePosition
      * @return true if the input was able to be tokenized, else false.

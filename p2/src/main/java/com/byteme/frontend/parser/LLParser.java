@@ -14,10 +14,10 @@ import java.util.stream.Collectors;
  * p2
  */
 public class LLParser {
-    private final LL1ParseTable table;
-    private final Grammar g;
     private static final Terminal teof = new Terminal("end", new KeywordLexeme("end"));
     private static final Terminal tepsilon = new Terminal("", new KeywordLexeme(""));
+    private final LL1ParseTable table;
+    private final Grammar g;
 
     public LLParser(LL1ParseTable table, Grammar g) {
         this.table = table;
@@ -98,7 +98,7 @@ public class LLParser {
 
         if (root instanceof ASTNodeNonterminal) {
             ASTNodeNonterminal NNT = (ASTNodeNonterminal) root;
-            for(int i = 0; i < NNT.getChildren().size(); i++) {
+            for (int i = 0; i < NNT.getChildren().size(); i++) {
                 if (NNT.getChildren().get(i) instanceof ASTNodeNonterminal) {
                     ASTNodeNonterminal child = (ASTNodeNonterminal) NNT.getChildren().get(i);
                     removeTails(child);
@@ -114,7 +114,7 @@ public class LLParser {
                         for (int j = 0; j < child.getChildren().size(); j++) {
                             NNT.getChildren().add(i + j, child.getChildren().get(j));
                         }
-                        i+=child.getChildren().size() - 1;
+                        i += child.getChildren().size() - 1;
                     }
                 }
             }
@@ -138,11 +138,11 @@ public class LLParser {
         ProductionRule eltoc = new ProductionRule(exprleft, or, clause, exprleft);
         ProductionRule eltoe = new ProductionRule(exprleft, tepsilon);
 
-        for(ASTNode c : ((ASTNodeNonterminal)root).getChildren()) {
+        for (ASTNode c : ((ASTNodeNonterminal) root).getChildren()) {
             if (c instanceof ASTNodeNonterminal) {
-                ASTNodeNonterminal ntchild = (ASTNodeNonterminal)c;
+                ASTNodeNonterminal ntchild = (ASTNodeNonterminal) c;
 
-                rrHelper((ASTNodeNonterminal)root, ntchild, expr, clause, etoc, eltoe);
+                rrHelper((ASTNodeNonterminal) root, ntchild, expr, clause, etoc, eltoe);
 
                 removeRecursion(c);
 
@@ -153,7 +153,7 @@ public class LLParser {
     public void rrHelper(ASTNodeNonterminal root, ASTNodeNonterminal ntchild, NonTerminal parent, NonTerminal child, ProductionRule parr, ProductionRule childr) {
         if (!root.getProductionRule().equals(parr)
                 && ntchild.getProductionRule().equals(parr)) {
-            while(true) {
+            while (true) {
                 if (ntchild.getChildren().size() == 3) {
                     ASTNodeNonterminal left = (ASTNodeNonterminal) ntchild.getChildren().remove(0);
                     ASTNode mid = ntchild.getChildren().remove(0);
@@ -189,7 +189,7 @@ public class LLParser {
                     }
 
 
-                }else {
+                } else {
                     break;
                 }
             }
