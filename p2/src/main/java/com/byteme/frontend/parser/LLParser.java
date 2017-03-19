@@ -128,16 +128,6 @@ public class LLParser {
         ProductionRule etoc = new ProductionRule(new NonTerminal("expr"), new NonTerminal("clause"), new NonTerminal("exprleft"));
         ArrayList<ProductionRule> rs = new ArrayList<>();
         rs.add(etoc);
-//        for(ASTNode c : ((ASTNodeNonterminal)root).getChildren()) {
-//            if (c instanceof ASTNodeNonterminal) {
-//                ASTNodeNonterminal ntchild = (ASTNodeNonterminal)c;
-//
-//                rrHelper((ASTNodeNonterminal)root, ntchild, expr, clause, etoc, eltoe);
-//
-//                removeRecursion(c);
-//
-//            }
-//        }
         for(ProductionRule pr : rs) {
             Stack<ASTNode> stack = new Stack<>();
             stack.push(root);
@@ -145,39 +135,16 @@ public class LLParser {
                 ASTNode curr = stack.pop();
                 if (curr instanceof ASTNodeNonterminal) {
                     ASTNodeNonterminal currNT = (ASTNodeNonterminal) curr;
-                    for (int i = 0; i < currNT.getChildren().size(); i++) {
-                        ASTNode n = currNT.getChildren().get(i);
-                        if (n instanceof ASTNodeNonterminal) {
-                            if (((ASTNodeNonterminal) n).getProductionRule().equals(pr)) {
-                                System.out.println(((ASTNodeNonterminal) n).getProductionRule());
-                                while (true) {
-                                    ASTNodeNonterminal m;
-
-                                    int inn = 0;
-                                    for (ASTNode te : ((ASTNodeNonterminal) n).getChildren()) {
-                                        ASTNodeNonterminal ten = (ASTNodeNonterminal) te;
-                                        System.out.println(inn++ + " ; " + ten.getProductionRule());
-                                    }
-
-                                    if (((ASTNodeNonterminal) n).getChildren().size() == 2) {
-                                        m = (ASTNodeNonterminal) ((ASTNodeNonterminal) n).getChildren().get(1);
-                                    } else {
-                                        m = (ASTNodeNonterminal) ((ASTNodeNonterminal) n).getChildren().get(3);
-                                    }
-                                    if (m.getProductionRule().getDerivation().contains(tepsilon)) {
-                                        ((ASTNodeNonterminal) n).removeChild(m);
-                                        break;
-                                    } else {
-                                        m.getChildren().add(0, n);
-                                        n = m;
-                                    }
-                                }
-                                currNT.getChildren().remove(i);
-                                currNT.getChildren().add(i, n);
-                            }
+                    if (currNT.getProductionRule().getHeadNonTerminal().equals(pr.getHeadNonTerminal())) {
+                        if (currNT.getChildren().size() == 2 && ((ASTNodeNonterminal)currNT.getChildren().get(1)).getChildren().size() != 0) {
+                            ASTNode child = currNT.getChildren().get(0);
+                            ArrayList<ASTNode> list = new ArrayList<ASTNode>();
+                            list.add(child);
+                            currNT.getChildren().set(0, new ASTNodeNonterminal(new ProductionRule(pr.getHeadNonTerminal(), ((ASTNodeNonterminal)child).getProductionRule().getHeadNonTerminal()),
+                                    list));
+                        } else if (currNT.getChildren().size() == 2 && ((ASTNodeNonterminal)currNT.getChildren().get(1)).getChildren().size() == 0) {
+                            ((ASTNodeNonterminal) curr).removeChild(currNT.getChildren().get(1));
                         }
-                        currNT.getChildren().remove(i);
-                        currNT.getChildren().add(i, n);
                     }
                 }
 
@@ -185,50 +152,5 @@ public class LLParser {
         }
     }
 
-//    public void rrHelper(ASTNodeNonterminal root, ASTNodeNonterminal ntchild, NonTerminal parent, NonTerminal child, ProductionRule parr, ProductionRule childr) {
-//        if (!root.getProductionRule().equals(parr)
-//                && ntchild.getProductionRule().equals(parr)) {
-//            while(true) {
-//                if (ntchild.getChildren().size() == 3) {
-//                    ASTNodeNonterminal left = (ASTNodeNonterminal) ntchild.getChildren().remove(0);
-//                    ASTNode mid = ntchild.getChildren().remove(0);
-//                    ASTNodeNonterminal right = (ASTNodeNonterminal) ntchild.getChildren().remove(0);
-//                    if (left.getProductionRule().getHeadNonTerminal().equals(childr)) {
-//                        ArrayList<ASTNode> t = new ArrayList<>();
-//                        t.add(left);
-//                        left = new ASTNodeNonterminal(parr, t);
-//                    }
-//
-//                    if (right.getProductionRule().getHeadNonTerminal().equals(childr)) {
-//                        ntchild.getChildren().add(0, left);
-//                        ntchild.getChildren().add(1, mid);
-//                        ntchild.getChildren().add(2, right);
-//                        break;
-//                    }
-//
-//                    if (right.getChildren().size() == 1) {
-//                        ntchild.getChildren().add(0, left);
-//                        ntchild.getChildren().add(1, mid);
-//                        ntchild.getChildren().add(2, right.getChildren().get(0));
-//                        break;
-//                    } else {
-//                        assert right.getChildren().size() == 3 : String.format("The size of %s : %s is wrong", right.getProductionRule().toString(), right.getChildren().size());
-//                        ArrayList<ASTNode> t = new ArrayList<>();
-//                        t.add(left);
-//                        t.add(mid);
-//                        t.add(right.getChildren().get(0));
-//                        ntchild.getChildren().add(0, new ASTNodeNonterminal(parr, t));
-//                        ntchild.getChildren().add(1, right.getChildren().get(1));
-//                        ntchild.getChildren().add(2, right.getChildren().get(2));
-//
-//                    }
-//
-//
-//                }else {
-//                    break;
-//                }
-//            }
-//        }
-//    }
 
 }

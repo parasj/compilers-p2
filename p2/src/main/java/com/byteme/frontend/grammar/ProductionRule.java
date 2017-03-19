@@ -23,7 +23,7 @@ public final class ProductionRule {
      * The NonTerminal Symbol whose derivation is defined by this
      * ProductionRule.
      */
-    private final NonTerminal headNonTerminal;
+    private NonTerminal headNonTerminal;
 
     /**
      * An ordered list of Symbols that this ProductionRule derives as.
@@ -58,6 +58,10 @@ public final class ProductionRule {
      */
     public NonTerminal getHeadNonTerminal() {
         return headNonTerminal;
+    }
+
+    public void setHeadNonTerminal(NonTerminal headNonTerminal) {
+        this.headNonTerminal = headNonTerminal;
     }
 
     /**
