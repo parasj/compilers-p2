@@ -16,7 +16,7 @@ public class NonTerminal extends Symbol {
 
     @Override
     public String toString() {
-        return this.name.toLowerCase();
+        return this.name;
     }
 
     @Override

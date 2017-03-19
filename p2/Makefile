@@ -31,5 +31,5 @@ run-grammar: build copy
 run-ast: build copy
 	java -ea -jar compiler.jar $(src) --ast
 
-grade: copy
+grade: clean all
 	(cd testing && ./grade.sh)

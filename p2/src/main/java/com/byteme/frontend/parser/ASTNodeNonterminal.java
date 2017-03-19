@@ -98,9 +98,9 @@ public class ASTNodeNonterminal extends ASTNode {
 
         String s;
         if (childStr.length() > 0) {
-            s = String.format("(%s %s)", productionRule.getHeadNonTerminal().getName().toLowerCase(), childStr);
+            s = String.format("(%s %s)", productionRule.getHeadNonTerminal().getName(), childStr);
         } else {
-            s = String.format("%s", productionRule.getHeadNonTerminal().getName().toLowerCase());
+            s = String.format("%s", productionRule.getHeadNonTerminal().getName());
         }
         return s;
     }
