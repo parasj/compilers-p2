@@ -45,6 +45,7 @@ public class LLParser {
                 assert stack.isEmpty() : "Stack is not empty!";
                 assert cursor == source.size() - 1 : "Not at end of input!";
                 removeTails(rootNode);
+                setParents(rootNode);
                 removeRecursion(rootNode);
                 return rootNode;
             }
@@ -83,6 +84,7 @@ public class LLParser {
         }
 
         removeTails(rootNode);
+        setParents(rootNode);
         removeRecursion(rootNode);
 
         return rootNode;
@@ -95,7 +97,7 @@ public class LLParser {
         throw new NullPointerException("Missing root production rule");
     }
 
-    public void removeTails(ASTNode root) {
+    private void removeTails(ASTNode root) {
 
         if (root instanceof ASTNodeNonterminal) {
             ASTNodeNonterminal NNT = (ASTNodeNonterminal) root;
@@ -123,34 +125,167 @@ public class LLParser {
 
     }
 
-    public void removeRecursion(ASTNode root) {
-
-        ProductionRule etoc = new ProductionRule(new NonTerminal("expr"), new NonTerminal("clause"), new NonTerminal("exprleft"));
-        ArrayList<ProductionRule> rs = new ArrayList<>();
-        rs.add(etoc);
-        for(ProductionRule pr : rs) {
-            Stack<ASTNode> stack = new Stack<>();
-            stack.push(root);
-            while (!stack.isEmpty()) {
-                ASTNode curr = stack.pop();
-                if (curr instanceof ASTNodeNonterminal) {
-                    ASTNodeNonterminal currNT = (ASTNodeNonterminal) curr;
-                    if (currNT.getProductionRule().getHeadNonTerminal().equals(pr.getHeadNonTerminal())) {
-                        if (currNT.getChildren().size() == 2 && ((ASTNodeNonterminal)currNT.getChildren().get(1)).getChildren().size() != 0) {
-                            ASTNode child = currNT.getChildren().get(0);
-                            ArrayList<ASTNode> list = new ArrayList<ASTNode>();
-                            list.add(child);
-                            currNT.getChildren().set(0, new ASTNodeNonterminal(new ProductionRule(pr.getHeadNonTerminal(), ((ASTNodeNonterminal)child).getProductionRule().getHeadNonTerminal()),
-                                    list));
-                        } else if (currNT.getChildren().size() == 2 && ((ASTNodeNonterminal)currNT.getChildren().get(1)).getChildren().size() == 0) {
-                            ((ASTNodeNonterminal) curr).removeChild(currNT.getChildren().get(1));
-                        }
+    private void setParents(ASTNode root) {
+        Stack<ASTNode> stack = new Stack<>();
+        stack.push(root);
+        while (!stack.isEmpty()) {
+            ASTNode curr = stack.pop();
+            if (curr instanceof  ASTNodeNonterminal) {
+                for (ASTNode c : ((ASTNodeNonterminal)curr).getChildren()) {
+                    c.setParent(curr);
+                    if (c instanceof ASTNodeNonterminal) {
+                        stack.push(c);
                     }
                 }
-
             }
         }
     }
 
+    private void removeRecursion(ASTNode root) {
+        HashMap<NonTerminal, NonTerminal> map = new HashMap<>();
+        NonTerminal expr = new NonTerminal("expr");
+        NonTerminal exprleft = new NonTerminal("exprleft");
+        map.put(expr,exprleft);
+        NonTerminal aexpr = new NonTerminal("aexpr");
+        NonTerminal aexprleft = new NonTerminal("aexprleft");
+        map.put(aexpr,aexprleft);
+        NonTerminal clause = new NonTerminal("clause");
+        NonTerminal clauseleft = new NonTerminal("clauseleft");
+        map.put(clause,clauseleft);
+        NonTerminal term = new NonTerminal("term");
+        NonTerminal termleft = new NonTerminal("termleft");
+        map.put(term,termleft);
+        for (NonTerminal nt : map.keySet()) {
+            removeRecursion1(root, nt, map.get(nt));
+            setParents(root);
+        }
+
+        for (NonTerminal nt : map.keySet()) {
+            cleanuptails((ASTNodeNonterminal) root, nt, map.get(nt));
+            setParents(root);
+        }
+
+    }
+
+    private void removeRecursion1(ASTNode root, NonTerminal expr, NonTerminal exprleft) {
+
+        ASTNodeNonterminal rootNT = (ASTNodeNonterminal) root;
+
+        for (int i = 0; i < rootNT.getChildren().size(); i++) {
+            ASTNode c = rootNT.getChildren().get(i);
+            if (c instanceof ASTNodeNonterminal) {
+                if (((ASTNodeNonterminal)c).getProductionRule().getHeadNonTerminal().equals(expr)) {
+                    ASTNodeNonterminal cnt = (ASTNodeNonterminal) c;
+                    for(int j = 0; j < cnt.getChildren().size(); j++) {
+                        if (cnt.getChildren().get(j) instanceof ASTNodeNonterminal
+                                && ((ASTNodeNonterminal)cnt.getChildren().get(j)).getProductionRule().getHeadNonTerminal().equals(exprleft)) {
+                            //Find the tail
+                            ASTNodeNonterminal tail = findTail((ASTNodeNonterminal) cnt.getChildren().get(j), exprleft);
+                            ASTNodeNonterminal parent = (ASTNodeNonterminal) tail.getParent();
+                            for (int l = 0; l < parent.getChildren().size(); l++) {
+                                if (parent.getChildren().get(l).equals(tail)) {
+                                    parent.getChildren().remove(l);
+                                }
+                            }
+                            //Remove tail
+                            List<ASTNode> list = new ArrayList<>();
+                            ASTNodeNonterminal newTree = new ASTNodeNonterminal(parent.getProductionRule(), list);
+                            if (parent.getChildren().size() == 1) {
+                                return;
+                            }
+
+
+                            //Get the part to be added to left
+                            ASTNodeNonterminal left = getLeft(parent, expr, exprleft);
+
+                            changeHead(left, expr, exprleft);
+
+                            //Add to left and put in original list
+                            rootNT.getChildren().remove(i);
+                            rootNT.getChildren().add(i, left);
+                        }
+                    }
+                } else {
+                    removeRecursion1(c, expr, exprleft);
+                }
+            }
+        }
+    }
+
+    private ASTNodeNonterminal findTail(ASTNodeNonterminal root, NonTerminal nonTerminal) {
+        //Tail ends in tepsilon
+        if ((root).getProductionRule().getHeadNonTerminal().equals(nonTerminal)
+                && ((root).getProductionRule().getDerivation().contains(tepsilon) )) {
+            return root;
+        } else if ((root).getProductionRule().getHeadNonTerminal().equals(nonTerminal)){
+            for (ASTNode c : (root).getChildren()) {
+                if (c instanceof ASTNodeNonterminal) {
+                    if (((ASTNodeNonterminal)c).getProductionRule().getHeadNonTerminal().equals(nonTerminal)) {
+                        return findTail((ASTNodeNonterminal) c, nonTerminal);
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    private ASTNodeNonterminal getLeft( ASTNodeNonterminal curr, NonTerminal ntstop, NonTerminal ntleft) {
+        if (curr.getProductionRule().getHeadNonTerminal().equals(ntstop)) {
+            return null;
+        }
+
+
+        //If parent starts with ntleft, figure out that left and add
+        if (((ASTNodeNonterminal)curr.getParent()).getProductionRule().getHeadNonTerminal().equals(ntleft)) {
+            ASTNodeNonterminal newTree = new ASTNodeNonterminal(curr.getProductionRule(), curr.getChildren());
+            newTree.getChildren().add(0, getLeft(((ASTNodeNonterminal)curr.getParent()), ntstop, ntleft));
+            return newTree;
+        }
+
+        if (((ASTNodeNonterminal)curr.getParent()).getProductionRule().getHeadNonTerminal().equals(ntstop)) {
+            ASTNodeNonterminal newTree = new ASTNodeNonterminal(curr.getProductionRule(), curr.getChildren());
+            ASTNodeNonterminal newp = new ASTNodeNonterminal(((ASTNodeNonterminal)(curr.getParent())).getProductionRule(), ((ASTNodeNonterminal)(curr.getParent())).getChildren());
+            newp.getChildren().remove(newp.getChildren().size() - 1);
+            newTree.getChildren().add(0, newp);
+            return newTree;
+        }
+
+        return null;
+
+    }
+
+
+    private void changeHead(ASTNodeNonterminal root, NonTerminal newNT, NonTerminal oldNT) {
+        Stack<ASTNodeNonterminal> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            ASTNodeNonterminal popped = stack.pop();
+            if (popped.getProductionRule().getHeadNonTerminal().equals(oldNT)) {
+                popped.getProductionRule().setHeadNonTerminal(newNT);
+            }
+            for (ASTNode n : popped.getChildren()) {
+                if (n instanceof ASTNodeNonterminal) {
+                    stack.push((ASTNodeNonterminal)n);
+                }
+            }
+        }
+    }
+
+    private void cleanuptails(ASTNodeNonterminal root, NonTerminal newNT, NonTerminal oldNT) {
+        Stack<ASTNodeNonterminal> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            ASTNodeNonterminal popped = stack.pop();
+            for (int i = 0; i < popped.getChildren().size(); i++) {
+                ASTNode n = popped.getChildren().get(i);
+                if (n instanceof ASTNodeNonterminal) {
+                    if ((((ASTNodeNonterminal)n).getProductionRule().getHeadNonTerminal().equals(oldNT) || ((ASTNodeNonterminal)n).getProductionRule().getHeadNonTerminal().equals(newNT))&& ((ASTNodeNonterminal)n).getProductionRule().getDerivation().contains(tepsilon)) {
+                        popped.getChildren().remove(i);
+                    }
+                    stack.push((ASTNodeNonterminal)n);
+                }
+            }
+        }
+    }
 
 }
