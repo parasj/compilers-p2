@@ -160,11 +160,45 @@ public class LLParser {
             setParents(root);
         }
 
+        fixaexpr((ASTNodeNonterminal)root);
+
         for (NonTerminal nt : map.keySet()) {
             cleanuptails((ASTNodeNonterminal) root, nt, map.get(nt));
             setParents(root);
         }
 
+    }
+
+    private void fixaexpr(ASTNodeNonterminal root) {
+        Stack<ASTNodeNonterminal> stack = new Stack<>();
+        stack.push(root);
+        while(!stack.isEmpty()) {
+            ASTNodeNonterminal popped = stack.pop();
+            ASTNodeNonterminal curr = popped;
+            if (curr.getProductionRule().getHeadNonTerminal().equals(new NonTerminal("aexpr"))) {
+                if (curr.getChildren().get(0) instanceof ASTNodeNonterminal
+                        && ((ASTNodeNonterminal) curr.getChildren().get(0)).getProductionRule().getHeadNonTerminal().equals(new NonTerminal("linop"))) {
+                    ASTNodeNonterminal newnt = new ASTNodeNonterminal(curr.getProductionRule(), new ArrayList<>());
+                    if (curr.getParent() != null) {
+                        newnt.getChildren().add(0, ((ASTNodeNonterminal) popped.getParent()).getChildren().get(0));
+                        ArrayList<ASTNode> list = new ArrayList<ASTNode>();
+                        list.add(newnt);
+                        list.addAll(curr.getChildren());
+
+                        ((ASTNodeNonterminal) curr.getParent()).setChildren(list);
+                        System.out.println(((ASTNodeNonterminal) curr.getParent()).toSExpression(0));
+                    }
+
+
+                }
+            }
+
+            for (ASTNode n : popped.getChildren()) {
+                if (n instanceof ASTNodeNonterminal) {
+                    stack.push((ASTNodeNonterminal)n);
+                }
+            }
+        }
     }
 
     private void removeRecursion1(ASTNode root, NonTerminal expr, NonTerminal exprleft) {
@@ -205,12 +239,12 @@ public class LLParser {
                             rootNT.getChildren().add(i, left);
                         }
                     }
-                } else {
-                    removeRecursion1(c, expr, exprleft);
                 }
+                removeRecursion1(c, expr, exprleft);
             }
         }
     }
+
 
     private ASTNodeNonterminal findTail(ASTNodeNonterminal root, NonTerminal nonTerminal) {
         //Tail ends in tepsilon
